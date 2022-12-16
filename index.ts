@@ -1,19 +1,25 @@
-import * as osu_db from './osu_db';
+import {osu_db_load, osu_db_results} from './osu_db';
+import {osu_db_parse_setting} from "./parse_settings";
+ 
 
-var osu_db_result = osu_db.osu_file_load('E:/osu!/osu!.db', 
-    [
-        osu_db.osu_db_parse_setting.artist,
-        osu_db.osu_db_parse_setting.title,
-        osu_db.osu_db_parse_setting.difficulty,
-        osu_db.osu_db_parse_setting.beatmap_md5,
-        osu_db.osu_db_parse_setting.beatmap_id,
-        osu_db.osu_db_parse_setting.beatmapset_id,
-        osu_db.osu_db_parse_setting.gamemode,
-        osu_db.osu_db_parse_setting.mod_date,
-        osu_db.osu_db_parse_setting.mod_time,
-        osu_db.osu_db_parse_setting.star_rating_taiko
-    ]
+var osu_db_settings = [
+    osu_db_parse_setting.title,
+    osu_db_parse_setting.gamemode,
+    osu_db_parse_setting.star_rating_taiko,
+    osu_db_parse_setting.ranked_status,
+    osu_db_parse_setting.ranked_status,
+];
+
+var osu_db_result: osu_db_results = osu_db_load(
+    'E:/osu!/osu!.db', 
+    //'D:/osu!.db',
+    osu_db_settings
 );
-console.log(osu_db_result);
+
+console.log(osu_db_result );
+
+setTimeout(()=>{return true;}, 100000)
+
+
 
 
