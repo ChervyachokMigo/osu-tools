@@ -31,29 +31,31 @@ exports.get_collections_detailed = void 0;
 `
  *  */
 function get_collections_detailed(collection_result, osu_db_results) {
-    var _a;
-    if (collection_result.collections.length == 0) {
-        return collection_result;
+    let updated_collection_result = {
+        collections: Object.assign([], collection_result.collections),
+        osu_version: collection_result === null || collection_result === void 0 ? void 0 : collection_result.osu_version
+    };
+    if (updated_collection_result.collections.length == 0) {
+        return updated_collection_result;
     }
     console.log('start union collection db with osu db..');
-    let updated_collection_result = Object.assign({}, collection_result);
-    for (let i = 0; i < updated_collection_result.collections.length; i++) {
-        console.log('reading collection', updated_collection_result.collections[i].name);
-        updated_collection_result.collections[i].beatmaps = [];
-        if (updated_collection_result.collections[i].md5_hashes.length == 0) {
+    updated_collection_result.collections.map(collection => {
+        collection.beatmaps = [];
+        console.log('reading collection', collection.name);
+        if (collection.md5_hashes.length == 0) {
             console.log('no beatmaps');
-            continue;
+            return;
         }
-        for (let md5_hash of updated_collection_result.collections[i].md5_hashes) {
-            let founded_beatmap = osu_db_results.beatmaps.filter(value => value.beatmap_md5 === md5_hash);
-            if (founded_beatmap.length > 0) {
-                (_a = updated_collection_result.collections[i].beatmaps) === null || _a === void 0 ? void 0 : _a.push(founded_beatmap[0]);
+        for (let md5_hash of collection.md5_hashes) {
+            let founded_beatmap = osu_db_results.beatmaps.filter(value => value.beatmap_md5 === md5_hash).shift();
+            if (founded_beatmap !== undefined) {
+                collection.beatmaps.push(founded_beatmap);
             }
             else {
                 console.error('not found beatmap: ', md5_hash);
             }
         }
-    }
+    });
     console.log('end union');
     return updated_collection_result;
 }

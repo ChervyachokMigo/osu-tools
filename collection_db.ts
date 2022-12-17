@@ -5,13 +5,23 @@ import { beatmap_results } from './beatmap_results';
 
 export type collection = {
     name: string,
-    md5_hashes: string[],
-    beatmaps?: beatmap_results[]
+    md5_hashes: string[]
 }
 
 export type collection_db_results = {
     osu_version?: number,
     collections: collection[]
+}
+
+export type collection_db_detailed_results = {
+    osu_version?: number,
+    collections: collection_detailed[]
+}
+
+export type collection_detailed = {
+    name: string,
+    md5_hashes: string[],
+    beatmaps: beatmap_results[]
 }
 
 export class collection_db extends osu_file {

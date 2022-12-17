@@ -32,6 +32,11 @@ export class osu_db extends osu_file {
             console.error('no set parse settings, results will without beatmaps');
         }
 
+        if (this.parse_settings.indexOf(osu_db_parse_setting.beatmap_md5) == -1) {
+            console.error('no setted beatmap_md5 parse setting', 
+                'beatmaps will not be unioned with collection_db without it setting');
+        }
+
         osu_db.osu_version = this.buff.getInt();
         osu_db.folder_count = this.buff.getInt();
         osu_db.is_account_unlocked = this.buff.getBool();

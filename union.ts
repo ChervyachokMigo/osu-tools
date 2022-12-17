@@ -1,4 +1,4 @@
-import { collection_db_results } from './collection_db';
+import { collection_db_results, collection_db_detailed_results, collection_detailed } from './collection_db';
 import { osu_db_results } from './osu_db';
 
 /**
@@ -32,36 +32,38 @@ import { osu_db_results } from './osu_db';
  *  */
 export function get_collections_detailed (
     collection_result: collection_db_results, 
-    osu_db_results: osu_db_results): collection_db_results {
+    osu_db_results: osu_db_results): collection_db_detailed_results {
 
-        if (collection_result.collections.length == 0) {
-            return collection_result;
+        let updated_collection_result: collection_db_detailed_results = {
+            collections: Object.assign([], collection_result.collections),
+            osu_version: collection_result?.osu_version
+        }
+        
+
+        if (updated_collection_result.collections.length == 0) {
+            return updated_collection_result;
         }
 
         console.log('start union collection db with osu db..');
 
-        let updated_collection_result = Object.assign({}, collection_result);
+        updated_collection_result.collections.map(collection=>{
+            collection.beatmaps = [];
+            console.log('reading collection',collection.name);
 
-        for (let i = 0; i < updated_collection_result.collections.length; i++){
-
-            console.log('reading collection',updated_collection_result.collections[i].name);
-
-            updated_collection_result.collections[i].beatmaps = [];
-
-            if (updated_collection_result.collections[i].md5_hashes.length == 0){
+            if (collection.md5_hashes.length == 0){
                 console.log('no beatmaps');
-                continue;
+                return;
             }
 
-            for (let md5_hash of updated_collection_result.collections[i].md5_hashes){
-                let founded_beatmap = osu_db_results.beatmaps.filter(value=> value.beatmap_md5 === md5_hash);
-                if (founded_beatmap.length > 0){
-                    updated_collection_result.collections[i].beatmaps?.push(founded_beatmap[0]);
+            for (let md5_hash of collection.md5_hashes){
+                let founded_beatmap = osu_db_results.beatmaps.filter(value=> value.beatmap_md5 === md5_hash).shift();
+                if (founded_beatmap !== undefined){
+                    collection.beatmaps.push(founded_beatmap);
                 } else {
                     console.error('not found beatmap: ', md5_hash);
                 }
             }
-        }
+        });
 
         console.log('end union');
 
