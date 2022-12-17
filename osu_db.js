@@ -10,9 +10,10 @@ class osu_db extends osu_file_1.osu_file {
         super(file_path, parse_settings);
     }
     osu_db_parse() {
-        let osu_db = {};
-        if (typeof this.parse_settings === 'undefined' || this.parse_settings.length == 0) {
-            throw new Error('set parse settings first');
+        let osu_db = { beatmaps: [] };
+        console.log('start parsing osu db..');
+        if (this.parse_settings.length == 0) {
+            console.error('no set parse settings, results will without beatmaps');
         }
         osu_db.osu_version = this.buff.getInt();
         osu_db.folder_count = this.buff.getInt();
@@ -20,13 +21,19 @@ class osu_db extends osu_file_1.osu_file {
         osu_db.account_unlocked_date = this.buff.getDateTime();
         osu_db.playername = this.buff.getString();
         osu_db.number_beatmaps = this.buff.getInt();
-        osu_db.beatmaps = [];
+        let one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
             let beatmap_data = this.osu_db_beatmap_parse(osu_db.osu_version);
-            osu_db.beatmaps.push(beatmap_data);
+            if (Object.keys(beatmap_data).length > 0) {
+                osu_db.beatmaps.push(beatmap_data);
+            }
+            if (i % one_percent_value == 0) {
+                console.log((i / osu_db.number_beatmaps * 100).toFixed(2), '% complete');
+            }
         }
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = variable_types_1.UserPermissions[osu_db.user_permissions_int];
+        console.log('end parsing osu db');
         return osu_db;
     }
     osu_db_beatmap_parse(osu_db_version) {
@@ -372,10 +379,15 @@ class osu_db extends osu_file_1.osu_file {
     }
 }
 exports.osu_db = osu_db;
-function osu_db_load(osu_path, parse_settings) {
-    var file_parse_result = {};
+/**
+ * @returns osu_db_results with all beatmaps information
+ * @param osu_db_path - absolute path to osu.db
+ * @also use `osu_db_all_parse_settings` for set all beatmap settings
+ */
+function osu_db_load(osu_db_path, parse_settings) {
+    var file_parse_result = { beatmaps: [] };
     try {
-        let osu_db_file = new osu_db(osu_path, parse_settings);
+        let osu_db_file = new osu_db(osu_db_path, parse_settings);
         switch (osu_db_file.get_type()) {
             case osu_file_type_1.osu_file_type.osu_db:
                 file_parse_result = osu_db_file.osu_db_parse();
@@ -392,3 +404,66 @@ function osu_db_load(osu_path, parse_settings) {
     }
 }
 exports.osu_db_load = osu_db_load;
+/*
+function beatmaps_save(){
+    try{
+        fs.writeFileSync(osu_db_JSON_filename, JSON.stringify(osu_db.beatmaps), {encoding: 'utf-8'});
+        return true;
+    } catch (e){
+        console.log(e);
+        return false;
+    }
+}
+
+function beatmaps_load(){
+    try{
+        osu_db.beatmaps = JSON.parse(fs.readFileSync(osu_db_JSON_filename, {encoding: 'utf-8'}));
+        return true;
+    } catch (e){
+        if (e.code === 'ENOENT'){
+            return false;
+        }
+        console.log(e);
+        return false;
+    }
+}
+
+
+function add_new_beatmaps(beatmaps){
+    console.log('Добавление новых '+beatmaps.length+' карт в osu_db')
+    for (let beatmap of beatmaps){
+        osu_db.beatmaps.push (beatmap);
+    }
+    console.log('Пересохранение osu_db..');
+    beatmaps_save();
+    console.log('Пересохранено osu_db');
+}
+
+function find_beatmap_by_md5(beatmap_md5){
+    let beatmap = (osu_db.beatmaps.filter(val=>val.beatmap_md5 === beatmap_md5)).shift();
+    if (typeof beatmap !== 'undefined'){
+        return beatmap;
+    } else {
+        return false;
+    }
+}
+
+function find_beatmapset_by_id(beatmapset_id){
+    let beatmap = osu_db.beatmaps.filter(val=>val.beatmapsetID === beatmapset_id);
+    if (typeof beatmap !== 'undefined'){
+        return beatmap;
+    } else {
+        return false;
+    }
+}
+
+function get_beatmaps_by_mode_and_star(mode, star_min, star_max){
+    let beatmaps = osu_db.beatmaps.filter(val=>{
+        if (!val.SRs.taiko || val.SRs.taiko.length == 0) {
+            return false
+        }
+        let sr_taiko = val.SRs.taiko[0].starrating_double;
+        return beatmap_modes[val.gamemode] === mode && sr_taiko > star_min && sr_taiko < star_max;
+    });
+    return beatmaps;
+}*/ 

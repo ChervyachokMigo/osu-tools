@@ -1,12 +1,5 @@
-/*var { Folder } = require('./index');
+var num = 637910215627727585n;
 
-var f = Folder.path
-console.log(getFiles({path: 'C:\\678'}))*/
 
-import * as osu_db from './osu_db';
+console.log(  num / 10000n  )
 
-async function main() {
-    await osu_db.osu_db_load('E:/osu!/osu!.db');
-}
-
-main();

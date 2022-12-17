@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.osu_db_parse_setting = void 0;
+exports.osu_db_none_parse_settings = exports.osu_db_all_parse_settings = exports.osu_db_parse_setting = void 0;
 var osu_db_parse_setting;
 (function (osu_db_parse_setting) {
     osu_db_parse_setting[osu_db_parse_setting["beatmap_size"] = 0] = "beatmap_size";
@@ -55,3 +55,57 @@ var osu_db_parse_setting;
     osu_db_parse_setting[osu_db_parse_setting["mod_time"] = 49] = "mod_time";
     osu_db_parse_setting[osu_db_parse_setting["mania_scroll"] = 50] = "mania_scroll";
 })(osu_db_parse_setting = exports.osu_db_parse_setting || (exports.osu_db_parse_setting = {}));
+exports.osu_db_all_parse_settings = [
+    osu_db_parse_setting.beatmap_size,
+    osu_db_parse_setting.artist,
+    osu_db_parse_setting.artist_unicode,
+    osu_db_parse_setting.title,
+    osu_db_parse_setting.title_unicode,
+    osu_db_parse_setting.creator,
+    osu_db_parse_setting.difficulty,
+    osu_db_parse_setting.audio_filename,
+    osu_db_parse_setting.beatmap_md5,
+    osu_db_parse_setting.osu_filename,
+    osu_db_parse_setting.ranked_status,
+    osu_db_parse_setting.number_hitcircles,
+    osu_db_parse_setting.number_sliders,
+    osu_db_parse_setting.number_spinners,
+    osu_db_parse_setting.mod_date,
+    osu_db_parse_setting.beatmap_stats,
+    osu_db_parse_setting.slider_velocity,
+    osu_db_parse_setting.star_rating_std,
+    osu_db_parse_setting.star_rating_taiko,
+    osu_db_parse_setting.star_rating_ctb,
+    osu_db_parse_setting.star_rating_mania,
+    osu_db_parse_setting.drain_time,
+    osu_db_parse_setting.total_time,
+    osu_db_parse_setting.preview_time,
+    osu_db_parse_setting.timing_points,
+    osu_db_parse_setting.beatmap_id,
+    osu_db_parse_setting.beatmapset_id,
+    osu_db_parse_setting.thread_id,
+    osu_db_parse_setting.grade_achieved_std,
+    osu_db_parse_setting.grade_achieved_taiko,
+    osu_db_parse_setting.grade_achieved_ctb,
+    osu_db_parse_setting.grade_achieved_mania,
+    osu_db_parse_setting.local_offset,
+    osu_db_parse_setting.stack_laniecy,
+    osu_db_parse_setting.gamemode,
+    osu_db_parse_setting.source,
+    osu_db_parse_setting.tags,
+    osu_db_parse_setting.online_offset,
+    osu_db_parse_setting.font_title,
+    osu_db_parse_setting.is_unplayed,
+    osu_db_parse_setting.last_played,
+    osu_db_parse_setting.is_OSZ2,
+    osu_db_parse_setting.folder_name,
+    osu_db_parse_setting.last_checked_repository_time,
+    osu_db_parse_setting.is_ignore_hit_sounds,
+    osu_db_parse_setting.is_ignore_skin,
+    osu_db_parse_setting.is_disable_storyboard,
+    osu_db_parse_setting.is_disable_video,
+    osu_db_parse_setting.is_visual_override,
+    osu_db_parse_setting.mod_time,
+    osu_db_parse_setting.mania_scroll
+];
+exports.osu_db_none_parse_settings = [];

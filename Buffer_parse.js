@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Buffer_parse = void 0;
 const fs_1 = __importDefault(require("fs"));
 const modes_1 = require("./modes");
+const UTC1970Years = BigInt(62135596800000);
 class Buffer_parse {
     constructor(file_handle) {
         this.file_handle = file_handle;
@@ -17,10 +18,10 @@ class Buffer_parse {
         return buf;
     }
     getDateTime() {
-        let long = this.getLong().toString();
-        let date_number = Number(long.substring(0, long.length - 4));
-        if (date_number > 0) {
-            return new Date(date_number - 62135596800000);
+        let windows_tick_date_value = this.getLong();
+        if (windows_tick_date_value > 0) {
+            let date_value_without_ns = windows_tick_date_value / BigInt(10000);
+            return new Date(Number(date_value_without_ns - UTC1970Years));
         }
         else {
             return new Date(0);
@@ -147,6 +148,9 @@ class Buffer_parse {
     }
     getString() {
         let stringCode = this.getByte();
+        if (stringCode == 0) {
+            return '';
+        }
         if (stringCode == 11) {
             let stringLength = this.getULEB128();
             let result = '';

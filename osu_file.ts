@@ -20,10 +20,10 @@ export class osu_file {
             throw new Error('wrong file type. It not osu file');
         }
 
-        if (parse_settings && parse_settings.length > 0) {
-            this.parse_settings = parse_settings;
-        } else {
+        if (typeof parse_settings === 'undefined'){
             this.parse_settings = [];
+        } else {
+            this.parse_settings = parse_settings;
         }
 
         try {

@@ -16,11 +16,11 @@ class osu_file {
         if (!this.set_type()) {
             throw new Error('wrong file type. It not osu file');
         }
-        if (parse_settings && parse_settings.length > 0) {
-            this.parse_settings = parse_settings;
+        if (typeof parse_settings === 'undefined') {
+            this.parse_settings = [];
         }
         else {
-            this.parse_settings = [];
+            this.parse_settings = parse_settings;
         }
         try {
             this.file_handle = fs_1.default.openSync(`${file_path}`, 'r');

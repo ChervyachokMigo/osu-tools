@@ -3,71 +3,12 @@ import { osu_db_parse_setting } from './parse_settings';
 import { osu_file } from './osu_file';
 import { osu_file_type } from './osu_file_type';
 
-import {TimingPoint, RankedStatus, Gamemode, UserPermissions, StarRating } from './variable_types';
-
-export type beatmap_results = {
-    beatmap_size?: number,
-    artist?: string,
-    artist_unicode?: string,
-    title?: string,
-    title_unicode?: string,
-    creator?: string,
-    difficulty?: string,
-    audio_filename?: string,
-    beatmap_md5?: string,
-    osu_filename?: string,
-    ranked_status_int?: RankedStatus,
-    ranked_status?: string,
-    number_hitcircles?: number,
-    number_sliders?: number,
-    number_spinners?: number,
-    mod_date?: Date,
-    AR?: number,
-    CS?: number,
-    HP?: number,
-    OD?: number,
-    slider_velocity?: number,
-    star_rating_mania?: StarRating[];
-    star_rating_ctb?: StarRating[];
-    star_rating_taiko?: StarRating[];
-    star_rating_std?: StarRating[];
-    drain_time?: number,
-    total_time?: number,
-    preview_time?: number,
-    timing_points?: TimingPoint[],
-    beatmap_id?: number,
-    beatmapset_id?: number,
-    thread_id?: number,
-    grade_achieved_std?: number,
-    grade_achieved_taiko?: number,
-    grade_achieved_ctb?: number,
-    grade_achieved_mania?: number,
-    local_offset?: number,
-    stack_laniecy?: number,
-    gamemode_int?: Gamemode,
-    gamemode?: string,
-    source?: string,
-    tags?: string,
-    online_offset?: number,
-    font_title?: string,
-    is_unplayed?: boolean,
-    last_played?: Date,
-    is_OSZ2?: boolean,
-    folder_name?: string,
-    last_checked_repository_time?: Date,
-    is_ignore_hit_sounds?: boolean,
-    is_ignore_skin?: boolean,
-    is_disable_storyboard?: boolean,
-    is_disable_video?: boolean,
-    is_visual_override?: boolean,
-    //unknown_value?: number,
-    mod_time?: number,
-    mania_scroll?: number
-}
+import { RankedStatus, Gamemode, UserPermissions } from './variable_types';
+import { beatmap_results } from './beatmap_results';
 
 export type osu_db_results = {
     number_beatmaps?: number,
-    beatmaps?: beatmap_results[],
+    beatmaps: beatmap_results[],
     osu_version?: number,
     folder_count?: number,
     is_account_unlocked?: boolean,
@@ -83,11 +24,12 @@ export class osu_db extends osu_file {
         super(file_path, parse_settings);
     }
 
-    osu_db_parse(): osu_db_results {
-        let osu_db: osu_db_results = {};
+    public osu_db_parse(): osu_db_results {
+        let osu_db: osu_db_results = {beatmaps: []};
+        console.log('start parsing osu db..');
 
-        if (typeof this.parse_settings === 'undefined' || this.parse_settings.length == 0) {
-            throw new Error('set parse settings first');
+        if (this.parse_settings.length == 0) {
+            console.error('no set parse settings, results will without beatmaps');
         }
 
         osu_db.osu_version = this.buff.getInt();
@@ -97,18 +39,29 @@ export class osu_db extends osu_file {
         osu_db.playername = this.buff.getString();
         osu_db.number_beatmaps = this.buff.getInt();
 
-        osu_db.beatmaps = [];
+        let one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
 
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
+
             let beatmap_data = this.osu_db_beatmap_parse(osu_db.osu_version);
-            osu_db.beatmaps.push(beatmap_data);
+            if (Object.keys(beatmap_data).length > 0){
+                osu_db.beatmaps.push(beatmap_data);
+            }
+
+            if ( i % one_percent_value == 0){
+                console.log((i/osu_db.number_beatmaps*100).toFixed(2),'% complete');
+            }
         }
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = UserPermissions[osu_db.user_permissions_int];
+
+        console.log('end parsing osu db');
+
         return osu_db;
+        
     }
 
-    osu_db_beatmap_parse(osu_db_version: number): beatmap_results {
+    private osu_db_beatmap_parse(osu_db_version: number): beatmap_results {
         var beatmap: beatmap_results = {};
 
         if (osu_db_version < 20191106) {
@@ -425,10 +378,15 @@ export class osu_db extends osu_file {
     }
 }
 
-export function osu_db_load(osu_path: string, parse_settings: Array<osu_db_parse_setting>): osu_db_results {
-    var file_parse_result: osu_db_results = {};
+/**
+ * @returns osu_db_results with all beatmaps information
+ * @param osu_db_path - absolute path to osu.db
+ * @also use `osu_db_all_parse_settings` for set all beatmap settings
+ */
+export function osu_db_load(osu_db_path: string, parse_settings?: Array<osu_db_parse_setting>): osu_db_results {
+    var file_parse_result: osu_db_results = { beatmaps: [] };
     try{
-        let osu_db_file = new osu_db(osu_path, parse_settings);
+        let osu_db_file = new osu_db(osu_db_path, parse_settings);
         switch (osu_db_file.get_type()){
             case osu_file_type.osu_db:
                 file_parse_result = osu_db_file.osu_db_parse();
@@ -446,3 +404,66 @@ export function osu_db_load(osu_path: string, parse_settings: Array<osu_db_parse
     }
 }
 
+/*
+function beatmaps_save(){
+    try{
+        fs.writeFileSync(osu_db_JSON_filename, JSON.stringify(osu_db.beatmaps), {encoding: 'utf-8'});
+        return true;
+    } catch (e){
+        console.log(e);
+        return false;
+    }
+}
+
+function beatmaps_load(){
+    try{
+        osu_db.beatmaps = JSON.parse(fs.readFileSync(osu_db_JSON_filename, {encoding: 'utf-8'}));
+        return true;
+    } catch (e){
+        if (e.code === 'ENOENT'){
+            return false;
+        }
+        console.log(e);
+        return false;
+    }
+}
+
+
+function add_new_beatmaps(beatmaps){
+    console.log('Добавление новых '+beatmaps.length+' карт в osu_db')
+    for (let beatmap of beatmaps){
+        osu_db.beatmaps.push (beatmap);
+    }
+    console.log('Пересохранение osu_db..');
+    beatmaps_save();
+    console.log('Пересохранено osu_db');
+}
+
+function find_beatmap_by_md5(beatmap_md5){
+    let beatmap = (osu_db.beatmaps.filter(val=>val.beatmap_md5 === beatmap_md5)).shift();
+    if (typeof beatmap !== 'undefined'){
+        return beatmap;
+    } else {
+        return false;
+    }
+}
+
+function find_beatmapset_by_id(beatmapset_id){
+    let beatmap = osu_db.beatmaps.filter(val=>val.beatmapsetID === beatmapset_id);
+    if (typeof beatmap !== 'undefined'){
+        return beatmap;
+    } else {
+        return false;
+    }
+}
+
+function get_beatmaps_by_mode_and_star(mode, star_min, star_max){
+    let beatmaps = osu_db.beatmaps.filter(val=>{
+        if (!val.SRs.taiko || val.SRs.taiko.length == 0) {
+            return false
+        }
+        let sr_taiko = val.SRs.taiko[0].starrating_double;
+        return beatmap_modes[val.gamemode] === mode && sr_taiko > star_min && sr_taiko < star_max;
+    });
+    return beatmaps;
+}*/

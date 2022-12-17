@@ -1,6 +1,9 @@
 import fs from 'fs';
 import { TimingPoint, IntDoublePair, StarRating } from './variable_types';
 import { ModsIntToText }  from './modes';
+
+const UTC1970Years = BigInt(62135596800000);
+
 export class Buffer_parse {
     file_handle: number;
     cursor_offset: number;
@@ -17,10 +20,10 @@ export class Buffer_parse {
     }
 
     getDateTime(): Date {
-        let long = this.getLong().toString();
-        let date_number = Number(long.substring(0, long.length-4));
-        if (date_number > 0){
-            return new Date(date_number - 62135596800000);
+        let windows_tick_date_value = this.getLong();
+        if (windows_tick_date_value > 0){
+            let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
+            return new Date( Number(date_value_without_ns - UTC1970Years ) );
         } else {
             return new Date(0);
         }
@@ -181,6 +184,11 @@ export class Buffer_parse {
 
     getString(): string {
         let stringCode = this.getByte();
+
+        if ( stringCode == 0 ) {
+            return '';
+        }
+
         if (stringCode == 11) {
             let stringLength = this.getULEB128();
             let result = '';
@@ -189,9 +197,11 @@ export class Buffer_parse {
                 this.cursor_offset += stringLength;
             }
             return result;
+
         } else {
             console.log('error read string');
             return '';
+
         }
     }
 
