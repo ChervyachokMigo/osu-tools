@@ -1,7 +1,7 @@
 
 import { osu_file } from './osu_file';
 import { osu_file_type } from '../consts/osu_file_type';
-import { score_property } from '../consts/parse_settings';
+import { score_property } from '../consts/property_settings';
 import { Gamemode } from '../consts/variable_types';
 import { ModsIntToText } from '../consts/modes';
 
@@ -85,39 +85,134 @@ export class scores_db extends osu_file {
     private score_parse ():score {
         let score: score = {};
 
+        if (this.property_settings.indexOf(score_property.gamemode) != -1) {
+            score.gamemode_int = this.buff.getByte();
+            score.gamemode = Gamemode[score.gamemode_int];
+        } else {
+            this.buff.skipByte();
+        }
+
+        if (this.property_settings.indexOf(score_property.score_version) != -1) {
+            score.score_version = this.buff.getInt();
+        } else {
+            this.buff.skipInt();
+        }
+
+        if (this.property_settings.indexOf(score_property.beatmap_md5) != -1) {
+            score.beatmap_md5 = this.buff.getString();
+        } else {
+            this.buff.skipString();
+        }
+
+        if (this.property_settings.indexOf(score_property.playername) != -1) {
+            score.playername = this.buff.getString();
+        } else {
+            this.buff.skipString();
+        }
+
+        if (this.property_settings.indexOf(score_property.replay_md5) != -1) {
+            score.replay_md5 = this.buff.getString();
+        } else {
+            this.buff.skipString();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_300) != -1) {
+            score.count_300 = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_100) != -1) {
+            score.count_100 = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_50) != -1) {
+            score.count_50 = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_geki) != -1) {
+            score.count_geki = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_katu) != -1) {
+            score.count_katu = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.count_miss) != -1) {
+            score.count_miss = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.scores) != -1) {
+            score.scores = this.buff.getInt();
+        } else {
+            this.buff.skipInt();
+        }
+
+        if (this.property_settings.indexOf(score_property.combo) != -1) {
+            score.combo = this.buff.getShort();
+        } else {
+            this.buff.skipShort();
+        }
+
+        if (this.property_settings.indexOf(score_property.is_fc) != -1) {
+            score.is_fc = this.buff.getBool();
+        } else {
+            this.buff.skipBool();
+        }
+
+        const mods_int = this.buff.getInt();
+        const mods = ModsIntToText(mods_int);
+
+        if (this.property_settings.indexOf(score_property.is_fc) != -1) {
+            score.mods_int = mods_int;
+            score.mods = mods;
+        } // else nothing
+
+        const hp_bar = this.buff.getString(); //parseperrystring //getLZMAString
+        if (hp_bar.length > 0 ){
+            if (this.property_settings.indexOf(score_property.hp_bar) != -1) {
+                score.hp_bar = hp_bar;
+            }
+        } //else nothing
+
+        if (this.property_settings.indexOf(score_property.date) != -1) {
+            score.date = this.buff.getDateTime();
+        } else {
+            this.buff.skipDateTime();
+        }
+
+        const replay_data_size = this.buff.getInt();
         
-        const gamemode_int: number = this.buff.getInt();
-        score.gamemode_int = gamemode_int
-        score.gamemode = Gamemode[gamemode_int];
+        if (this.property_settings.indexOf(score_property.replay_data) != -1) {
+            if (replay_data_size != -1){
+                //score.replay_data = //parse getstringbytes
+            }
+        }
+        
+        //let replay_data_buffer = await osufile.getStringBytes(replay_data_length);
 
-        score.score_version = this.buff.getInt();
-        score.beatmap_md5 = this.buff.getString();
-        score.playername = this.buff.getString();
-        score.replay_md5 = this.buff.getString();
+        if (this.property_settings.indexOf(score_property.online_id) != -1) {
+            score.online_id = this.buff.getLong();
+        } else {
+            this.buff.skipLong();
+        }
 
-        score.count_300 = this.buff.getShort();
-        score.count_100 = this.buff.getShort();
-        score.count_50 = this.buff.getShort();
-        score.count_geki = this.buff.getShort();
-        score.count_katu = this.buff.getShort();
-        score.count_miss = this.buff.getShort();
-
-        score.scores = this.buff.getInt();
-        score.combo = this.buff.getShort();
-        score.is_fc = this.buff.getBool();
-
-        const mods_int: number = this.buff.getInt();
-        score.mods_int = mods_int;
-        score.mods = ModsIntToText(mods_int);
-
-        score.hp_bar = this.buff.getString(); //parseperrystring //getLZMAString
-        score.date = this.buff.getDateTime();
-        let replay_data_size = this.buff.getInt();
-        console.log(replay_data_size)
-        score.replay_data = [];//let replay_data_buffer = await osufile.getStringBytes(replay_data_length);
-        score.online_id = this.buff.getLong();
-        if(score.mods.includes('Target')){
-            score.target_practice_accuracy = this.buff.getDouble();
+        if(mods.indexOf('Target') != -1){
+            if (this.property_settings.indexOf(score_property.target_practice_accuracy) != -1) {
+                score.target_practice_accuracy = this.buff.getDouble();
+            } else {
+                this.buff.skipDouble();
+            }
         }
 
         return score;

@@ -124,8 +124,14 @@ export enum score_property {
     combo = 'combo',
     is_fc = 'is_fc',
     mods = 'mods',
-    hp_bar = 'hp_bar',
+    /**
+     * Notice: in **scores.db** hp_bar always empty
+     */
+    hp_bar = 'hp_bar',  
     date = 'date',
+    /**
+     * Notice: in **scores.db** replay_data always empty
+     */
     replay_data = 'replay_data',
     online_id = 'online_id',
     target_practice_accuracy = 'target_practice_accuracy'

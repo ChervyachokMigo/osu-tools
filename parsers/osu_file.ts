@@ -8,10 +8,10 @@ export class osu_file {
     public file_basename: string;
     public file_path: string;
     public file_type: osu_file_type;
-    public parse_settings: Array<any>;
+    public property_settings: Array<any>;
     public buff: Buffer_parse;
 
-    constructor(file_path: string, parse_settings?: Array<any>) {
+    constructor(file_path: string, property_settings?: Array<any>) {
         this.file_type = osu_file_type.none;
         this.file_path = file_path;
         this.file_basename = path.basename(file_path);
@@ -20,10 +20,10 @@ export class osu_file {
             throw new Error('wrong file type. It not osu file');
         }
 
-        if (typeof parse_settings === 'undefined'){
-            this.parse_settings = [];
+        if (typeof property_settings === 'undefined'){
+            this.property_settings = [];
         } else {
-            this.parse_settings = parse_settings;
+            this.property_settings = property_settings;
         }
 
         try {
@@ -67,9 +67,9 @@ export class osu_file {
         }
     }
 
-    set_parse_settings(parse_settings: Array<any>) {
-        if (parse_settings && parse_settings.length > 0) {
-            this.parse_settings = parse_settings;
+    set_property_settings(property_settings: Array<any>) {
+        if (property_settings && property_settings.length > 0) {
+            this.property_settings = property_settings;
         } else {
             throw new Error('wrong parse settings');
         }

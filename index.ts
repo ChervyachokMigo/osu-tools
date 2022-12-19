@@ -1,10 +1,10 @@
 import { collection_db_load, collection_db_results } from './parsers/collection_db';
 import { find_beatmaps, osu_db_load, osu_db_results} from './parsers/osu_db';
-import { beatmap_property, all_beatmap_properties, all_score_properties} from "./consts/parse_settings";
+import { beatmap_property, all_beatmap_properties, all_score_properties, score_property} from "./consts/property_settings";
 import { get_collections_detailed } from './tools/union';
 import { beatmap_results } from './consts/beatmap_results';
 import { scores_db_load } from './parsers/scores_db';
-
+/*
 var getted_beatmap_properties = [
     beatmap_property.beatmap_id,
     beatmap_property.beatmap_stats,
@@ -27,8 +27,8 @@ var collection_db_result: collection_db_results = collection_db_load('E:/osu!/co
 
 var detailed_collections = get_collections_detailed(collection_db_result, osu_db_result);
 console.log(detailed_collections);
-
-var scores_db_result = scores_db_load('E:/osu!/scores.db', all_score_properties);
+*/
+var scores_db_result = scores_db_load('E:/osu!/scores.db', [score_property.online_id]);
 console.log(scores_db_result);
 
 setTimeout(()=>{return true;}, 100000)

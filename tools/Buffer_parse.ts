@@ -199,6 +199,7 @@ export class Buffer_parse {
             return result;
 
         } else {
+            console.log('stringCode',stringCode)
             console.log('error read string');
             return '';
 
