@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { Buffer_parse } from './Buffer_parse';
-import { osu_file_type } from './osu_file_type';
+import { Buffer_parse } from '../tools/Buffer_parse';
+import { osu_file_type } from '../consts/osu_file_type';
 
 export class osu_file {
     public file_handle: any;

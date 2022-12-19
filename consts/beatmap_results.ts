@@ -1,6 +1,5 @@
 import { TimingPoint, RankedStatus, Gamemode, StarRating } from './variable_types';
 
-
 export type beatmap_results = {
     beatmap_size?: number;
     artist?: string;

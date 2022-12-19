@@ -1,27 +1,17 @@
 
 import { osu_file } from './osu_file';
-import { osu_file_type } from './osu_file_type';
-import { beatmap_results } from './beatmap_results';
+import { osu_file_type } from '../consts/osu_file_type';
+import { beatmap_results } from '../consts/beatmap_results';
 
 export type collection = {
     name: string,
-    md5_hashes: string[]
+    beatmaps_md5: string[]
+    beatmaps?: beatmap_results[]
 }
 
 export type collection_db_results = {
     osu_version?: number,
     collections: collection[]
-}
-
-export type collection_db_detailed_results = {
-    osu_version?: number,
-    collections: collection_detailed[]
-}
-
-export type collection_detailed = {
-    name: string,
-    md5_hashes: string[],
-    beatmaps: beatmap_results[]
 }
 
 export class collection_db extends osu_file {
@@ -47,14 +37,14 @@ export class collection_db extends osu_file {
         for (let i = 0; i < collections_size; i++) {
             let current_collection: collection = {
                 name: this.buff.getString(), 
-                md5_hashes: []
+                beatmaps_md5: []
             };
 
             let currect_collection_hashes_size = this.buff.getInt();
 
             if (currect_collection_hashes_size > 0){
                 for (let k = 0; k < currect_collection_hashes_size; k++){
-                    current_collection.md5_hashes.push(this.buff.getString());
+                    current_collection.beatmaps_md5.push(this.buff.getString());
                 }
             }
             collection_db.collections.push(current_collection);

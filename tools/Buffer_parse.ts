@@ -1,62 +1,73 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Buffer_parse = void 0;
-const fs_1 = __importDefault(require("fs"));
-const modes_1 = require("./modes");
+import fs from 'fs';
+import { TimingPoint, IntDoublePair, StarRating } from '../consts/variable_types';
+import { ModsIntToText }  from '../consts/modes';
+
 const UTC1970Years = BigInt(62135596800000);
-class Buffer_parse {
-    constructor(file_handle) {
+
+export class Buffer_parse {
+    file_handle: number;
+    cursor_offset: number;
+
+    constructor(file_handle: number) {
         this.file_handle = file_handle;
         this.cursor_offset = 0;
     }
-    bufferRead(offset, length) {
+
+    bufferRead(offset: number, length: number): Buffer {
         let buf = Buffer.alloc(length);
-        fs_1.default.readSync(this.file_handle, buf, 0, length, offset);
+        fs.readSync(this.file_handle, buf, 0, length, offset);
         return buf;
     }
-    getDateTime() {
+
+    getDateTime(): Date {
         let windows_tick_date_value = this.getLong();
-        if (windows_tick_date_value > 0) {
-            let date_value_without_ns = windows_tick_date_value / BigInt(10000);
-            return new Date(Number(date_value_without_ns - UTC1970Years));
-        }
-        else {
+        if (windows_tick_date_value > 0){
+            let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
+            return new Date( Number(date_value_without_ns - UTC1970Years ) );
+        } else {
             return new Date(0);
         }
     }
-    skipDateTime() {
+
+    skipDateTime(): void {
         this.cursor_offset += 8;
     }
-    getBool() {
+
+    getBool(): boolean {
         return Boolean(this.getInt(1));
     }
-    skipBool() {
+
+    skipBool(): void {
         this.cursor_offset += 1;
     }
-    getByte() {
+
+    getByte(): number {
         return this.getInt(1);
     }
-    skipByte() {
+
+    skipByte(): void {
         this.cursor_offset += 1;
     }
-    getShort() {
+
+    getShort(): number {
         return this.getInt(2);
     }
-    skipShort() {
+
+    skipShort(): void {
         this.cursor_offset += 2;
     }
-    getLong() {
+
+    getLong(): bigint {
         let res = this.bufferRead(this.cursor_offset, 8);
         this.cursor_offset += 8;
         return res.readBigInt64LE(0);
     }
-    skipLong() {
+
+    skipLong(): void {
         this.cursor_offset += 8;
     }
-    getInt(length = 4) {
+
+    getInt(length: number = 4): number {
         let res = this.bufferRead(this.cursor_offset, length);
         this.cursor_offset += length;
         switch (length) {
@@ -69,73 +80,97 @@ class Buffer_parse {
             default: throw new Error('wrong number length');
         }
     }
-    skipInt() {
+
+    skipInt(): void {
         this.cursor_offset += 4;
     }
-    getStarRatings() {
-        let result = [];
+
+    getStarRatings(): Array<StarRating> {
+        let result: Array<StarRating> = [];
         let count = this.getInt();
+
         for (let i = 0; i < count; i++) {
-            let sr = { mods: [], mods_int: 0, stars: 0 };
+            let sr: StarRating = { mods: [], mods_int: 0, stars: 0 };
+
             this.getByte();
             sr.mods_int = this.getInt();
-            sr.mods = (0, modes_1.ModsIntToText)(sr.mods_int);
+
+            sr.mods = ModsIntToText(sr.mods_int);
+
             this.getByte();
             sr.stars = this.getDouble();
+
             result.push(sr);
         }
         return result;
     }
-    getIntDoublePairs() {
-        let result = [];
+
+    getIntDoublePairs(): Array<IntDoublePair> {
+        let result: Array<IntDoublePair> = [];
         let count = this.getInt();
+
         for (let i = 0; i < count; i++) {
-            let sr = { int: 0, double: 0 };
+            let sr: IntDoublePair = { int: 0, double: 0 };
+
             this.getByte();
             sr.int = this.getInt();
+
             this.getByte();
             sr.double = this.getDouble();
+
             result.push(sr);
         }
         return result;
     }
-    skipIntDoublePairs() {
+
+    skipIntDoublePairs(): void {
         let count = this.getInt();
         this.cursor_offset += 14 * count;
     }
-    getTimingPoints() {
-        var result = [];
+
+    getTimingPoints(): Array<TimingPoint> {
+        var result: Array<TimingPoint> = [];
         let count = this.getInt();
+
         for (let i = 0; i < count; i++) {
             result.push(this.getTimingPoint());
         }
         return result;
     }
-    getTimingPoint() {
-        let result = { bpm: 0, offset: 0, is_inherit: false };
+
+    getTimingPoint(): TimingPoint {
+        let result: TimingPoint = { bpm: 0, offset: 0, is_inherit: false };
+
         result.bpm = this.getDouble();
         result.offset = this.getDouble();
         result.is_inherit = this.getBool();
+
         return result;
     }
-    skipTimingPoints() {
+
+    skipTimingPoints(): void {
         let timingPointsNumber = this.getInt();
         this.cursor_offset += 17 * timingPointsNumber;
     }
-    getSingle() {
+
+    getSingle(): number {
         return this.getFloat(4);
     }
-    skipSingle() {
+
+    skipSingle(): void {
         this.cursor_offset += 4;
     }
-    getDouble() {
+
+    getDouble(): number {
         return this.getFloat(8);
     }
-    skipDouble() {
+
+    skipDouble(): void {
         this.cursor_offset += 8;
     }
-    getFloat(length) {
-        let buf = this.bufferRead(this.cursor_offset, length);
+
+    getFloat(length: number): number {
+        let buf: Buffer = this.bufferRead(this.cursor_offset, length);
         this.cursor_offset += length;
         switch (length) {
             case 4:
@@ -146,11 +181,14 @@ class Buffer_parse {
                 throw new Error('wrong number length');
         }
     }
-    getString() {
+
+    getString(): string {
         let stringCode = this.getByte();
-        if (stringCode == 0) {
+
+        if ( stringCode == 0 ) {
             return '';
         }
+
         if (stringCode == 11) {
             let stringLength = this.getULEB128();
             let result = '';
@@ -159,13 +197,15 @@ class Buffer_parse {
                 this.cursor_offset += stringLength;
             }
             return result;
-        }
-        else {
+
+        } else {
             console.log('error read string');
             return '';
+
         }
     }
-    skipString() {
+
+    skipString(): void {
         let stringCode = this.getByte();
         if (stringCode == 11) {
             let stringLength = this.getULEB128();
@@ -174,11 +214,12 @@ class Buffer_parse {
             }
         }
     }
-    getULEB128() {
-        let result = 0;
-        let shift = 0;
+
+    getULEB128(): number {
+        let result: number = 0;
+        let shift: number = 0;
         while (true) {
-            let byte = this.getInt(1);
+            let byte: any = this.getInt(1);
             result |= (byte & 0x7f) << shift;
             if ((byte & 0x80) === 0)
                 break;
@@ -187,4 +228,3 @@ class Buffer_parse {
         return result;
     }
 }
-exports.Buffer_parse = Buffer_parse;

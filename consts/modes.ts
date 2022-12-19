@@ -11,22 +11,22 @@ const mod_names = ['NoFail',     'Easy',
 'FadeIn',      'Random',     'Cinema',
 'Target',      'Key9',       'KeyCoop',
 'Key1',        'Key3',       'Key2',
-'ScoreV2',     'Mirror']
+'ScoreV2',     'Mirror'];
 
 
 export function ModsIntToText (modsBits: number) {
-        if (modsBits == 0){
-            return ['No Mods'];
-        }
-        let result_mods = [];
+    if (modsBits == 0){
+        return ['No Mods'];
+    }
+    let result_mods = [];
 
-        for (let i = 0 ; i < 32; i++){
-            let bit = bitwise.integer.getBit(modsBits, i);
-            if (bit){
-                result_mods.push(mod_names[i]);
-            }
-            
+    for (let i = 0 ; i < 32; i++){
+        let bit = bitwise.integer.getBit(modsBits, i);
+        if (bit){
+            result_mods.push(mod_names[i]);
         }
         
-        return result_mods
     }
+    
+    return result_mods
+}
