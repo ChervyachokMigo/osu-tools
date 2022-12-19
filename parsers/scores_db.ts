@@ -85,8 +85,10 @@ export class scores_db extends osu_file {
     private score_parse ():score {
         let score: score = {};
 
-        score.gamemode_int = this.buff.getByte();
-        score.gamemode = Gamemode[score.gamemode_int];
+        
+        const gamemode_int: number = this.buff.getInt();
+        score.gamemode_int = gamemode_int
+        score.gamemode = Gamemode[gamemode_int];
 
         score.score_version = this.buff.getInt();
         score.beatmap_md5 = this.buff.getString();
@@ -104,8 +106,9 @@ export class scores_db extends osu_file {
         score.combo = this.buff.getShort();
         score.is_fc = this.buff.getBool();
 
-        score.mods_int = this.buff.getInt();
-        score.mods = ModsIntToText(score.mods_int);
+        const mods_int: number = this.buff.getInt();
+        score.mods_int = mods_int;
+        score.mods = ModsIntToText(mods_int);
 
         score.hp_bar = this.buff.getString(); //parseperrystring //getLZMAString
         score.date = this.buff.getDateTime();

@@ -2,9 +2,9 @@
   "name": "osu-tools",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "built/index.js",
   "scripts": {
-    "test": "node index.js && pause"
+    "test": "node built/index.js && pause"
   },
   "keywords": [],
   "author": "",
