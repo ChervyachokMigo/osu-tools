@@ -58,13 +58,23 @@ export class osu_file {
                         break;
                 }
             }
+
             if (this.file_type === osu_file_type.none) {
                 return false;
             }
+
             return true;
+
         } else {
-            return false;
+
+            if (path.extname(this.file_basename) === '.osr') {
+                this.file_type = osu_file_type.replay_osr;
+
+                return true;
+            } 
         }
+
+        return false;
     }
 
     set_property_settings(property_settings: Array<any>) {

@@ -1,6 +1,8 @@
 import fs from 'fs';
-import { TimingPoint, IntDoublePair, StarRating } from '../consts/variable_types';
+import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame } from '../consts/variable_types';
 import { ModsIntToText }  from '../consts/modes';
+import { decompressLZMASync } from '../lib/decompressLZMASync';
+import bitwise from 'bitwise';
 
 const UTC1970Years = BigInt(62135596800000);
 
@@ -227,5 +229,73 @@ export class Buffer_parse {
             shift += 7;
         }
         return result;
+    }
+
+    getHpBar(): HP_Bar[] {
+        let hp_bar_raw: string = this.getString();
+        let hp_bar: HP_Bar[] = [];
+
+        if (hp_bar_raw.length > 0) {
+            for (let hp_value of hp_bar_raw.split(',') .map( value => value.split('|')) .filter( value => value.length >= 2)){
+                let hp_bar_item: HP_Bar = {
+                    offset: parseInt(hp_value[0]), 
+                    hp: parseFloat(hp_value[1])
+                }
+                hp_bar.push(hp_bar_item);
+            }
+        }
+        return hp_bar;
+    }
+
+    private getLZMAString(encoded_buffer: Buffer){
+        return decompressLZMASync(encoded_buffer);
+    }
+
+    getReplayData(): ReplayData {
+        const result: ReplayData = { replay_seed: 0, replay_frames: [] };
+        const replay_data_size = this.getInt();
+
+        if (replay_data_size > 0){
+			let buffer = this.bufferRead(this.cursor_offset, replay_data_size);
+            this.cursor_offset += replay_data_size;
+
+            let replay_data_array = this.getLZMAString(buffer).split(',') 
+                .map( value => value.split('|'))
+                .filter ( value => value.length == 4 );
+    
+            if (replay_data_array.length > 0){
+
+                if (replay_data_array[replay_data_array.length-1][0] == '-12345' ){
+                    let replay_seed = replay_data_array.pop();
+                    result.replay_seed = typeof replay_seed !== undefined  && replay_seed && replay_seed.length == 4 ? 
+                        parseInt(replay_seed[3]) : 0;
+                }
+
+                let offset: bigint = BigInt(0);
+                for (let replay_frame_data of replay_data_array){
+                    if (replay_frame_data.length == 4){
+                        let keysbyte = parseInt(replay_frame_data[3]);
+                        offset += BigInt(replay_frame_data[0]);
+
+                        let replay_action: ReplayFrame = {
+                            offset: offset,
+                            time: BigInt(replay_frame_data[0]),
+                            x: parseFloat(replay_frame_data[1]),
+                            y: parseFloat(replay_frame_data[2]),
+                            keys_pressed: {
+                                Key_1: Boolean(bitwise.integer.getBit( keysbyte, 0 )), 
+                                Key_2: Boolean(bitwise.integer.getBit( keysbyte, 1 )), 
+                                Key_3: Boolean(bitwise.integer.getBit( keysbyte, 2 )), 
+                                Key_4: Boolean(bitwise.integer.getBit( keysbyte, 3 )),
+                                Key_Smoke: Boolean(bitwise.integer.getBit( keysbyte, 4 )),
+                            }
+                        }
+                        result.replay_frames.push(replay_action);
+                    }
+                }
+            }
+        }
+
+		return result;
     }
 }

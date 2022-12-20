@@ -44,3 +44,28 @@ export enum RankedStatus {
     qualified = 6, 
     loved = 7
 }
+
+export type HP_Bar = {
+    offset: number,
+    hp: number
+}
+
+export type ReplayFrame = {
+    offset: bigint,
+    time: bigint,
+    x: number,
+    y: number,
+    keys_pressed: KeysPressed
+}
+
+export type ReplayData = {
+    replay_seed: number,
+    replay_frames: ReplayFrame[]
+}
+export type KeysPressed = {
+    Key_1: boolean,
+    Key_2: boolean,
+    Key_3: boolean,
+    Key_4: boolean,
+    Key_Smoke: boolean
+}
