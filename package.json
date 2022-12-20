@@ -1,13 +1,13 @@
 {
   "name": "osu-tools",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "osu parser for db/osr files and some stuff ",
   "main": "built/index.js",
   "scripts": {
     "test": "node built/index.js && pause"
   },
   "keywords": [],
-  "author": "",
+  "author": "ChervyachokMigo",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.11.13",
