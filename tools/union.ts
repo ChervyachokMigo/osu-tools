@@ -85,7 +85,9 @@ export function get_scores_detailed ( scores_results: scores_db_results, osu_db_
         }
 
         console.log('start union scores db with osu db..');
-
+        
+        var i = 0;
+        let one_percent_value = Math.trunc(updated_scores_results.beatmaps_scores.length/100);
         updated_scores_results.beatmaps_scores.map( ( beatmap_scores: scores_beatmap ) => {
             beatmap_scores.beatmap = {};
 
@@ -100,6 +102,12 @@ export function get_scores_detailed ( scores_results: scores_db_results, osu_db_
             } else {
                 console.error('not found beatmap: ', beatmap_scores.beatmap_md5);
             }
+
+
+            //if ( i % one_percent_value == 0){
+                console.log( (Math.floor( i / updated_scores_results.beatmaps_scores.length * 10000)/100 ),'% complete');
+            //}
+            i++;
             
         });
 

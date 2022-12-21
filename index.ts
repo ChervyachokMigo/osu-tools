@@ -18,7 +18,7 @@ var getted_beatmap_properties = [
 ];
 
 var osu_db_result: osu_db_results = osu_db_load(
-    'E:/osu!/osu!.db' ,  getted_beatmap_properties
+    'E:/osu!/osu!.db' ,  all_beatmap_properties
 );
 
 /*
@@ -31,19 +31,19 @@ var detailed_collections = get_collections_detailed(collection_db_result, osu_db
 console.log(detailed_collections);
 */
 
-/*var scores_db_result = scores_db_load('E:/osu!/scores.db', [score_property.online_id, score_property.gamemode]);
+var scores_db_result = scores_db_load('E:/osu!/scores.db', [score_property.online_id, score_property.gamemode]);
 console.log(scores_db_result);
 
 var detailed_scores_db = get_scores_detailed(scores_db_result, osu_db_result);
-console.log(detailed_scores_db);*/
+console.log(detailed_scores_db);
 
 
-var replay = replay_load(
-    'E:\\osu!\\Replays\\SadGod - Nikitata - TIMEOUT (KORDHELL REMIX) [INNER ONI] (2022-12-19) Taiko.osr',
+/*var replay = replay_load(
+    'E:\\osu!\\Replays\\replay-osu_3846701_4339861825.osr',
     all_score_properties);
 console.log(replay);
 
 var score_detailed = get_score_detailed(replay, osu_db_result);
-console.log(score_detailed);
+console.log(score_detailed);*/
  
 setTimeout(()=>{return true;}, 100000);

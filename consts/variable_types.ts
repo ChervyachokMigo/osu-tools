@@ -26,9 +26,9 @@ export enum UserPermissions {
 }
 
 export enum Gamemode {
-    std = 0, 
+    osu = 0, 
     taiko = 1, 
-    ctb = 2, 
+    catch = 2, 
     mania = 3
 }
 
@@ -69,3 +69,4 @@ export type KeysPressed = {
     Key_4: boolean,
     Key_Smoke: boolean
 }
+
