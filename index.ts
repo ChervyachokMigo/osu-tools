@@ -5,8 +5,9 @@ import { get_collections_detailed, get_scores_detailed, get_score_detailed } fro
 import { beatmap_results } from './consts/beatmap_results';
 import { scores_db_load } from './parsers/scores_db';
 import { replay_load } from './parsers/replay_osr';
+import { ScanFolderForOsuFiles } from './parsers/scan_songs';
 
-var getted_beatmap_properties = [
+/*var getted_beatmap_properties = [
     beatmap_property.beatmap_id,
     beatmap_property.beatmap_stats,
     beatmap_property.beatmapset_id,
@@ -19,7 +20,7 @@ var getted_beatmap_properties = [
 
 var osu_db_result: osu_db_results = osu_db_load(
     'E:/osu!/osu!.db' ,  all_beatmap_properties
-);
+);*/
 
 /*
 var founded_beatmaps = find_beatmaps( osu_db_result, (beatmap) =>  beatmap.beatmap_id && beatmap.beatmap_id < 100 );
@@ -31,11 +32,11 @@ var detailed_collections = get_collections_detailed(collection_db_result, osu_db
 console.log(detailed_collections);
 */
 
-var scores_db_result = scores_db_load('E:/osu!/scores.db', [score_property.online_id, score_property.gamemode]);
+/*var scores_db_result = scores_db_load('E:/osu!/scores.db', [score_property.online_id, score_property.gamemode]);
 console.log(scores_db_result);
 
 var detailed_scores_db = get_scores_detailed(scores_db_result, osu_db_result);
-console.log(detailed_scores_db);
+console.log(detailed_scores_db);*/
 
 
 /*var replay = replay_load(
@@ -45,5 +46,7 @@ console.log(replay);
 
 var score_detailed = get_score_detailed(replay, osu_db_result);
 console.log(score_detailed);*/
+
+ScanFolderForOsuFiles('E:\\osu!');
  
-setTimeout(()=>{return true;}, 100000);
+//setTimeout(()=>{return true;}, 100000);
