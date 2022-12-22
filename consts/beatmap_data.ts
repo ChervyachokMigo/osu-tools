@@ -69,7 +69,19 @@ import { Gamemode } from "./variable_types";
     */
     timing_points: beatmap_timing_point[];
 
+    /**
+     * [Colours]	
+     * 
+     * Combo and skin colours
+     */
     colors: beatmap_data_color[];
+
+    /**
+     * [Hit objects]
+     * 
+     * Hit objects
+     */
+    hit_objects: beatmap_data_hit_object[];
 
 }
 
@@ -99,14 +111,35 @@ export enum beatmap_sample_set {
     Drum = 'Drum'
 }
 
-/** [Timing points]
+/** [Timing points] and [Hit objects]
  * 
  * Default sample set for hit objects
  */
-export enum timing_point_sample_set {
+export enum hit_sample_set {
+    /**
+     * 
+     * [Hit objects]
+     * 
+     * No custom sample set
+     * 
+     * For normal sounds, the set is determined by the timing point's sample set.
+     * 
+     * For additions, the set is determined by the normal sound's sample set.
+     */
     Default = 0,
+    /**
+     * Normal set
+     */
     Normal = 1,
+
+    /**
+     * Soft set
+     */
     Soft = 2,
+
+    /**
+     * Drum set
+     */
     Drum = 3
 }
 
@@ -186,11 +219,6 @@ export type beatmap_color_type = {
     SliderBorder: 'SliderBorder'
 }
 
-
-const NOTECOLOR = {
-    DON: 1,
-    KATSU: 2
-}
 /** [Hit objects]
  *
  * Type of the object.*/
@@ -198,6 +226,51 @@ export enum beatmap_data_hit_object_type {
     hitcircle = 1,
     slider = 2,
     spinner = 3
+}
+
+/** [Hit objects]
+ *
+ * Hitsound applied to the object. 
+ */
+export enum beatmap_data_hit_sound {
+    Normal = 0,
+    Whistle = 1,
+    Finish = 2,
+    Clap = 3
+}
+
+/**  [Hit objects]
+ * 
+ * All of these options (besides volume) are used to determine which sound file to play for a given hitsound. 
+ * 
+ * The filename is `<sampleSet>-hit<hitSound><index>.wav` , where:
+ * 
+ * `sampleSet` is normal, soft, or drum, determined by either normalSet or additionSet depending on which hitsound is playing
+ * 
+ * `hitSound` is normal, whistle, finish, or clap
+ * 
+ * `index` is the same index as above, except it is not written if the value is 0 or 1 */
+export type beatmap_data_hit_sample ={
+    /**
+     * Sample set of the normal sound.
+     */
+    normal_set: hit_sample_set;
+    /**
+     * Sample set of the whistle, finish, and clap sounds.
+     */
+    addition_set: hit_sample_set;
+    /**
+     *  Index of the sample. If this is 0, the timing point's sample index will be used instead.
+     */
+    index: number;
+    /**
+     * Volume of the sample from 1 to 100. If this is 0, the timing point's volume will be used instead.
+     */
+    volume: number;
+    /**
+     * Custom filename of the addition sound.
+     */
+    filename: string;
 }
 
 /**
@@ -505,6 +578,7 @@ export type beatmap_timing_point = {
      * The end of the timing section is the next timing point's time (or never, if this is the last timing point).
      */
     time_offset: number;
+
     /** [Timing points]
      * 
      * This property has two meanings:
@@ -516,31 +590,39 @@ export type beatmap_timing_point = {
      *   For example, -50 would make all sliders in this timing section twice as fast as SliderMultiplier.
      */
     beat_length: number;
+
     /** [Timing points]
      * 
      * Amount of beats in a measure. Inherited timing points ignore this property.
      */
     meter: number;
+
     /** [Timing points]
      * 
-     * Default sample set for hit objects (0 = beatmap default, 1 = normal, 2 = soft, 3 = drum).
+     * Default sample set for hit objects 
+     * 
+     * 0 = beatmap default, 1 = normal, 2 = soft, 3 = drum
      */
-    sample_set: timing_point_sample_set;
+    sample_set: hit_sample_set;
+
     /** [Timing points]
      * 
      * Custom sample index for hit objects. 0 indicates osu!'s default hitsounds.
      */
     sample_index: number;
+
     /** [Timing points]
      * 
      * Volume percentage for hit objects.
      */
     volume: number;
+
     /** [Timing points]
      * 
      * Whether or not the timing point is uninherited.
      */
     uninherited: boolean;
+
     /** [Timing points]
      * 
      * Timing points have two extra effects that can be toggled
@@ -561,16 +643,19 @@ export type beatmap_data_color = {
      * Type of color
      */
     type?: beatmap_color_type;
+
     /** [Colors]
      * 
      * Red component of color
      */
     red?: number;
+
     /** [Colors]
      * 
      * Green component of color
      */
     green?: number;
+
     /** [Colors]
      * 
      * Blue component of color
@@ -617,7 +702,7 @@ export type beatmap_data_hit_object = {
      *
      * Extra parameters specific to the object's type.
      */
-    objectParams?: beatmap_data_hit_object_params;
+    objectParams?: string;
 
     /** [Hit objects]
      *
@@ -626,6 +711,8 @@ export type beatmap_data_hit_object = {
      * It is closely related to hitSound.
      * 
      * If it is not written, it defaults to 0:0:0:0:
+     * 
+     * Hit sample syntax: normalSet:additionSet:index:volume:filename
      */
     hitSample?: beatmap_data_hit_sample;
 
