@@ -49,4 +49,4 @@ console.log(score_detailed);*/
 
 ScanFolderForOsuFiles('E:\\osu!');
  
-//setTimeout(()=>{return true;}, 100000);
+setTimeout(()=>{return true;}, 1000000);

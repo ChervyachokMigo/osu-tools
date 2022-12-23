@@ -11,25 +11,25 @@ import { Gamemode } from "./variable_types";
      * 
      * General information about the beatmap
      */
-    general?: beatmap_data_general;
+    general: beatmap_data_general;
     /**
      * [Editor]
      * 
      * These options are only relevant when opening maps in the beatmap editor. They do not affect gameplay.
      */
-    editor?: beatmap_data_editor;
+    editor: beatmap_data_editor;
     /**
      * [Metadata]
      * 
      * Information used to identify the beatmap
      */
-    metadata?: beatmap_metadata;
+    metadata: beatmap_metadata;
     /**
      * [Difficulty]	
      * 
      * Difficulty settings
      */
-    difficulty?: beatmap_data_difficulty;
+    difficulty: beatmap_data_difficulty;
 
     /**
      * [Events]	
@@ -56,7 +56,7 @@ import { Gamemode } from "./variable_types";
      * For information about storyboard syntax, see Storyboard Scripting.
      * https://osu.ppy.sh/wiki/en/Storyboard/Scripting
      */
-    events?: string[];
+    events: string[];
 
     /**
     * [Timing points]
@@ -192,40 +192,41 @@ export enum beatmap_overlay_position {
  * 
  * They are comma-separated triplets of integers 0–255, representing the red, green, and blue components of the colours.
  */
-export type beatmap_color_type = {
+export enum beatmap_color_type {
     /** [Colors]
      * 
      * Additive combo colours
      */
-    Color1: 'Color1',
-    Color2: 'Color2',
-    Color3: 'Color3',
-    Color4: 'Color4',
-    Color5: 'Color5',
-    Color6: 'Color6',
-    Color7: 'Color7',
-    Color8: 'Color8',
+    Color1 = 'Color1',
+    Color2 = 'Color2',
+    Color3 = 'Color3',
+    Color4 = 'Color4',
+    Color5 = 'Color5',
+    Color6 = 'Color6',
+    Color7 = 'Color7',
+    Color8 = 'Color8',
 
     /** [Colors]
      * 
      * Additive slider track colour
      */
-    SliderTrackOverride: 'SliderTrackOverride',
+    SliderTrackOverride = 'SliderTrackOverride',
 
     /** [Colors]
      * 
      * Slider border colour
      */
-    SliderBorder: 'SliderBorder'
+    SliderBorder = 'SliderBorder'
 }
 
 /** [Hit objects]
  *
  * Type of the object.*/
 export enum beatmap_data_hit_object_type {
-    hitcircle = 1,
-    slider = 2,
-    spinner = 3
+    hitcircle = 0,
+    slider = 1,
+    spinner = 2,
+    mania_hold = 3
 }
 
 /** [Hit objects]
@@ -254,23 +255,23 @@ export type beatmap_data_hit_sample ={
     /**
      * Sample set of the normal sound.
      */
-    normal_set: hit_sample_set;
+    normal_set?: hit_sample_set;
     /**
      * Sample set of the whistle, finish, and clap sounds.
      */
-    addition_set: hit_sample_set;
+    addition_set?: hit_sample_set;
     /**
      *  Index of the sample. If this is 0, the timing point's sample index will be used instead.
      */
-    index: number;
+    index?: number;
     /**
      * Volume of the sample from 1 to 100. If this is 0, the timing point's volume will be used instead.
      */
-    volume: number;
+    volume?: number;
     /**
      * Custom filename of the addition sound.
      */
-    filename: string;
+    filename?: string;
 }
 
 /**
@@ -290,7 +291,7 @@ export type beatmap_data_general = {
         Milliseconds of silence before the audio starts playing
         @param default 0 
         */
-    audio_leadin?: number;
+    audio_lead_in?: number;
 
         /**[General]
         
@@ -491,7 +492,7 @@ export type beatmap_metadata = {
         /**[Metadata]
 
         Original media the song was produced for */
-    sourse?: string;
+    source?: string;
 
         /**[Metadata]
 
@@ -692,17 +693,20 @@ export type beatmap_data_hit_object = {
      * Type of the object.*/
     type: beatmap_data_hit_object_type;
 
+    is_new_combo?: boolean,
+    new_combo_colors_skip?: number,
+
     /** [Hit objects]
      *
      * Hitsound applied to the object. 
      */
-    hitSound?: beatmap_data_hit_sound;
+    hit_sound?: beatmap_data_hit_sound;
 
     /** [Hit objects]
      *
      * Extra parameters specific to the object's type.
      */
-    objectParams?: string;
+    object_params?: string;
 
     /** [Hit objects]
      *
@@ -714,6 +718,6 @@ export type beatmap_data_hit_object = {
      * 
      * Hit sample syntax: normalSet:additionSet:index:volume:filename
      */
-    hitSample?: beatmap_data_hit_sample;
+    hit_sample?: beatmap_data_hit_sample;
 
 }
