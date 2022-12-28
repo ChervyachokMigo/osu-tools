@@ -8,79 +8,34 @@ import md5File from 'md5-file';
 import { beatmap_block, beatmap_block_type_defaults, getBlockType } from "../consts/beatmap_block";
 import { Gamemode } from "../consts/variable_types";
 import bitwise from "bitwise";
+import fs from 'fs';
+import { osu_file_beatmap_property } from "../consts/property_settings";
 
-export function ScanFolderForOsuFiles (osufolder: string) {
+export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data[] {
+    console.log('scan starting..');
     try{
         const osu_songs = path.join(osufolder, "Songs");
         const files = readdirSync(osu_songs , { withFileTypes: true });
 
         var count = 0;
-        var fields_counts: any = {};
+
+        var beatmaps: beatmap_data[] = [];
         for (const beatmap_folder of files) {
 
             if (count % 1000 == 0){
                 console.log(count, '/', files.length);
             }
 
-            if (beatmap_folder.isDirectory()) {
-               
-                const beatmapset_files = readdirSync(path.join(osu_songs, beatmap_folder.name), { withFileTypes: true });
-
-                if (beatmapset_files && beatmapset_files.length > 0) {
-
-                    for (const beatmapset_file of beatmapset_files) {
-                        
-
-                        if ( beatmapset_file.isDirectory()) {
-                            continue;
-                        }
-
-                        if (beatmapset_file.name.endsWith(".osu")) {
-                            const osu_file_path = path.join(osu_songs, beatmap_folder.name, beatmapset_file.name);
-                            const md5 = md5File.sync(osu_file_path);
-
-                            const osu_file_data = parse_osu_file(osu_file_path);
-                            osu_file_data.metadata.beatmap_md5 = md5;
-
-                            //console.log(osu_file_data);
-
-                            function wait(ms : number) {
-                                var start = Date.now(),
-                                    now = start;
-                                while (now - start < ms) {
-                                  now = Date.now();
-                                }
-                            }
-
-                            //wait (5000)
-                            
-                           /*osu_file_data.hit_objects.map(value=>{
-                                for (const field of Object.keys(value)) {
-                                    if (!fields_counts[field]) {
-                                        fields_counts[field] = 1;
-                                    }
-                                    else {
-                                        fields_counts[field] += 1;
-                                    }
-                                }
-                            });*/
-
-                            //appendFileSync('beatmaps.txt', JSON.stringify(osu_file_data))
-                        }
-                    }
-
-                }
-                
-                
-
+            if (beatmap_folder.isDirectory()){
+                beatmaps = beatmaps.concat( get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties) );
             }
+            
             
             count ++;
 
         }
-        
-       // console.log(fields_counts);
-
+        console.log('scan complete');
+        return beatmaps;
     } catch (error) {
         console.log(error);
         throw new Error('Error scanning folder');
@@ -88,7 +43,46 @@ export function ScanFolderForOsuFiles (osufolder: string) {
         
 }
 
-function parse_osu_file(osu_file_path: string): beatmap_data {
+export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data[] {
+    const osu_songs = path.join(osufolder, "Songs");
+    var beatmaps: beatmap_data[] = [];
+
+    try {
+        const beatmapset_files = readdirSync(path.join(osu_songs, folder_path), { withFileTypes: true });
+    
+        if (beatmapset_files && beatmapset_files.length > 0) {
+
+            for (const beatmapset_file of beatmapset_files) {
+                
+
+                if ( beatmapset_file.isDirectory()) {
+                    continue;
+                }
+
+                if (beatmapset_file.name.endsWith(".osu")) {
+                    const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file.name);
+                    const md5 = md5File.sync(osu_file_path);
+
+                    const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties);
+                    osu_file_data.metadata.beatmap_md5 = md5;
+
+                    beatmaps.push(osu_file_data);
+
+                }
+            }
+
+        }
+        return beatmaps;
+
+    } catch (error){
+        console.log(error);
+        throw new Error('Error open folder');
+    }
+
+    
+}
+
+function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data {
     const beatmap: beatmap_data = {
         general: {},
         editor: {},

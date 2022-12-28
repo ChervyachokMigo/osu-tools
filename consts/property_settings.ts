@@ -161,3 +161,16 @@ export const all_score_properties = [
 ];
 
 export const none_score_properties = [];
+
+export enum osu_file_beatmap_property {
+    general_block = 'general_block',
+    editor_block = 'editor_block',
+    metadata_block = 'metadata_block',
+    difficulty_block = 'difficulty_block',
+    events_block = 'events_block',
+    timing_points_block = 'timing_points_block',
+    colors_block = 'colors_block',
+    hit_objects_block = 'hit_objects_block',
+
+
+}
