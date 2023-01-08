@@ -171,6 +171,15 @@ export enum osu_file_beatmap_property {
     timing_points_block = 'timing_points_block',
     colors_block = 'colors_block',
     hit_objects_block = 'hit_objects_block',
-
-
 }
+
+export const all_osu_file_properties = [
+    osu_file_beatmap_property.general_block,
+    osu_file_beatmap_property.editor_block,
+    osu_file_beatmap_property.metadata_block,
+    osu_file_beatmap_property.difficulty_block,
+    osu_file_beatmap_property.events_block,
+    osu_file_beatmap_property.timing_points_block,
+    osu_file_beatmap_property.colors_block,
+    osu_file_beatmap_property.hit_objects_block
+]

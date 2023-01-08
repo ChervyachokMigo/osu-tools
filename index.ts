@@ -1,6 +1,6 @@
 import { collection_db_load, collection_db_results } from './parsers/collection_db';
 import { find_beatmaps, osu_db_load, osu_db_results} from './parsers/osu_db';
-import { beatmap_property, all_beatmap_properties, all_score_properties, score_property, osu_file_beatmap_property} from "./consts/property_settings";
+import { beatmap_property, all_beatmap_properties, all_score_properties, score_property, osu_file_beatmap_property, all_osu_file_properties} from "./consts/property_settings";
 import { get_collections_detailed, get_scores_detailed, get_score_detailed } from './tools/union';
 import { beatmap_results } from './consts/beatmap_results';
 import { scores_db_load } from './parsers/scores_db';
@@ -47,16 +47,18 @@ console.log(replay);
 
 var score_detailed = get_score_detailed(replay, osu_db_result);
 console.log(score_detailed);*/
-var beatmaps = get_all_beatmaps_from_songs('E:\\osu!', [osu_file_beatmap_property.general_block]);
+var beatmaps = get_all_beatmaps_from_songs('E:\\osu!', all_osu_file_properties);
 console.log('start writing all beatmaps '+beatmaps.length);
 
 var count = 0;
+var writing_beatmaps = [];
 for (let beatmap of beatmaps){
     count ++;
     console.log('write '+count);
-    
-   appendFileSync( "E:\\beatmaps_test.txt", beatmap.toString() );
+    writing_beatmaps.push(JSON.stringify(beatmap));
 }
+
+writeFileSync( "E:\\beatmaps_test.json", '['+writing_beatmaps.join(',')+']' );
 
  
 setTimeout(()=>{return true;}, 1000000);

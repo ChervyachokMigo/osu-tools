@@ -18,12 +18,15 @@ export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap
         const files = readdirSync(osu_songs , { withFileTypes: true });
 
         var count = 0;
-
+        console.time('thousand')
         var beatmaps: beatmap_data[] = [];
         for (const beatmap_folder of files) {
 
             if (count % 1000 == 0){
                 console.log(count, '/', files.length);
+                console.timeEnd('thousand')
+
+                console.time('thousand')
             }
 
             if (beatmap_folder.isDirectory()){
@@ -110,7 +113,9 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
         }
 
         //[General] block
-        if (beatmap_block_type.is_general_block) {
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_block) != -1
+            && beatmap_block_type.is_general_block) {
+
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name: string = row_splitted[0].toLowerCase().trim();
@@ -192,10 +197,13 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                     beatmap.general.is_samples_match_playback_rate = Boolean(row_value);
                 }
             }
+
         }
         
         //[Editor] block
-        if (beatmap_block_type.is_editor_block) {
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_block) != -1 &&
+            beatmap_block_type.is_editor_block) {
+
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name: string = row_splitted[0].toLowerCase().trim();
@@ -223,10 +231,13 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                     beatmap.editor.timeline_zoom = Number(row_value);
                 }
             }
+
         }
         
         //[Metadata] block
-        if (beatmap_block_type.is_metadata_block) {
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_block) != -1 &&
+            beatmap_block_type.is_metadata_block) {
+
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name: string = row_splitted[0].toLowerCase().trim();
@@ -273,10 +284,13 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                     beatmap.metadata.beatmapset_id = Number(row_value);
                 }
             }
+
         }
 
         //[Difficulty] block
-        if (beatmap_block_type.is_difficulty_block) {
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_block) != -1 &&
+            beatmap_block_type.is_difficulty_block) {
+
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name: string = row_splitted[0].toLowerCase().trim();
@@ -306,16 +320,25 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                     beatmap.difficulty.slider_tick_rate = Number(row_value);
                 }
             }
+
         }
 
-        if (beatmap_block_type.is_event_block) {
+        //[Events] block
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.events_block) != -1 &&
+            beatmap_block_type.is_event_block) {
+
             let row_escaped = row.replace('\r', '')
             if (row_escaped.length >= 1) {
                 beatmap.events.push( row_escaped )
             }
+
+
         }
 
-        if (beatmap_block_type.is_timing_points_block) {
+        //[TimingPoints] block
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.timing_points_block) != -1 &&
+            beatmap_block_type.is_timing_points_block) {
+
             let row_splitted = row.replace('\r', '').split(',');
             if (row_splitted.length >= 2) {
                 let timing_point: beatmap_timing_point = {
@@ -334,9 +357,13 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 };
                 beatmap.timing_points.push(timing_point);     
             }
+
         }
 
-        if (beatmap_block_type.is_color_block) {
+        //[Colours] block
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.colors_block) != -1 &&
+        beatmap_block_type.is_color_block) {
+
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name: string = row_splitted[0].toLowerCase().trim();
@@ -356,9 +383,13 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                     beatmap.colors.push(color); 
                 }
             }
+
         }
 
-        if (beatmap_block_type.is_hit_objects_block) {
+        //[HitObjects] block
+        if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_block) != -1 &&
+        beatmap_block_type.is_hit_objects_block) {
+
             let row_splitted = row.replace('\r', '').split(',');
             if (row_splitted.length >= 5) {
                 let type = 0;
@@ -418,6 +449,7 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 
                 beatmap.hit_objects.push(hit_object);
             }
+
         }
 
     
