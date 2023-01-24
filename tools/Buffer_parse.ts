@@ -15,9 +15,10 @@ export class Buffer_parse {
         this.cursor_offset = 0;
     }
 
-    bufferRead(offset: number, length: number): Buffer {
+    bufferRead(length: number): Buffer {
         let buf = Buffer.alloc(length);
-        fs.readSync(this.file_handle, buf, 0, length, offset);
+        fs.readSync(this.file_handle, buf, 0, length, this.cursor_offset);
+        this.cursor_offset += length;
         return buf;
     }
 
@@ -60,8 +61,7 @@ export class Buffer_parse {
     }
 
     getLong(): bigint {
-        let res = this.bufferRead(this.cursor_offset, 8);
-        this.cursor_offset += 8;
+        let res = this.bufferRead(8);
         return res.readBigInt64LE(0);
     }
 
@@ -70,8 +70,7 @@ export class Buffer_parse {
     }
 
     getInt(length: number = 4): number {
-        let res = this.bufferRead(this.cursor_offset, length);
-        this.cursor_offset += length;
+        let res = this.bufferRead(length);
         switch (length) {
             case 1:
                 return res.readInt8(0);
@@ -172,8 +171,7 @@ export class Buffer_parse {
     }
 
     getFloat(length: number): number {
-        let buf: Buffer = this.bufferRead(this.cursor_offset, length);
-        this.cursor_offset += length;
+        let buf: Buffer = this.bufferRead(length);
         switch (length) {
             case 4:
                 return buf.readFloatLE(0);
@@ -186,21 +184,22 @@ export class Buffer_parse {
 
     getString(): string {
         let stringCode = this.getByte();
+        let res = '';
 
         if ( stringCode == 0 ) {
-            return '';
+            return res;
         }
 
         if (stringCode == 11) {
+
             let stringLength = this.getULEB128();
-            let result = '';
             if (stringLength > 0) {
-                result = this.bufferRead(this.cursor_offset, stringLength).toString();
-                this.cursor_offset += stringLength;
+                res = this.bufferRead(stringLength).toString();
             }
-            return result;
+            return res;
 
         } else {
+
             console.log('stringCode',stringCode)
             console.log('error read string');
             return '';
@@ -256,8 +255,7 @@ export class Buffer_parse {
         const replay_data_size = this.getInt();
 
         if (replay_data_size > 0){
-			let buffer = this.bufferRead(this.cursor_offset, replay_data_size);
-            this.cursor_offset += replay_data_size;
+			let buffer = this.bufferRead(replay_data_size);
 
             let replay_data_array = this.getLZMAString(buffer).split(',') 
                 .map( value => value.split('|'))

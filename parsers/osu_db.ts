@@ -44,7 +44,7 @@ export class osu_db extends osu_file {
         osu_db.playername = this.buff.getString();
         osu_db.number_beatmaps = this.buff.getInt();
 
-        let one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
+        let one_percent_value = Math.trunc(osu_db.number_beatmaps/1000);
 
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
 
@@ -53,9 +53,9 @@ export class osu_db extends osu_file {
                 osu_db.beatmaps.push(beatmap_data);
             }
 
-            //if ( i % one_percent_value == 0){
-                console.log( (Math.floor( i / osu_db.number_beatmaps * 10000)/100),'% complete');
-            //}
+            if ( i % one_percent_value == 0){
+                console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
+            }
         }
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = UserPermissions[osu_db.user_permissions_int];
