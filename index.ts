@@ -68,9 +68,19 @@ for (let beatmap of beatmaps){
 
 writeFileSync( "E:\\beatmaps_test.json", '['+writing_beatmaps.join(',')+']' );
 */
+var getted_beatmap_properties = [
+    beatmap_property.beatmap_id,
+    beatmap_property.beatmap_stats,
+    beatmap_property.beatmapset_id,
+    beatmap_property.artist,
+    beatmap_property.title,
+    beatmap_property.creator,
+    beatmap_property.difficulty,
+    beatmap_property.beatmap_md5
+];
 
 var osu_db_result: osu_db_results = osu_db_load(
-    'E:/osu!/osu!.db' ,  all_beatmap_properties
+    'E:/osu!/osu!.db' ,  getted_beatmap_properties
 );
 
 var founded_beatmaps = find_beatmaps( osu_db_result, (beatmap) =>  beatmap.beatmap_id && beatmap.beatmap_id < 100 );
