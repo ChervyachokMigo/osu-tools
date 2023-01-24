@@ -46,16 +46,27 @@ export class osu_db extends osu_file {
 
         let one_percent_value = Math.trunc(osu_db.number_beatmaps/1000);
 
+        var start_time = new Date().valueOf();
+        var avg_times = [];
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
+
+            
 
             let beatmap_data = this.beatmap_parse(osu_db.osu_version);
             if (Object.keys(beatmap_data).length > 0){
                 osu_db.beatmaps.push(beatmap_data);
             }
+            
 
             if ( i % one_percent_value == 0){
                 console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
+                let endtime = (new Date().valueOf()-start_time)*0.001;
+                console.log('end for', endtime.toFixed(3) );
+                start_time = new Date().valueOf();
+                avg_times.push(endtime);
+                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
             }
+            
         }
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = UserPermissions[osu_db.user_permissions_int];
@@ -159,10 +170,12 @@ export class osu_db extends osu_file {
                 beatmap.HP = this.buff.getByte();
                 beatmap.OD = this.buff.getByte();
             } else {
+                /*
                 this.buff.skipByte();
                 this.buff.skipByte();
                 this.buff.skipByte();
-                this.buff.skipByte();
+                this.buff.skipByte();*/
+                this.buff.skipBytes(4);
             }
         } else {
             if (this.property_settings.indexOf(beatmap_property.beatmap_stats) != -1) {
@@ -171,10 +184,11 @@ export class osu_db extends osu_file {
                 beatmap.HP = this.buff.getSingle();
                 beatmap.OD = this.buff.getSingle();
             } else {
+                /*this.buff.skipSingle();
                 this.buff.skipSingle();
                 this.buff.skipSingle();
-                this.buff.skipSingle();
-                this.buff.skipSingle();
+                this.buff.skipSingle();*/
+                this.buff.skipBytes(16);
             }
         }
 
@@ -188,22 +202,22 @@ export class osu_db extends osu_file {
             if (this.property_settings.indexOf(beatmap_property.star_rating_std) != -1) {
                 beatmap.star_rating_std = this.buff.getStarRatings();
             } else {
-                this.buff.skipIntDoublePairs();
+                this.buff.skipStarRatings();
             }
             if (this.property_settings.indexOf(beatmap_property.star_rating_taiko) != -1) {
                 beatmap.star_rating_taiko = this.buff.getStarRatings();
             } else {
-                this.buff.skipIntDoublePairs();
+                this.buff.skipStarRatings();
             }
             if (this.property_settings.indexOf(beatmap_property.star_rating_ctb) != -1) {
                 beatmap.star_rating_ctb = this.buff.getStarRatings();
             } else {
-                this.buff.skipIntDoublePairs();
+                this.buff.skipStarRatings();
             }
             if (this.property_settings.indexOf(beatmap_property.star_rating_mania) != -1) {
                 beatmap.star_rating_mania = this.buff.getStarRatings();
             } else {
-                this.buff.skipIntDoublePairs();
+                this.buff.skipStarRatings();
             }
         }
 

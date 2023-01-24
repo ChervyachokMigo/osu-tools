@@ -76,7 +76,14 @@ var getted_beatmap_properties = [
     beatmap_property.title,
     beatmap_property.creator,
     beatmap_property.difficulty,
-    beatmap_property.beatmap_md5
+    beatmap_property.beatmap_md5,
+    beatmap_property.timing_points,
+    beatmap_property.star_rating_ctb,
+    beatmap_property.star_rating_mania,
+    beatmap_property.star_rating_std,
+    beatmap_property.star_rating_taiko,
+    beatmap_property.artist_unicode,
+    beatmap_property.title_unicode
 ];
 
 var osu_db_result: osu_db_results = osu_db_load(

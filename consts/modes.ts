@@ -18,6 +18,7 @@ export function ModsIntToText (modsBits: number) {
     if (modsBits == 0){
         return ['No Mods'];
     }
+
     let result_mods = [];
 
     for (let i = 0 ; i < 32; i++){

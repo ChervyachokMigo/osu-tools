@@ -23,7 +23,7 @@ export class Buffer_parse {
     }
 
     getDateTime(): Date {
-        let windows_tick_date_value = this.getLong();
+        let windows_tick_date_value = this.bufferRead(8).readBigInt64LE();
         if (windows_tick_date_value > 0){
             let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
             return new Date( Number(date_value_without_ns - UTC1970Years ) );
@@ -37,7 +37,7 @@ export class Buffer_parse {
     }
 
     getBool(): boolean {
-        return Boolean(this.getInt(1));
+        return Boolean(this.bufferRead(1).readUInt8());
     }
 
     skipBool(): void {
@@ -45,7 +45,11 @@ export class Buffer_parse {
     }
 
     getByte(): number {
-        return this.getInt(1);
+        return this.bufferRead(1).readUInt8();
+    }
+
+    skipBytes(length: number): void {
+        this.cursor_offset += length;
     }
 
     skipByte(): void {
@@ -53,7 +57,7 @@ export class Buffer_parse {
     }
 
     getShort(): number {
-        return this.getInt(2);
+        return this.bufferRead(2).readInt16LE();
     }
 
     skipShort(): void {
@@ -61,25 +65,15 @@ export class Buffer_parse {
     }
 
     getLong(): bigint {
-        let res = this.bufferRead(8);
-        return res.readBigInt64LE(0);
+        return this.bufferRead(8).readBigInt64LE();
     }
 
     skipLong(): void {
         this.cursor_offset += 8;
     }
 
-    getInt(length: number = 4): number {
-        let res = this.bufferRead(length);
-        switch (length) {
-            case 1:
-                return res.readInt8(0);
-            case 2:
-                return res.readInt16LE(0);
-            case 4:
-                return res.readInt32LE(0);
-            default: throw new Error('wrong number length');
-        }
+    getInt(): number {
+        return this.bufferRead(4).readInt32LE();
     }
 
     skipInt(): void {
@@ -87,75 +81,57 @@ export class Buffer_parse {
     }
 
     getStarRatings(): Array<StarRating> {
-        let result: Array<StarRating> = [];
-        let count = this.getInt();
+        let results: Array<StarRating> = [];
+        let count = this.bufferRead(4).readInt32LE();
 
         for (let i = 0; i < count; i++) {
-            let sr: StarRating = { mods: [], mods_int: 0, stars: 0 };
+            
+            let sr: StarRating = {};
+            
+            this.cursor_offset += 1;
+            sr.mods_int = this.bufferRead(4).readInt32LE();
+            this.cursor_offset += 1;
+            sr.stars = this.bufferRead(8).readDoubleLE();
 
-            this.getByte();
-            sr.mods_int = this.getInt();
+            sr.mods = ModsIntToText(sr.mods_int)
 
-            sr.mods = ModsIntToText(sr.mods_int);
-
-            this.getByte();
-            sr.stars = this.getDouble();
-
-            result.push(sr);
+            results.push(sr);
         }
-        return result;
+        return results;
     }
 
-    getIntDoublePairs(): Array<IntDoublePair> {
-        let result: Array<IntDoublePair> = [];
-        let count = this.getInt();
-
-        for (let i = 0; i < count; i++) {
-            let sr: IntDoublePair = { int: 0, double: 0 };
-
-            this.getByte();
-            sr.int = this.getInt();
-
-            this.getByte();
-            sr.double = this.getDouble();
-
-            result.push(sr);
-        }
-        return result;
-    }
-
-    skipIntDoublePairs(): void {
-        let count = this.getInt();
+    skipStarRatings(): void {
+        let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 14 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {
-        var result: Array<TimingPoint> = [];
-        let count = this.getInt();
+        let results: Array<TimingPoint> = [];
+        let count = this.bufferRead(4).readInt32LE();
 
         for (let i = 0; i < count; i++) {
-            result.push(this.getTimingPoint());
+            let TimingPoint: TimingPoint = {
+                bpm: 0, 
+                offset: 0, 
+                is_inherit: false 
+            };
+
+            TimingPoint.bpm = this.bufferRead(8).readDoubleLE();
+            TimingPoint.offset = this.bufferRead(8).readDoubleLE();
+            TimingPoint.is_inherit = Boolean(this.bufferRead(1).readUInt8());
+    
+            results.push(TimingPoint);
         }
-        return result;
-    }
-
-    getTimingPoint(): TimingPoint {
-        let result: TimingPoint = { bpm: 0, offset: 0, is_inherit: false };
-
-        result.bpm = this.getDouble();
-        result.offset = this.getDouble();
-        result.is_inherit = this.getBool();
-
-        return result;
+        return results;
     }
 
     skipTimingPoints(): void {
-        let timingPointsNumber = this.getInt();
+        let timingPointsNumber = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 17 * timingPointsNumber;
     }
 
     getSingle(): number {
-        return this.getFloat(4);
+        return this.bufferRead(4).readFloatLE();
     }
 
     skipSingle(): void {
@@ -163,27 +139,15 @@ export class Buffer_parse {
     }
 
     getDouble(): number {
-        return this.getFloat(8);
+        return this.bufferRead(8).readDoubleLE();
     }
 
     skipDouble(): void {
         this.cursor_offset += 8;
     }
 
-    getFloat(length: number): number {
-        let buf: Buffer = this.bufferRead(length);
-        switch (length) {
-            case 4:
-                return buf.readFloatLE(0);
-            case 8:
-                return buf.readDoubleLE(0);
-            default:
-                throw new Error('wrong number length');
-        }
-    }
-
     getString(): string {
-        let stringCode = this.getByte();
+        let stringCode = this.bufferRead(1).readUInt8();
         let res = '';
 
         if ( stringCode == 0 ) {
@@ -194,7 +158,7 @@ export class Buffer_parse {
 
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
-                res = this.bufferRead(stringLength).toString();
+                res = this.bufferRead(stringLength).toString('utf8');
             }
             return res;
 
@@ -208,7 +172,7 @@ export class Buffer_parse {
     }
 
     skipString(): void {
-        let stringCode = this.getByte();
+        let stringCode = this.bufferRead(1).readUInt8();
         if (stringCode == 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
@@ -221,7 +185,7 @@ export class Buffer_parse {
         let result: number = 0;
         let shift: number = 0;
         while (true) {
-            let byte: any = this.getInt(1);
+            let byte: number = this.bufferRead(1).readUInt8();
             result |= (byte & 0x7f) << shift;
             if ((byte & 0x80) === 0)
                 break;
@@ -252,7 +216,7 @@ export class Buffer_parse {
 
     getReplayData(): ReplayData {
         const result: ReplayData = { replay_seed: 0, replay_frames: [] };
-        const replay_data_size = this.getInt();
+        const replay_data_size = this.bufferRead(4).readInt32LE();
 
         if (replay_data_size > 0){
 			let buffer = this.bufferRead(replay_data_size);
