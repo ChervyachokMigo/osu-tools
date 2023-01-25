@@ -7,17 +7,22 @@ import bitwise from 'bitwise';
 const UTC1970Years = BigInt(62135596800000);
 
 export class Buffer_parse {
-    file_handle: number;
+    //file_handle: number;
     cursor_offset: number;
+    file_buffer: Buffer;
 
-    constructor(file_handle: number) {
-        this.file_handle = file_handle;
+    constructor( file_buffer: Buffer) {
+        this.file_buffer = file_buffer;
+        //this.file_handle = file_handle;
         this.cursor_offset = 0;
     }
 
     bufferRead(length: number): Buffer {
-        let buf = Buffer.alloc(length);
-        fs.readSync(this.file_handle, buf, 0, length, this.cursor_offset);
+       // console.log(this.file_buffer.length)
+       // console.log(this.cursor_offset, length)
+        let buf = this.file_buffer.subarray(this.cursor_offset, this.cursor_offset + length)
+        //let buf = Buffer.alloc(length);
+        //fs.readSync(this.file_handle, buf, 0, length, this.cursor_offset);
         this.cursor_offset += length;
         return buf;
     }
@@ -101,8 +106,7 @@ export class Buffer_parse {
     }
 
     skipStarRatings(): void {
-        let count = this.bufferRead(4).readInt32LE();
-        this.cursor_offset += 14 * count;
+        this.cursor_offset += 14 * this.bufferRead(4).readInt32LE();
     }
 
     getTimingPoints(): Array<TimingPoint> {
@@ -111,8 +115,8 @@ export class Buffer_parse {
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
-                bpm: 0, 
-                offset: 0, 
+                bpm: 0.0, 
+                offset: 0.0, 
                 is_inherit: false 
             };
 
@@ -126,8 +130,7 @@ export class Buffer_parse {
     }
 
     skipTimingPoints(): void {
-        let timingPointsNumber = this.bufferRead(4).readInt32LE();
-        this.cursor_offset += 17 * timingPointsNumber;
+        this.cursor_offset += 17 * this.bufferRead(4).readInt32LE();
     }
 
     getSingle(): number {
@@ -150,11 +153,11 @@ export class Buffer_parse {
         let stringCode = this.bufferRead(1).readUInt8();
         let res = '';
 
-        if ( stringCode == 0 ) {
+        if ( stringCode === 0 ) {
             return res;
         }
 
-        if (stringCode == 11) {
+        if (stringCode === 11) {
 
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
@@ -173,7 +176,7 @@ export class Buffer_parse {
 
     skipString(): void {
         let stringCode = this.bufferRead(1).readUInt8();
-        if (stringCode == 11) {
+        if (stringCode === 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
                 this.cursor_offset += stringLength;
@@ -223,13 +226,13 @@ export class Buffer_parse {
 
             let replay_data_array = this.getLZMAString(buffer).split(',') 
                 .map( value => value.split('|'))
-                .filter ( value => value.length == 4 );
+                .filter ( value => value.length === 4 );
     
             if (replay_data_array.length > 0){
 
                 if (replay_data_array[replay_data_array.length-1][0] == '-12345' ){
                     let replay_seed = replay_data_array.pop();
-                    result.replay_seed = typeof replay_seed !== undefined  && replay_seed && replay_seed.length == 4 ? 
+                    result.replay_seed = typeof replay_seed !== undefined  && replay_seed && replay_seed.length === 4 ? 
                         parseInt(replay_seed[3]) : 0;
                 }
 

@@ -10,6 +10,8 @@ export class osu_file {
     public file_type: osu_file_type;
     public property_settings: Array<any>;
     public buff: Buffer_parse;
+    public file_buffer: Buffer;
+
 
     constructor(file_path: string, property_settings?: Array<any>) {
         this.file_type = osu_file_type.none;
@@ -27,8 +29,10 @@ export class osu_file {
         }
 
         try {
-            this.file_handle = fs.openSync(`${file_path}`, 'r');
-            this.buff = new Buffer_parse(this.file_handle);
+            //this.file_handle = fs.openSync(file_path, 'r');
+            this.file_buffer = fs.readFileSync(file_path);
+            this.buff = new Buffer_parse(this.file_buffer);
+            //this.buff = new Buffer_parse(this.file_handle, this.file_buffer);
         } catch (error) {
             console.log(error);
             throw new Error('can not open osu file');
@@ -36,7 +40,7 @@ export class osu_file {
     }
 
     close(): void {
-        return fs.closeSync(this.file_handle);
+        //return fs.closeSync(this.file_handle);
     }
 
     get_type(): osu_file_type {
