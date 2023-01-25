@@ -106,7 +106,8 @@ export class Buffer_parse {
     }
 
     skipStarRatings(): void {
-        this.cursor_offset += 14 * this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
+        this.cursor_offset += 14 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {
@@ -130,7 +131,8 @@ export class Buffer_parse {
     }
 
     skipTimingPoints(): void {
-        this.cursor_offset += 17 * this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
+        this.cursor_offset += 17 * count;
     }
 
     getSingle(): number {

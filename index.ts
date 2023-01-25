@@ -11,6 +11,8 @@ import { replay_load } from './parsers/replay_osr';
 import { get_all_beatmaps_from_songs } from './parsers/scan_songs';
 import { appendFileSync, writeFileSync } from 'fs';
 
+console.time('complete')
+
 var getted_beatmap_properties = [
     beatmap_property.beatmap_id,
     beatmap_property.beatmap_stats,
@@ -30,7 +32,7 @@ var osu_db_result: osu_db_results = osu_db_load(
 var founded_beatmaps = find_beatmaps( osu_db_result, (beatmap) =>  beatmap.beatmap_id && beatmap.beatmap_id < 100 );
 console.log(founded_beatmaps);
 
-var collection_db_result: collection_db_results = collection_db_load('E:/osu!/collection.db')
+/*var collection_db_result: collection_db_results = collection_db_load('E:/osu!/collection.db')
 
 var detailed_collections = get_collections_detailed(collection_db_result, osu_db_result);
 console.log(detailed_collections);
@@ -69,31 +71,7 @@ for (let beatmap of beatmaps){
 writeFileSync( "E:\\beatmaps_test.json", '['+writing_beatmaps.join(',')+']' );
 */
 
-/*var getted_beatmap_properties = [
-    beatmap_property.beatmap_id,
-    beatmap_property.beatmap_stats,
-    beatmap_property.beatmapset_id,
-    beatmap_property.artist,
-    beatmap_property.title,
-    beatmap_property.creator,
-    beatmap_property.difficulty,
-    beatmap_property.beatmap_md5,
-    beatmap_property.timing_points,
-    beatmap_property.star_rating_ctb,
-    beatmap_property.star_rating_mania,
-    beatmap_property.star_rating_std,
-    beatmap_property.star_rating_taiko,
-    beatmap_property.artist_unicode,
-    beatmap_property.title_unicode
-];
 
-var osu_db_result: osu_db_results = osu_db_load(
-    'E:/osu!/osu!.db' ,  all_beatmap_properties
-);
-
-var founded_beatmaps = find_beatmaps( osu_db_result, (beatmap) =>  beatmap.beatmap_id && beatmap.beatmap_id < 100 );
-console.log(founded_beatmaps);
-*/
-
+console.timeEnd('complete')
 
 setTimeout(()=>{return true;}, 1000000);
