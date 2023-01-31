@@ -86,7 +86,7 @@ export function getStarRatings(stream: ReadStream): Array<StarRating> {
     for (let i = 0; i < count; i++) {
 
         let sr: StarRating = { 
-            mods: [],
+            //mods: [],
             mods_int: 0,
             stars: 0
         };
@@ -95,7 +95,7 @@ export function getStarRatings(stream: ReadStream): Array<StarRating> {
 
         sr.mods_int = getInt(stream);
 
-        sr.mods = ModsIntToText(sr.mods_int);
+        //sr.mods = ModsIntToText(sr.mods_int);
 
         getByte(stream);
 

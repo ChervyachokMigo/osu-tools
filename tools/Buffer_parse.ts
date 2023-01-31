@@ -7,21 +7,22 @@ import bitwise from 'bitwise';
 const UTC1970Years = BigInt(62135596800000);
 
 export class Buffer_parse {
-    //file_handle: number;
+    file_handle: number;
     cursor_offset: number;
     file_buffer: Buffer;
 
-    constructor( file_buffer: Buffer) {
+    constructor( file_handle: number, file_buffer: Buffer) {
         this.file_buffer = file_buffer;
-        //this.file_handle = file_handle;
+        this.file_handle = file_handle;
         this.cursor_offset = 0;
     }
 
     bufferRead(length: number): Buffer {
-       // console.log(this.file_buffer.length)
-       // console.log(this.cursor_offset, length)
+        //console.log(this.file_buffer.length)
+        //console.log(this.cursor_offset, length)
+
         let buf = this.file_buffer.subarray(this.cursor_offset, this.cursor_offset + length)
-        //let buf = Buffer.alloc(length);
+
         //fs.readSync(this.file_handle, buf, 0, length, this.cursor_offset);
         this.cursor_offset += length;
         return buf;
@@ -98,7 +99,7 @@ export class Buffer_parse {
             this.cursor_offset += 1;
             sr.stars = this.bufferRead(8).readDoubleLE();
 
-            sr.mods = ModsIntToText(sr.mods_int)
+            //sr.mods = ModsIntToText(sr.mods_int)
 
             results.push(sr);
         }
@@ -112,7 +113,7 @@ export class Buffer_parse {
 
     getTimingPoints(): Array<TimingPoint> {
         let results: Array<TimingPoint> = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
@@ -176,7 +177,7 @@ export class Buffer_parse {
         }
     }
 
-    skipString(): void {
+    skipString(): void  {
         let stringCode = this.bufferRead(1).readUInt8();
         if (stringCode === 11) {
             let stringLength = this.getULEB128();

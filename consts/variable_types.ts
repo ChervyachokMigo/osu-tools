@@ -4,7 +4,7 @@ export type IntDoublePair = {
 }
 
 export type StarRating = {
-    mods?: string[],
+    //mods?: string[],
     mods_int?: number,
     stars?: number
 }

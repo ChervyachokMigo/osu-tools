@@ -25,7 +25,7 @@ var getted_beatmap_properties = [
 ];
 
 var osu_db_result: osu_db_results = osu_db_load(
-    'E:/osu!/osu!.db' ,  getted_beatmap_properties
+    'E:/osu!/osu!.db' , all_beatmap_properties
 );
 
 

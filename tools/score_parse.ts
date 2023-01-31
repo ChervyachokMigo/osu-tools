@@ -97,7 +97,7 @@ export function score_parse(buffer: Buffer_parse, property_settings: score_prope
 
     if (property_settings.indexOf(score_property.is_fc) != -1) {
         score.mods_int = mods_int;
-        score.mods = mods;
+        //score.mods = mods;
     } // else nothing
 
     const hp_bar = buffer.getHpBar();

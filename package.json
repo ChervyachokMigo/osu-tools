@@ -16,6 +16,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
+    "@raygun-nickj/mmap-io": "^1.4.0",
     "bitwise": "^2.1.0",
     "md5-file": "^5.0.0"
   }
