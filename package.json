@@ -2,9 +2,12 @@
   "name": "osu-tools",
   "version": "0.1.0",
   "description": "osu parser for db/osr files and some stuff ",
-  "main": "built/index.js",
+  "main": "npm run",
   "scripts": {
-    "test": "node built/index.js && pause"
+    "clean_built": "rd built /S /Q",
+    "ts_watch": "npx tsc",
+    "run": "node --max-old-space-size=8000 built/index.js && pause",
+    "clean_and_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause"
   },
   "keywords": [],
   "author": "ChervyachokMigo",

@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "clean_and_run",
+			"problemMatcher": [],
+			"label": "npm: clean_and_run",
+			"detail": "rd built /S /Q && npx tsc && node built/index.js --max-old-space-size=8000 && pause"
+		}
+	]
+}

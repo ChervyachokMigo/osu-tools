@@ -1,0 +1,1 @@
+rd built /S /Q

@@ -11,7 +11,10 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\built\\index.js",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run", "clean_and_run","--max-old-space-size=8000"
+            ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

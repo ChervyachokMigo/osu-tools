@@ -50,7 +50,7 @@ export class osu_db extends osu_file {
         this.property_settings_fast = property_settings_boolean_array(this.property_settings);
 
         //display variables
-        var one_percent_value = Math.trunc(osu_db.number_beatmaps/1000);
+        var one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
         var start_time = new Date().valueOf();
         var avg_times = [];
 

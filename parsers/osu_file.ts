@@ -35,13 +35,17 @@ export class osu_file {
             let fstats = fs.fstatSync(this.file_handle);
 
             this.file_size = fstats.size;
-            this.file_buffer = mmap.map(this.file_size, mmap.PROT_READ, mmap.MAP_SHARED, this.file_handle, 0, mmap.MADV_NORMAL);
+            this.file_buffer = mmap.map(this.file_size, mmap.PROT_READ, mmap.MAP_PRIVATE, this.file_handle, 0, mmap.MADV_NORMAL);
             this.buff = new Buffer_parse(this.file_handle, this.file_buffer);
 
         } catch (error) {
             console.log(error);
             throw new Error('can not open osu file');
         }
+    }
+
+    free(): [number, number] {
+        return mmap.incore(this.file_buffer);
     }
 
     close(): void {
