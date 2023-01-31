@@ -1,0 +1,1 @@
+rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause
