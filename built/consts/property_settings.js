@@ -1,0 +1,184 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.all_osu_file_properties = exports.osu_file_beatmap_property = exports.none_score_properties = exports.all_score_properties = exports.score_property = exports.none_beatmap_properties = exports.all_beatmap_properties = exports.beatmap_property = void 0;
+var beatmap_property;
+(function (beatmap_property) {
+    beatmap_property[beatmap_property["beatmap_size"] = 0] = "beatmap_size";
+    beatmap_property[beatmap_property["artist"] = 1] = "artist";
+    beatmap_property[beatmap_property["artist_unicode"] = 2] = "artist_unicode";
+    beatmap_property[beatmap_property["title"] = 3] = "title";
+    beatmap_property[beatmap_property["title_unicode"] = 4] = "title_unicode";
+    beatmap_property[beatmap_property["creator"] = 5] = "creator";
+    beatmap_property[beatmap_property["difficulty"] = 6] = "difficulty";
+    beatmap_property[beatmap_property["audio_filename"] = 7] = "audio_filename";
+    beatmap_property[beatmap_property["beatmap_md5"] = 8] = "beatmap_md5";
+    beatmap_property[beatmap_property["osu_filename"] = 9] = "osu_filename";
+    beatmap_property[beatmap_property["ranked_status"] = 10] = "ranked_status";
+    beatmap_property[beatmap_property["number_hitcircles"] = 11] = "number_hitcircles";
+    beatmap_property[beatmap_property["number_sliders"] = 12] = "number_sliders";
+    beatmap_property[beatmap_property["number_spinners"] = 13] = "number_spinners";
+    beatmap_property[beatmap_property["mod_date"] = 14] = "mod_date";
+    beatmap_property[beatmap_property["beatmap_stats"] = 15] = "beatmap_stats";
+    beatmap_property[beatmap_property["slider_velocity"] = 16] = "slider_velocity";
+    beatmap_property[beatmap_property["star_rating_std"] = 17] = "star_rating_std";
+    beatmap_property[beatmap_property["star_rating_taiko"] = 18] = "star_rating_taiko";
+    beatmap_property[beatmap_property["star_rating_ctb"] = 19] = "star_rating_ctb";
+    beatmap_property[beatmap_property["star_rating_mania"] = 20] = "star_rating_mania";
+    beatmap_property[beatmap_property["drain_time"] = 21] = "drain_time";
+    beatmap_property[beatmap_property["total_time"] = 22] = "total_time";
+    beatmap_property[beatmap_property["preview_time"] = 23] = "preview_time";
+    beatmap_property[beatmap_property["timing_points"] = 24] = "timing_points";
+    beatmap_property[beatmap_property["beatmap_id"] = 25] = "beatmap_id";
+    beatmap_property[beatmap_property["beatmapset_id"] = 26] = "beatmapset_id";
+    beatmap_property[beatmap_property["thread_id"] = 27] = "thread_id";
+    beatmap_property[beatmap_property["grade_achieved_std"] = 28] = "grade_achieved_std";
+    beatmap_property[beatmap_property["grade_achieved_taiko"] = 29] = "grade_achieved_taiko";
+    beatmap_property[beatmap_property["grade_achieved_ctb"] = 30] = "grade_achieved_ctb";
+    beatmap_property[beatmap_property["grade_achieved_mania"] = 31] = "grade_achieved_mania";
+    beatmap_property[beatmap_property["local_offset"] = 32] = "local_offset";
+    beatmap_property[beatmap_property["stack_laniecy"] = 33] = "stack_laniecy";
+    beatmap_property[beatmap_property["gamemode"] = 34] = "gamemode";
+    beatmap_property[beatmap_property["source"] = 35] = "source";
+    beatmap_property[beatmap_property["tags"] = 36] = "tags";
+    beatmap_property[beatmap_property["online_offset"] = 37] = "online_offset";
+    beatmap_property[beatmap_property["font_title"] = 38] = "font_title";
+    beatmap_property[beatmap_property["is_unplayed"] = 39] = "is_unplayed";
+    beatmap_property[beatmap_property["last_played"] = 40] = "last_played";
+    beatmap_property[beatmap_property["is_OSZ2"] = 41] = "is_OSZ2";
+    beatmap_property[beatmap_property["folder_name"] = 42] = "folder_name";
+    beatmap_property[beatmap_property["last_checked_repository_time"] = 43] = "last_checked_repository_time";
+    beatmap_property[beatmap_property["is_ignore_hit_sounds"] = 44] = "is_ignore_hit_sounds";
+    beatmap_property[beatmap_property["is_ignore_skin"] = 45] = "is_ignore_skin";
+    beatmap_property[beatmap_property["is_disable_storyboard"] = 46] = "is_disable_storyboard";
+    beatmap_property[beatmap_property["is_disable_video"] = 47] = "is_disable_video";
+    beatmap_property[beatmap_property["is_visual_override"] = 48] = "is_visual_override";
+    beatmap_property[beatmap_property["mod_time"] = 49] = "mod_time";
+    beatmap_property[beatmap_property["mania_scroll"] = 50] = "mania_scroll";
+})(beatmap_property = exports.beatmap_property || (exports.beatmap_property = {}));
+exports.all_beatmap_properties = [
+    beatmap_property.beatmap_size,
+    beatmap_property.artist,
+    beatmap_property.artist_unicode,
+    beatmap_property.title,
+    beatmap_property.title_unicode,
+    beatmap_property.creator,
+    beatmap_property.difficulty,
+    beatmap_property.audio_filename,
+    beatmap_property.beatmap_md5,
+    beatmap_property.osu_filename,
+    beatmap_property.ranked_status,
+    beatmap_property.number_hitcircles,
+    beatmap_property.number_sliders,
+    beatmap_property.number_spinners,
+    beatmap_property.mod_date,
+    beatmap_property.beatmap_stats,
+    beatmap_property.slider_velocity,
+    beatmap_property.star_rating_std,
+    beatmap_property.star_rating_taiko,
+    beatmap_property.star_rating_ctb,
+    beatmap_property.star_rating_mania,
+    beatmap_property.drain_time,
+    beatmap_property.total_time,
+    beatmap_property.preview_time,
+    beatmap_property.timing_points,
+    beatmap_property.beatmap_id,
+    beatmap_property.beatmapset_id,
+    beatmap_property.thread_id,
+    beatmap_property.grade_achieved_std,
+    beatmap_property.grade_achieved_taiko,
+    beatmap_property.grade_achieved_ctb,
+    beatmap_property.grade_achieved_mania,
+    beatmap_property.local_offset,
+    beatmap_property.stack_laniecy,
+    beatmap_property.gamemode,
+    beatmap_property.source,
+    beatmap_property.tags,
+    beatmap_property.online_offset,
+    beatmap_property.font_title,
+    beatmap_property.is_unplayed,
+    beatmap_property.last_played,
+    beatmap_property.is_OSZ2,
+    beatmap_property.folder_name,
+    beatmap_property.last_checked_repository_time,
+    beatmap_property.is_ignore_hit_sounds,
+    beatmap_property.is_ignore_skin,
+    beatmap_property.is_disable_storyboard,
+    beatmap_property.is_disable_video,
+    beatmap_property.is_visual_override,
+    beatmap_property.mod_time,
+    beatmap_property.mania_scroll
+];
+exports.none_beatmap_properties = [];
+var score_property;
+(function (score_property) {
+    score_property[score_property["gamemode"] = 0] = "gamemode";
+    score_property[score_property["score_version"] = 1] = "score_version";
+    score_property[score_property["beatmap_md5"] = 2] = "beatmap_md5";
+    score_property[score_property["playername"] = 3] = "playername";
+    score_property[score_property["replay_md5"] = 4] = "replay_md5";
+    score_property[score_property["count_300"] = 5] = "count_300";
+    score_property[score_property["count_100"] = 6] = "count_100";
+    score_property[score_property["count_50"] = 7] = "count_50";
+    score_property[score_property["count_geki"] = 8] = "count_geki";
+    score_property[score_property["count_katu"] = 9] = "count_katu";
+    score_property[score_property["count_miss"] = 10] = "count_miss";
+    score_property[score_property["scores"] = 11] = "scores";
+    score_property[score_property["combo"] = 12] = "combo";
+    score_property[score_property["is_fc"] = 13] = "is_fc";
+    score_property[score_property["mods"] = 14] = "mods";
+    /**
+     * Notice: in **scores.db** hp_bar always empty
+     */
+    score_property[score_property["hp_bar"] = 15] = "hp_bar";
+    score_property[score_property["date"] = 16] = "date";
+    /**
+     * Notice: in **scores.db** replay_data always empty
+     */
+    score_property[score_property["replay_data"] = 17] = "replay_data";
+    score_property[score_property["online_id"] = 18] = "online_id";
+    score_property[score_property["target_practice_accuracy"] = 19] = "target_practice_accuracy";
+})(score_property = exports.score_property || (exports.score_property = {}));
+exports.all_score_properties = [
+    score_property.gamemode,
+    score_property.score_version,
+    score_property.beatmap_md5,
+    score_property.playername,
+    score_property.replay_md5,
+    score_property.count_300,
+    score_property.count_100,
+    score_property.count_50,
+    score_property.count_geki,
+    score_property.count_katu,
+    score_property.count_miss,
+    score_property.scores,
+    score_property.combo,
+    score_property.is_fc,
+    score_property.mods,
+    score_property.hp_bar,
+    score_property.date,
+    score_property.replay_data,
+    score_property.online_id,
+    score_property.target_practice_accuracy
+];
+exports.none_score_properties = [];
+var osu_file_beatmap_property;
+(function (osu_file_beatmap_property) {
+    osu_file_beatmap_property[osu_file_beatmap_property["general_block"] = 0] = "general_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_block"] = 1] = "editor_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_block"] = 2] = "metadata_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_block"] = 3] = "difficulty_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["events_block"] = 4] = "events_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["timing_points_block"] = 5] = "timing_points_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["colors_block"] = 6] = "colors_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["hit_objects_block"] = 7] = "hit_objects_block";
+})(osu_file_beatmap_property = exports.osu_file_beatmap_property || (exports.osu_file_beatmap_property = {}));
+exports.all_osu_file_properties = [
+    osu_file_beatmap_property.general_block,
+    osu_file_beatmap_property.editor_block,
+    osu_file_beatmap_property.metadata_block,
+    osu_file_beatmap_property.difficulty_block,
+    osu_file_beatmap_property.events_block,
+    osu_file_beatmap_property.timing_points_block,
+    osu_file_beatmap_property.colors_block,
+    osu_file_beatmap_property.hit_objects_block
+];

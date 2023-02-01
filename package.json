@@ -8,7 +8,9 @@
     "ts_watch": "npx tsc",
     "run": "node --max-old-space-size=8000 built/index.js && pause",
     "clean_and_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
-    "ts_node_run": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts"
+    "ts_node_run": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
+    "run_final": "node --max-old-space-size=8000 built/index.js && pause",
+    "test_osu_db": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts"
   },
   "keywords": [],
   "author": "ChervyachokMigo",
@@ -22,6 +24,7 @@
   "dependencies": {
     "@raygun-nickj/mmap-io": "^1.4.0",
     "bitwise": "^2.1.0",
-    "md5-file": "^5.0.0"
+    "md5-file": "^5.0.0",
+    "ts-node": "^10.9.1"
   }
 }
