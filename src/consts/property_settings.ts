@@ -163,23 +163,126 @@ export const all_score_properties = [
 export const none_score_properties = [];
 
 export enum osu_file_beatmap_property {
+
     general_block,
+
+    general_audio_filename,
+    general_audio_lead_in,
+    general_audio_hash,
+    general_preview_time,
+    general_countdown,
+    general_sample_set,
+    general_stack_leniency,
+    general_gamemode,
+    general_is_letterbox_in_break,
+    general_is_storyfire_in_front,
+    general_is_use_skin_sprites,
+    general_is_always_show_playfield,
+    general_overlay_position,
+    general_skin_preference,
+    general_is_epilepsy_warning,
+    general_countdown_offset,
+    general_is_special_style,
+    general_is_widescreen_storyboard,
+    general_is_samples_match_playback_rate,
+
     editor_block,
+
+    editor_bookmarks,
+    editor_distance_snapping,
+    editor_beat_divisor,
+    editor_grid_size,
+    editor_timeline_zoom,
+
     metadata_block,
+
+    metadata_title,
+    metadata_title_unicode,
+    metadata_artist,
+    metadata_artist_unicode,
+    metadata_creator,
+    metadata_version,
+    metadata_source,
+    metadata_tags,
+    metadata_beatmap_id,
+    metadata_beatmapset_id,
+
     difficulty_block,
+
+    difficulty_Health_Points_drain_rate,
+    difficulty_Circle_Size,
+    difficulty_Overall_Difficulty,
+    difficulty_Approach_Rate,
+    difficulty_slider_multiplier,
+    difficulty_slider_tick_rate,
+
     events_block,
+
     timing_points_block,
+
     colors_block,
+
     hit_objects_block,
 }
 
 export const all_osu_file_properties = [
     osu_file_beatmap_property.general_block,
+
+    osu_file_beatmap_property.general_audio_filename,
+    osu_file_beatmap_property.general_audio_lead_in,
+    osu_file_beatmap_property.general_audio_hash,
+    osu_file_beatmap_property.general_preview_time,
+    osu_file_beatmap_property.general_countdown,
+    osu_file_beatmap_property.general_sample_set,
+    osu_file_beatmap_property.general_stack_leniency,
+    osu_file_beatmap_property.general_gamemode,
+    osu_file_beatmap_property.general_is_letterbox_in_break,
+    osu_file_beatmap_property.general_is_storyfire_in_front,
+    osu_file_beatmap_property.general_is_use_skin_sprites,
+    osu_file_beatmap_property.general_is_always_show_playfield,
+    osu_file_beatmap_property.general_overlay_position,
+    osu_file_beatmap_property.general_skin_preference,
+    osu_file_beatmap_property.general_is_epilepsy_warning,
+    osu_file_beatmap_property.general_countdown_offset,
+    osu_file_beatmap_property.general_is_special_style,
+    osu_file_beatmap_property.general_is_widescreen_storyboard,
+    osu_file_beatmap_property.general_is_samples_match_playback_rate,
+
     osu_file_beatmap_property.editor_block,
+
+    osu_file_beatmap_property.editor_bookmarks,
+    osu_file_beatmap_property.editor_distance_snapping,
+    osu_file_beatmap_property.editor_beat_divisor,
+    osu_file_beatmap_property.editor_grid_size,
+    osu_file_beatmap_property.editor_timeline_zoom,
+
     osu_file_beatmap_property.metadata_block,
+
+    osu_file_beatmap_property.metadata_title,
+    osu_file_beatmap_property.metadata_title_unicode,
+    osu_file_beatmap_property.metadata_artist,
+    osu_file_beatmap_property.metadata_artist_unicode,
+    osu_file_beatmap_property.metadata_creator,
+    osu_file_beatmap_property.metadata_version,
+    osu_file_beatmap_property.metadata_source,
+    osu_file_beatmap_property.metadata_tags,
+    osu_file_beatmap_property.metadata_beatmap_id,
+    osu_file_beatmap_property.metadata_beatmapset_id,
+
     osu_file_beatmap_property.difficulty_block,
+
+    osu_file_beatmap_property.difficulty_Health_Points_drain_rate,
+    osu_file_beatmap_property.difficulty_Circle_Size,
+    osu_file_beatmap_property.difficulty_Overall_Difficulty,
+    osu_file_beatmap_property.difficulty_Approach_Rate,
+    osu_file_beatmap_property.difficulty_slider_multiplier,
+    osu_file_beatmap_property.difficulty_slider_tick_rate,
+
     osu_file_beatmap_property.events_block,
+
     osu_file_beatmap_property.timing_points_block,
+
     osu_file_beatmap_property.colors_block,
-    osu_file_beatmap_property.hit_objects_block
+
+    osu_file_beatmap_property.hit_objects_block,
 ]

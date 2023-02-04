@@ -10,8 +10,9 @@ import { Gamemode } from "../consts/variable_types";
 import bitwise from "bitwise";
 import fs from 'fs';
 import { osu_file_beatmap_property } from "../consts/property_settings";
+import { callbackify } from "util";
 
-export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data[] {
+export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], is_read_only: boolean = false, callback: Function): beatmap_data[] {
     console.log('scan starting..');
     try{
         const osu_songs = path.join(osufolder, "Songs");
@@ -19,7 +20,15 @@ export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap
 
         var count = 0;
         console.time('thousand')
+        
         var beatmaps: beatmap_data[] = [];
+        
+
+        //display variables
+        var one_percent_value = Math.trunc(files.length/100);
+        var start_time = new Date().valueOf();
+        var avg_times = [];
+
         for (const beatmap_folder of files) {
 
             if (count % 1000 == 0){
@@ -30,9 +39,27 @@ export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap
             }
 
             if (beatmap_folder.isDirectory()){
-                beatmaps = beatmaps.concat( get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties) );
+                let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties);
+
+                callback(current_beatmaps);
+
+                if (is_read_only === false){
+                    beatmaps = beatmaps.concat( current_beatmaps );
+                } else {
+                    current_beatmaps = [];
+                }
+
             }
-            
+
+            //display progress
+            if ( count % one_percent_value == 0){
+                console.log(  ( ( count / files.length * 10000)/100).toFixed(1),'% complete');
+                let endtime = (new Date().valueOf()-start_time)*0.001;
+                console.log('end for', endtime.toFixed(3) );
+                start_time = new Date().valueOf();
+                avg_times.push(endtime);
+                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+            }
             
             count ++;
 
@@ -121,80 +148,118 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 let row_name: string = row_splitted[0].toLowerCase().trim();
                 let row_value: string = row_splitted[1].trim();
 
-                if (row_name.startsWith('audiofilename')){
-                    beatmap.general.audio_filename = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_audio_filename) != -1){
+                    if (row_name.startsWith('audiofilename')){
+                        beatmap.general.audio_filename = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('audioleadin')){
-                    beatmap.general.audio_lead_in = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_audio_lead_in) != -1){
+                    if (row_name.startsWith('audioleadin')){
+                        beatmap.general.audio_lead_in = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('audiohash')){
-                    beatmap.general.audio_hash = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_audio_hash) != -1){
+                    if (row_name.startsWith('audiohash')){
+                        beatmap.general.audio_hash = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('previewtime')){
-                    beatmap.general.preview_time = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_preview_time) != -1){
+                    if (row_name.startsWith('previewtime')){
+                        beatmap.general.preview_time = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('countdown')){
-                    beatmap.general.countdown = Number(row_value) as beatmap_countdown;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_countdown) != -1){
+                    if (row_name.startsWith('countdown')){
+                        beatmap.general.countdown = Number(row_value) as beatmap_countdown;
+                    }
                 }
 
-                if (row_name.startsWith('sampleset')){
-                    beatmap.general.sample_set = row_value as beatmap_sample_set ;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_sample_set) != -1){
+                    if (row_name.startsWith('sampleset')){
+                        beatmap.general.sample_set = row_value as beatmap_sample_set ;
+                    }
                 }
 
-                if (row_name.startsWith('stackleniency')){
-                    beatmap.general.stack_leniency = Number(row_value) ;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_stack_leniency) != -1){
+                    if (row_name.startsWith('stackleniency')){
+                        beatmap.general.stack_leniency = Number(row_value) ;
+                    }
                 }
 
-                if (row_name.startsWith('mode')){
-                    beatmap.general.gamemode = Number(row_value) as Gamemode ;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_gamemode) != -1){
+                    if (row_name.startsWith('mode')){
+                        beatmap.general.gamemode = Number(row_value) as Gamemode ;
+                    }
                 }
 
-                if (row_name.startsWith('letterboxinbreaks')){
-                    beatmap.general.is_letterbox_in_break = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_letterbox_in_break) != -1){
+                    if (row_name.startsWith('letterboxinbreaks')){
+                        beatmap.general.is_letterbox_in_break = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('storyfireinfront')){
-                    beatmap.general.is_storyfire_in_front = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_storyfire_in_front) != -1){
+                    if (row_name.startsWith('storyfireinfront')){
+                        beatmap.general.is_storyfire_in_front = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('useskinsprites')){
-                    beatmap.general.is_use_skin_sprites = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_use_skin_sprites) != -1){
+                    if (row_name.startsWith('useskinsprites')){
+                        beatmap.general.is_use_skin_sprites = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('alwaysshowplayfield')){
-                    beatmap.general.is_always_show_playfield = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_always_show_playfield) != -1){
+                    if (row_name.startsWith('alwaysshowplayfield')){
+                        beatmap.general.is_always_show_playfield = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('overlayposition')){
-                    beatmap.general.overlay_position = row_value as beatmap_overlay_position;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_overlay_position) != -1){
+                    if (row_name.startsWith('overlayposition')){
+                        beatmap.general.overlay_position = row_value as beatmap_overlay_position;
+                    }
                 }
 
-                if (row_name.startsWith('skinpreference')){
-                    beatmap.general.skin_preference = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_skin_preference) != -1){
+                    if (row_name.startsWith('skinpreference')){
+                        beatmap.general.skin_preference = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('epilepsywarning')){
-                    beatmap.general.is_epilepsy_warning = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_epilepsy_warning) != -1){
+                    if (row_name.startsWith('epilepsywarning')){
+                        beatmap.general.is_epilepsy_warning = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('countdownoffset')){
-                    beatmap.general.countdown_offset = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_countdown_offset) != -1){
+                    if (row_name.startsWith('countdownoffset')){
+                        beatmap.general.countdown_offset = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('specialstyle')){
-                    beatmap.general.is_special_style = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_special_style) != -1){
+                    if (row_name.startsWith('specialstyle')){
+                        beatmap.general.is_special_style = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('widescreenstoryboard')){
-                    beatmap.general.is_widescreen_storyboard = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_widescreen_storyboard) != -1){
+                    if (row_name.startsWith('widescreenstoryboard')){
+                        beatmap.general.is_widescreen_storyboard = Boolean(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('samplesmatchplaybackrate')){
-                    beatmap.general.is_samples_match_playback_rate = Boolean(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_is_samples_match_playback_rate) != -1){
+                    if (row_name.startsWith('samplesmatchplaybackrate')){
+                        beatmap.general.is_samples_match_playback_rate = Boolean(row_value);
+                    }
                 }
             }
 
@@ -209,26 +274,36 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 let row_name: string = row_splitted[0].toLowerCase().trim();
                 let row_value: string = row_splitted[1].trim();
 
-                if (row_name.startsWith('bookmarks')){
-                    beatmap.editor.bookmarks = row_value.split(',')
-                        .map(value => Number(value.trim()) )
-                        .filter(value => !isNaN(value) && value > 0 );
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_bookmarks) != -1){
+                    if (row_name.startsWith('bookmarks')){
+                        beatmap.editor.bookmarks = row_value.split(',')
+                            .map(value => Number(value.trim()) )
+                            .filter(value => !isNaN(value) && value > 0 );
+                    }
                 }
 
-                if (row_name.startsWith('distancespacing')){
-                    beatmap.editor.distance_snapping = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_distance_snapping) != -1){
+                    if (row_name.startsWith('distancespacing')){
+                        beatmap.editor.distance_snapping = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('beatdivisor')){
-                    beatmap.editor.beat_divisor = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_beat_divisor) != -1){
+                    if (row_name.startsWith('beatdivisor')){
+                        beatmap.editor.beat_divisor = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('gridsize')){
-                    beatmap.editor.grid_size = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_grid_size) != -1){
+                    if (row_name.startsWith('gridsize')){
+                        beatmap.editor.grid_size = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('timelinezoom')){
-                    beatmap.editor.timeline_zoom = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.editor_timeline_zoom) != -1){
+                    if (row_name.startsWith('timelinezoom')){
+                        beatmap.editor.timeline_zoom = Number(row_value);
+                    }
                 }
             }
 
@@ -243,45 +318,65 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 let row_name: string = row_splitted[0].toLowerCase().trim();
                 let row_value: string = row_splitted[1].trim();
 
-                if (row_name === 'title'){
-                    beatmap.metadata.title = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_title) != -1){
+                    if (row_name === 'title'){
+                        beatmap.metadata.title = row_value;
+                    }
                 }
 
-                if (row_name === 'titleunicode'){
-                    beatmap.metadata.title_unicode = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_title_unicode) != -1){
+                    if (row_name === 'titleunicode'){
+                        beatmap.metadata.title_unicode = row_value;
+                    }
                 }
 
-                if (row_name === 'artist'){
-                    beatmap.metadata.artist = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_artist) != -1){
+                    if (row_name === 'artist'){
+                        beatmap.metadata.artist = row_value;
+                    }
                 }
 
-                if (row_name === 'artistunicode'){
-                    beatmap.metadata.artist_unicode = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_artist_unicode) != -1){
+                    if (row_name === 'artistunicode'){
+                        beatmap.metadata.artist_unicode = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('creator')){
-                    beatmap.metadata.creator = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_creator) != -1){
+                    if (row_name.startsWith('creator')){
+                        beatmap.metadata.creator = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('version')){
-                    beatmap.metadata.version = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_version) != -1){
+                    if (row_name.startsWith('version')){
+                        beatmap.metadata.version = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('source')){
-                    beatmap.metadata.source = row_value;
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_source) != -1){
+                    if (row_name.startsWith('source')){
+                        beatmap.metadata.source = row_value;
+                    }
                 }
 
-                if (row_name.startsWith('tags')){
-                    beatmap.metadata.tags = row_value.split(' ')
-                    .filter( value => value.length>0 );
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_tags) != -1){
+                    if (row_name.startsWith('tags')){
+                        beatmap.metadata.tags = row_value.split(' ')
+                        .filter( value => value.length>0 );
+                    }
                 }
 
-                if (row_name.startsWith('beatmapid')){
-                    beatmap.metadata.beatmap_id = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_beatmap_id) != -1){
+                    if (row_name.startsWith('beatmapid')){
+                        beatmap.metadata.beatmap_id = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('beatmapsetid')){
-                    beatmap.metadata.beatmapset_id = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.metadata_beatmapset_id) != -1){
+                    if (row_name.startsWith('beatmapsetid')){
+                        beatmap.metadata.beatmapset_id = Number(row_value);
+                    }
                 }
             }
 
@@ -296,28 +391,40 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
                 let row_name: string = row_splitted[0].toLowerCase().trim();
                 let row_value: string = row_splitted[1].trim();
 
-                if (row_name.startsWith('hpdrainrate')){
-                    beatmap.difficulty.Health_Points_drain_rate = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_Health_Points_drain_rate) != -1){
+                    if (row_name.startsWith('hpdrainrate')){
+                        beatmap.difficulty.Health_Points_drain_rate = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('circlesize')){
-                    beatmap.difficulty.Circle_Size = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_Circle_Size) != -1){
+                    if (row_name.startsWith('circlesize')){
+                        beatmap.difficulty.Circle_Size = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('overalldifficulty')){
-                    beatmap.difficulty.Overall_Difficulty = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_Overall_Difficulty) != -1){
+                    if (row_name.startsWith('overalldifficulty')){
+                        beatmap.difficulty.Overall_Difficulty = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('approachrate')){
-                    beatmap.difficulty.Approach_Rate = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_Approach_Rate) != -1){
+                    if (row_name.startsWith('approachrate')){
+                        beatmap.difficulty.Approach_Rate = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('slidermultiplier')){
-                    beatmap.difficulty.slider_multiplier = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_slider_multiplier) != -1){
+                    if (row_name.startsWith('slidermultiplier')){
+                        beatmap.difficulty.slider_multiplier = Number(row_value);
+                    }
                 }
 
-                if (row_name.startsWith('slidertickrate')){
-                    beatmap.difficulty.slider_tick_rate = Number(row_value);
+                if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.difficulty_slider_tick_rate) != -1){
+                    if (row_name.startsWith('slidertickrate')){
+                        beatmap.difficulty.slider_tick_rate = Number(row_value);
+                    }
                 }
             }
 

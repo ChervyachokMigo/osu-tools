@@ -5,7 +5,7 @@ import { Gamemode } from "./variable_types";
  * 
  * .osu is a human-readable file format containing information about a beatmap.
  */
- export type beatmap_data = {
+export type beatmap_data = {
     /**
      * [General]
      * 

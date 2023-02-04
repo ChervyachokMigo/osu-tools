@@ -17,18 +17,14 @@ import { beatmap_results } from './consts/beatmap_results';
 import { get_all_beatmaps_from_songs } from './parsers/scan_songs';
 import { appendFileSync, writeFileSync } from 'fs';
 
-export { osu_db_results, collection_db_results, beatmap_results };
-
-export const property = {
-    beatmap: beatmap_property,
-    score: score_property,
-    osu_file: osu_file_beatmap_property,
-}
-
 export const all_properties = {
     beatmap: all_beatmap_properties,
     score: all_score_properties,
     osu_file: all_osu_file_properties
+}
+
+export const songs = {
+    scan: get_all_beatmaps_from_songs
 }
 
 export const osu_db = {

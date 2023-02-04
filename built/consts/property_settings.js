@@ -164,21 +164,101 @@ exports.none_score_properties = [];
 var osu_file_beatmap_property;
 (function (osu_file_beatmap_property) {
     osu_file_beatmap_property[osu_file_beatmap_property["general_block"] = 0] = "general_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["editor_block"] = 1] = "editor_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["metadata_block"] = 2] = "metadata_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_block"] = 3] = "difficulty_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["events_block"] = 4] = "events_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["timing_points_block"] = 5] = "timing_points_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["colors_block"] = 6] = "colors_block";
-    osu_file_beatmap_property[osu_file_beatmap_property["hit_objects_block"] = 7] = "hit_objects_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_audio_filename"] = 1] = "general_audio_filename";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_audio_lead_in"] = 2] = "general_audio_lead_in";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_audio_hash"] = 3] = "general_audio_hash";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_preview_time"] = 4] = "general_preview_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_countdown"] = 5] = "general_countdown";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_sample_set"] = 6] = "general_sample_set";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_stack_leniency"] = 7] = "general_stack_leniency";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_gamemode"] = 8] = "general_gamemode";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_letterbox_in_break"] = 9] = "general_is_letterbox_in_break";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_storyfire_in_front"] = 10] = "general_is_storyfire_in_front";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_use_skin_sprites"] = 11] = "general_is_use_skin_sprites";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_always_show_playfield"] = 12] = "general_is_always_show_playfield";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_overlay_position"] = 13] = "general_overlay_position";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_skin_preference"] = 14] = "general_skin_preference";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_epilepsy_warning"] = 15] = "general_is_epilepsy_warning";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_countdown_offset"] = 16] = "general_countdown_offset";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_special_style"] = 17] = "general_is_special_style";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_widescreen_storyboard"] = 18] = "general_is_widescreen_storyboard";
+    osu_file_beatmap_property[osu_file_beatmap_property["general_is_samples_match_playback_rate"] = 19] = "general_is_samples_match_playback_rate";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_block"] = 20] = "editor_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_bookmarks"] = 21] = "editor_bookmarks";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_distance_snapping"] = 22] = "editor_distance_snapping";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_beat_divisor"] = 23] = "editor_beat_divisor";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_grid_size"] = 24] = "editor_grid_size";
+    osu_file_beatmap_property[osu_file_beatmap_property["editor_timeline_zoom"] = 25] = "editor_timeline_zoom";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_block"] = 26] = "metadata_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_title"] = 27] = "metadata_title";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_title_unicode"] = 28] = "metadata_title_unicode";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_artist"] = 29] = "metadata_artist";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_artist_unicode"] = 30] = "metadata_artist_unicode";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_creator"] = 31] = "metadata_creator";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_version"] = 32] = "metadata_version";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_source"] = 33] = "metadata_source";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_tags"] = 34] = "metadata_tags";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_beatmap_id"] = 35] = "metadata_beatmap_id";
+    osu_file_beatmap_property[osu_file_beatmap_property["metadata_beatmapset_id"] = 36] = "metadata_beatmapset_id";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_block"] = 37] = "difficulty_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_Health_Points_drain_rate"] = 38] = "difficulty_Health_Points_drain_rate";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_Circle_Size"] = 39] = "difficulty_Circle_Size";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_Overall_Difficulty"] = 40] = "difficulty_Overall_Difficulty";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_Approach_Rate"] = 41] = "difficulty_Approach_Rate";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_slider_multiplier"] = 42] = "difficulty_slider_multiplier";
+    osu_file_beatmap_property[osu_file_beatmap_property["difficulty_slider_tick_rate"] = 43] = "difficulty_slider_tick_rate";
+    osu_file_beatmap_property[osu_file_beatmap_property["events_block"] = 44] = "events_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["timing_points_block"] = 45] = "timing_points_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["colors_block"] = 46] = "colors_block";
+    osu_file_beatmap_property[osu_file_beatmap_property["hit_objects_block"] = 47] = "hit_objects_block";
 })(osu_file_beatmap_property = exports.osu_file_beatmap_property || (exports.osu_file_beatmap_property = {}));
 exports.all_osu_file_properties = [
     osu_file_beatmap_property.general_block,
+    osu_file_beatmap_property.general_audio_filename,
+    osu_file_beatmap_property.general_audio_lead_in,
+    osu_file_beatmap_property.general_audio_hash,
+    osu_file_beatmap_property.general_preview_time,
+    osu_file_beatmap_property.general_countdown,
+    osu_file_beatmap_property.general_sample_set,
+    osu_file_beatmap_property.general_stack_leniency,
+    osu_file_beatmap_property.general_gamemode,
+    osu_file_beatmap_property.general_is_letterbox_in_break,
+    osu_file_beatmap_property.general_is_storyfire_in_front,
+    osu_file_beatmap_property.general_is_use_skin_sprites,
+    osu_file_beatmap_property.general_is_always_show_playfield,
+    osu_file_beatmap_property.general_overlay_position,
+    osu_file_beatmap_property.general_skin_preference,
+    osu_file_beatmap_property.general_is_epilepsy_warning,
+    osu_file_beatmap_property.general_countdown_offset,
+    osu_file_beatmap_property.general_is_special_style,
+    osu_file_beatmap_property.general_is_widescreen_storyboard,
+    osu_file_beatmap_property.general_is_samples_match_playback_rate,
     osu_file_beatmap_property.editor_block,
+    osu_file_beatmap_property.editor_bookmarks,
+    osu_file_beatmap_property.editor_distance_snapping,
+    osu_file_beatmap_property.editor_beat_divisor,
+    osu_file_beatmap_property.editor_grid_size,
+    osu_file_beatmap_property.editor_timeline_zoom,
     osu_file_beatmap_property.metadata_block,
+    osu_file_beatmap_property.metadata_title,
+    osu_file_beatmap_property.metadata_title_unicode,
+    osu_file_beatmap_property.metadata_artist,
+    osu_file_beatmap_property.metadata_artist_unicode,
+    osu_file_beatmap_property.metadata_creator,
+    osu_file_beatmap_property.metadata_version,
+    osu_file_beatmap_property.metadata_source,
+    osu_file_beatmap_property.metadata_tags,
+    osu_file_beatmap_property.metadata_beatmap_id,
+    osu_file_beatmap_property.metadata_beatmapset_id,
     osu_file_beatmap_property.difficulty_block,
+    osu_file_beatmap_property.difficulty_Health_Points_drain_rate,
+    osu_file_beatmap_property.difficulty_Circle_Size,
+    osu_file_beatmap_property.difficulty_Overall_Difficulty,
+    osu_file_beatmap_property.difficulty_Approach_Rate,
+    osu_file_beatmap_property.difficulty_slider_multiplier,
+    osu_file_beatmap_property.difficulty_slider_tick_rate,
     osu_file_beatmap_property.events_block,
     osu_file_beatmap_property.timing_points_block,
     osu_file_beatmap_property.colors_block,
-    osu_file_beatmap_property.hit_objects_block
+    osu_file_beatmap_property.hit_objects_block,
 ];

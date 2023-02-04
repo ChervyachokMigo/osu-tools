@@ -4,13 +4,15 @@
   "description": "osu parser for db/osr files and some stuff ",
   "main": "built/index.js",
   "scripts": {
-    "clean_built": "rd built /S /Q",
-    "ts_watch": "npx tsc",
+    "clean": "rd built /S /Q",
+    "build": "npx tsc",
     "run": "node --max-old-space-size=8000 built/index.js && pause",
-    "clean_and_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
-    "ts_node_run": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
-    "run_final": "node --max-old-space-size=8000 built/index.js && pause",
-    "test_osu_db": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts"
+    "clean_build_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
+    "run (debug)": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
+    "test_osu_db": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts",
+    "test_scan_songs": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_scan_songs.ts",
+    "test_random": "npx tsc && ts-node tests/test_random.ts"
+  
   },
   "keywords": [],
   "author": "ChervyachokMigo",
