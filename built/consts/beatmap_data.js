@@ -22,9 +22,9 @@ var beatmap_countdown;
 */
 var beatmap_sample_set;
 (function (beatmap_sample_set) {
-    beatmap_sample_set["Normal"] = "Normal";
-    beatmap_sample_set["Soft"] = "Soft";
-    beatmap_sample_set["Drum"] = "Drum";
+    beatmap_sample_set[beatmap_sample_set["Normal"] = 0] = "Normal";
+    beatmap_sample_set[beatmap_sample_set["Soft"] = 1] = "Soft";
+    beatmap_sample_set[beatmap_sample_set["Drum"] = 2] = "Drum";
 })(beatmap_sample_set = exports.beatmap_sample_set || (exports.beatmap_sample_set = {}));
 /** [Timing points] and [Hit objects]
  *
@@ -68,17 +68,17 @@ var beatmap_overlay_position;
      *
      * use skin setting
      */
-    beatmap_overlay_position["NoChange"] = "NoChange";
+    beatmap_overlay_position[beatmap_overlay_position["NoChange"] = 0] = "NoChange";
     /** [General]
      *
      * draw overlays under numbers
      */
-    beatmap_overlay_position["Below"] = "Below";
+    beatmap_overlay_position[beatmap_overlay_position["Below"] = 1] = "Below";
     /** [General]
      *
      * draw overlays on top of numbers
      */
-    beatmap_overlay_position["Above"] = "Above";
+    beatmap_overlay_position[beatmap_overlay_position["Above"] = 2] = "Above";
 })(beatmap_overlay_position = exports.beatmap_overlay_position || (exports.beatmap_overlay_position = {}));
 /**
  * [Colors]

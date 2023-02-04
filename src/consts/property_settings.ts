@@ -164,6 +164,7 @@ export const none_score_properties = [];
 
 export enum osu_file_beatmap_property {
 
+    //activate all gerenal properties
     general_block,
 
     general_audio_filename,
@@ -206,6 +207,7 @@ export enum osu_file_beatmap_property {
     metadata_tags,
     metadata_beatmap_id,
     metadata_beatmapset_id,
+    metadata_beatmap_md5,
 
     difficulty_block,
 
@@ -218,6 +220,16 @@ export enum osu_file_beatmap_property {
 
     events_block,
 
+    events_backgrounds,
+    events_videos,
+    events_break_points,
+    events_color_transformations,
+    events_sprites,
+    events_samples,
+    events_animations,
+    events_comments,
+    events_scripts,
+
     timing_points_block,
 
     colors_block,
@@ -225,9 +237,7 @@ export enum osu_file_beatmap_property {
     hit_objects_block,
 }
 
-export const all_osu_file_properties = [
-    osu_file_beatmap_property.general_block,
-
+export const all_general_properties = [
     osu_file_beatmap_property.general_audio_filename,
     osu_file_beatmap_property.general_audio_lead_in,
     osu_file_beatmap_property.general_audio_hash,
@@ -246,18 +256,18 @@ export const all_osu_file_properties = [
     osu_file_beatmap_property.general_countdown_offset,
     osu_file_beatmap_property.general_is_special_style,
     osu_file_beatmap_property.general_is_widescreen_storyboard,
-    osu_file_beatmap_property.general_is_samples_match_playback_rate,
+    osu_file_beatmap_property.general_is_samples_match_playback_rate
+];
 
-    osu_file_beatmap_property.editor_block,
-
+export const all_editor_properties = [
     osu_file_beatmap_property.editor_bookmarks,
     osu_file_beatmap_property.editor_distance_snapping,
     osu_file_beatmap_property.editor_beat_divisor,
     osu_file_beatmap_property.editor_grid_size,
-    osu_file_beatmap_property.editor_timeline_zoom,
+    osu_file_beatmap_property.editor_timeline_zoom
+];
 
-    osu_file_beatmap_property.metadata_block,
-
+export const all_metadata_properties = [
     osu_file_beatmap_property.metadata_title,
     osu_file_beatmap_property.metadata_title_unicode,
     osu_file_beatmap_property.metadata_artist,
@@ -268,21 +278,37 @@ export const all_osu_file_properties = [
     osu_file_beatmap_property.metadata_tags,
     osu_file_beatmap_property.metadata_beatmap_id,
     osu_file_beatmap_property.metadata_beatmapset_id,
+    osu_file_beatmap_property.metadata_beatmap_md5
+];
 
-    osu_file_beatmap_property.difficulty_block,
-
+export const all_difficulty_properties = [
     osu_file_beatmap_property.difficulty_Health_Points_drain_rate,
     osu_file_beatmap_property.difficulty_Circle_Size,
     osu_file_beatmap_property.difficulty_Overall_Difficulty,
     osu_file_beatmap_property.difficulty_Approach_Rate,
     osu_file_beatmap_property.difficulty_slider_multiplier,
     osu_file_beatmap_property.difficulty_slider_tick_rate,
+];
 
+export const all_events_properties = [
+    osu_file_beatmap_property.events_backgrounds,
+    osu_file_beatmap_property.events_videos,
+    osu_file_beatmap_property.events_break_points,
+    osu_file_beatmap_property.events_color_transformations,
+    osu_file_beatmap_property.events_sprites,
+    osu_file_beatmap_property.events_samples,
+    osu_file_beatmap_property.events_animations,
+    osu_file_beatmap_property.events_comments,
+    osu_file_beatmap_property.events_scripts
+];
+
+export const all_osu_file_properties = [
+    osu_file_beatmap_property.general_block,
+    osu_file_beatmap_property.editor_block,
+    osu_file_beatmap_property.metadata_block,
+    osu_file_beatmap_property.difficulty_block,
     osu_file_beatmap_property.events_block,
-
     osu_file_beatmap_property.timing_points_block,
-
     osu_file_beatmap_property.colors_block,
-
     osu_file_beatmap_property.hit_objects_block,
-]
+];

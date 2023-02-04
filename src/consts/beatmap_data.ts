@@ -1,3 +1,4 @@
+import { beatmap_event } from "./beatmap_events/beatmap_event";
 import { Gamemode } from "./variable_types";
 
 /**
@@ -56,7 +57,7 @@ export type beatmap_data = {
      * For information about storyboard syntax, see Storyboard Scripting.
      * https://osu.ppy.sh/wiki/en/Storyboard/Scripting
      */
-    events: string[];
+    events: beatmap_event[];
 
     /**
     * [Timing points]
@@ -106,9 +107,9 @@ export enum beatmap_countdown {
  * @param  default Normal 
 */
 export enum beatmap_sample_set {
-    Normal = 'Normal',
-    Soft = 'Soft',
-    Drum = 'Drum'
+    Normal = 0,
+    Soft = 1,
+    Drum = 2
 }
 
 /** [Timing points] and [Hit objects]
@@ -154,18 +155,18 @@ export enum beatmap_overlay_position {
      * 
      * use skin setting
      */
-    NoChange = 'NoChange',
+    NoChange = 0,
 
     /** [General]
      * 
      * draw overlays under numbers
      */
-    Below = 'Below',
+    Below = 1,
     /** [General]
      * 
      * draw overlays on top of numbers
      */
-    Above = 'Above'
+    Above = 2
 }
 
 /** [Timing points]

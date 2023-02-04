@@ -12,6 +12,7 @@ const beatmap_block_1 = require("../consts/beatmap_block");
 const variable_types_1 = require("../consts/variable_types");
 const bitwise_1 = __importDefault(require("bitwise"));
 const property_settings_1 = require("../consts/property_settings");
+const beatmap_events_1 = require("../tools/beatmap_events");
 function get_all_beatmaps_from_songs(osufolder, osu_file_beatmap_properties, is_read_only = false, callback) {
     console.log('scan starting..');
     try {
@@ -72,9 +73,12 @@ function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatm
                 }
                 if (beatmapset_file.name.endsWith(".osu")) {
                     const osu_file_path = path_1.default.join(osu_songs, folder_path, beatmapset_file.name);
-                    const md5 = md5_file_1.default.sync(osu_file_path);
                     const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties);
-                    osu_file_data.metadata.beatmap_md5 = md5;
+                    if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_beatmap_md5) !== -1) {
+                        if (!osu_file_data.metadata)
+                            osu_file_data.metadata = {};
+                        osu_file_data.metadata.beatmap_md5 = md5_file_1.default.sync(osu_file_path);
+                    }
                     beatmaps.push(osu_file_data);
                 }
             }
@@ -88,6 +92,21 @@ function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatm
 }
 exports.get_beatmaps_from_beatmap_folder = get_beatmaps_from_beatmap_folder;
 function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
+    const properties_has_general_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.general_block);
+    const properties_has_editor_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.editor_block);
+    const properties_has_metadata_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.metadata_block);
+    const properties_has_difficulty_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.difficulty_block);
+    const properties_has_events_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.events_block);
+    const is_properties_has_general_block = properties_has_general_block ||
+        property_settings_1.all_general_properties.some(property => osu_file_beatmap_properties.includes(property));
+    const is_properties_has_editor_block = properties_has_editor_block ||
+        property_settings_1.all_editor_properties.some(property => osu_file_beatmap_properties.includes(property));
+    const is_properties_has_metadata_block = properties_has_metadata_block ||
+        property_settings_1.all_metadata_properties.some(property => osu_file_beatmap_properties.includes(property));
+    const is_properties_has_difficulty_block = properties_has_difficulty_block ||
+        property_settings_1.all_difficulty_properties.some(property => osu_file_beatmap_properties.includes(property));
+    const is_properties_has_events_block = properties_has_events_block ||
+        property_settings_1.all_events_properties.some(property => osu_file_beatmap_properties.includes(property));
     const beatmap = {
         general: {},
         editor: {},
@@ -108,139 +127,167 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             continue;
         }
         //[General] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_block) != -1
-            && beatmap_block_type.is_general_block) {
+        if (is_properties_has_general_block && beatmap_block_type.is_general_block) {
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name = row_splitted[0].toLowerCase().trim();
                 let row_value = row_splitted[1].trim();
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_filename) != -1) {
-                    if (row_name.startsWith('audiofilename')) {
-                        beatmap.general.audio_filename = row_value;
+                if (typeof row_value !== 'undefined' && row_value.length > 0) {
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_filename) !== -1) {
+                        if (row_name.startsWith('audiofilename')) {
+                            beatmap.general.audio_filename = row_value;
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_lead_in) != -1) {
-                    if (row_name.startsWith('audioleadin')) {
-                        beatmap.general.audio_lead_in = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_lead_in) !== -1) {
+                        if (row_name.startsWith('audioleadin')) {
+                            beatmap.general.audio_lead_in = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_hash) != -1) {
-                    if (row_name.startsWith('audiohash')) {
-                        beatmap.general.audio_hash = row_value;
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_hash) !== -1) {
+                        if (row_name.startsWith('audiohash')) {
+                            beatmap.general.audio_hash = row_value;
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_preview_time) != -1) {
-                    if (row_name.startsWith('previewtime')) {
-                        beatmap.general.preview_time = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_preview_time) !== -1) {
+                        if (row_name.startsWith('previewtime')) {
+                            beatmap.general.preview_time = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown) != -1) {
-                    if (row_name.startsWith('countdown')) {
-                        beatmap.general.countdown = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown) !== -1) {
+                        if (row_name.startsWith('countdown')) {
+                            beatmap.general.countdown = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_sample_set) != -1) {
-                    if (row_name.startsWith('sampleset')) {
-                        beatmap.general.sample_set = row_value;
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_sample_set) !== -1) {
+                        if (row_name.startsWith('sampleset')) {
+                            beatmap.general.sample_set = isNaN(Number(row_value)) ?
+                                beatmap_data_1.beatmap_sample_set[row_value] :
+                                Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_stack_leniency) != -1) {
-                    if (row_name.startsWith('stackleniency')) {
-                        beatmap.general.stack_leniency = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_stack_leniency) !== -1) {
+                        if (row_name.startsWith('stackleniency')) {
+                            beatmap.general.stack_leniency = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_gamemode) != -1) {
-                    if (row_name.startsWith('mode')) {
-                        beatmap.general.gamemode = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_gamemode) !== -1) {
+                        if (row_name.startsWith('mode')) {
+                            beatmap.general.gamemode = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_letterbox_in_break) != -1) {
-                    if (row_name.startsWith('letterboxinbreaks')) {
-                        beatmap.general.is_letterbox_in_break = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_letterbox_in_break) !== -1) {
+                        if (row_name.startsWith('letterboxinbreaks')) {
+                            beatmap.general.is_letterbox_in_break = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_storyfire_in_front) != -1) {
-                    if (row_name.startsWith('storyfireinfront')) {
-                        beatmap.general.is_storyfire_in_front = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_storyfire_in_front) !== -1) {
+                        if (row_name.startsWith('storyfireinfront')) {
+                            beatmap.general.is_storyfire_in_front = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_use_skin_sprites) != -1) {
-                    if (row_name.startsWith('useskinsprites')) {
-                        beatmap.general.is_use_skin_sprites = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_use_skin_sprites) !== -1) {
+                        if (row_name.startsWith('useskinsprites')) {
+                            beatmap.general.is_use_skin_sprites = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_always_show_playfield) != -1) {
-                    if (row_name.startsWith('alwaysshowplayfield')) {
-                        beatmap.general.is_always_show_playfield = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_always_show_playfield) !== -1) {
+                        if (row_name.startsWith('alwaysshowplayfield')) {
+                            beatmap.general.is_always_show_playfield = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_overlay_position) != -1) {
-                    if (row_name.startsWith('overlayposition')) {
-                        beatmap.general.overlay_position = row_value;
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_overlay_position) !== -1) {
+                        if (row_name.startsWith('overlayposition')) {
+                            beatmap.general.overlay_position = isNaN(Number(row_value)) ?
+                                beatmap_data_1.beatmap_overlay_position[row_value] :
+                                Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_skin_preference) != -1) {
-                    if (row_name.startsWith('skinpreference')) {
-                        beatmap.general.skin_preference = row_value;
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_skin_preference) !== -1) {
+                        if (row_name.startsWith('skinpreference')) {
+                            beatmap.general.skin_preference = row_value;
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_epilepsy_warning) != -1) {
-                    if (row_name.startsWith('epilepsywarning')) {
-                        beatmap.general.is_epilepsy_warning = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_epilepsy_warning) !== -1) {
+                        if (row_name.startsWith('epilepsywarning')) {
+                            beatmap.general.is_epilepsy_warning = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown_offset) != -1) {
-                    if (row_name.startsWith('countdownoffset')) {
-                        beatmap.general.countdown_offset = Number(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown_offset) !== -1) {
+                        if (row_name.startsWith('countdownoffset')) {
+                            beatmap.general.countdown_offset = Number(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_special_style) != -1) {
-                    if (row_name.startsWith('specialstyle')) {
-                        beatmap.general.is_special_style = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_special_style) !== -1) {
+                        if (row_name.startsWith('specialstyle')) {
+                            beatmap.general.is_special_style = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_widescreen_storyboard) != -1) {
-                    if (row_name.startsWith('widescreenstoryboard')) {
-                        beatmap.general.is_widescreen_storyboard = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_widescreen_storyboard) !== -1) {
+                        if (row_name.startsWith('widescreenstoryboard')) {
+                            beatmap.general.is_widescreen_storyboard = Boolean(row_value);
+                        }
                     }
-                }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_samples_match_playback_rate) != -1) {
-                    if (row_name.startsWith('samplesmatchplaybackrate')) {
-                        beatmap.general.is_samples_match_playback_rate = Boolean(row_value);
+                    if (properties_has_general_block ||
+                        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_samples_match_playback_rate) !== -1) {
+                        if (row_name.startsWith('samplesmatchplaybackrate')) {
+                            beatmap.general.is_samples_match_playback_rate = Boolean(row_value);
+                        }
                     }
                 }
             }
         }
         //[Editor] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_block) != -1 &&
-            beatmap_block_type.is_editor_block) {
+        else if (is_properties_has_editor_block && beatmap_block_type.is_editor_block) {
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name = row_splitted[0].toLowerCase().trim();
                 let row_value = row_splitted[1].trim();
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_bookmarks) != -1) {
+                if (properties_has_editor_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_bookmarks) !== -1) {
                     if (row_name.startsWith('bookmarks')) {
                         beatmap.editor.bookmarks = row_value.split(',')
                             .map(value => Number(value.trim()))
                             .filter(value => !isNaN(value) && value > 0);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_distance_snapping) != -1) {
+                if (properties_has_editor_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_distance_snapping) !== -1) {
                     if (row_name.startsWith('distancespacing')) {
                         beatmap.editor.distance_snapping = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_beat_divisor) != -1) {
+                if (properties_has_editor_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_beat_divisor) !== -1) {
                     if (row_name.startsWith('beatdivisor')) {
                         beatmap.editor.beat_divisor = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_grid_size) != -1) {
+                if (properties_has_editor_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_grid_size) !== -1) {
                     if (row_name.startsWith('gridsize')) {
                         beatmap.editor.grid_size = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_timeline_zoom) != -1) {
+                if (properties_has_editor_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.editor_timeline_zoom) !== -1) {
                     if (row_name.startsWith('timelinezoom')) {
                         beatmap.editor.timeline_zoom = Number(row_value);
                     }
@@ -248,59 +295,68 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             }
         }
         //[Metadata] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_block) != -1 &&
-            beatmap_block_type.is_metadata_block) {
+        else if (is_properties_has_metadata_block && beatmap_block_type.is_metadata_block) {
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name = row_splitted[0].toLowerCase().trim();
                 let row_value = row_splitted[1].trim();
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_title) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_title) !== -1) {
                     if (row_name === 'title') {
                         beatmap.metadata.title = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_title_unicode) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_title_unicode) !== -1) {
                     if (row_name === 'titleunicode') {
                         beatmap.metadata.title_unicode = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_artist) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_artist) !== -1) {
                     if (row_name === 'artist') {
                         beatmap.metadata.artist = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_artist_unicode) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_artist_unicode) !== -1) {
                     if (row_name === 'artistunicode') {
                         beatmap.metadata.artist_unicode = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_creator) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_creator) !== -1) {
                     if (row_name.startsWith('creator')) {
                         beatmap.metadata.creator = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_version) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_version) !== -1) {
                     if (row_name.startsWith('version')) {
                         beatmap.metadata.version = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_source) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_source) !== -1) {
                     if (row_name.startsWith('source')) {
                         beatmap.metadata.source = row_value;
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_tags) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_tags) !== -1) {
                     if (row_name.startsWith('tags')) {
                         beatmap.metadata.tags = row_value.split(' ')
                             .filter(value => value.length > 0);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_beatmap_id) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_beatmap_id) !== -1) {
                     if (row_name.startsWith('beatmapid')) {
                         beatmap.metadata.beatmap_id = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_beatmapset_id) != -1) {
+                if (properties_has_metadata_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.metadata_beatmapset_id) !== -1) {
                     if (row_name.startsWith('beatmapsetid')) {
                         beatmap.metadata.beatmapset_id = Number(row_value);
                     }
@@ -308,38 +364,43 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             }
         }
         //[Difficulty] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_block) != -1 &&
-            beatmap_block_type.is_difficulty_block) {
+        else if (is_properties_has_difficulty_block && beatmap_block_type.is_difficulty_block) {
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
                 let row_name = row_splitted[0].toLowerCase().trim();
                 let row_value = row_splitted[1].trim();
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Health_Points_drain_rate) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Health_Points_drain_rate) !== -1) {
                     if (row_name.startsWith('hpdrainrate')) {
                         beatmap.difficulty.Health_Points_drain_rate = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Circle_Size) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Circle_Size) !== -1) {
                     if (row_name.startsWith('circlesize')) {
                         beatmap.difficulty.Circle_Size = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Overall_Difficulty) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Overall_Difficulty) !== -1) {
                     if (row_name.startsWith('overalldifficulty')) {
                         beatmap.difficulty.Overall_Difficulty = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Approach_Rate) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_Approach_Rate) !== -1) {
                     if (row_name.startsWith('approachrate')) {
                         beatmap.difficulty.Approach_Rate = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_slider_multiplier) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_slider_multiplier) !== -1) {
                     if (row_name.startsWith('slidermultiplier')) {
                         beatmap.difficulty.slider_multiplier = Number(row_value);
                     }
                 }
-                if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_slider_tick_rate) != -1) {
+                if (properties_has_difficulty_block ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.difficulty_slider_tick_rate) !== -1) {
                     if (row_name.startsWith('slidertickrate')) {
                         beatmap.difficulty.slider_tick_rate = Number(row_value);
                     }
@@ -347,15 +408,14 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             }
         }
         //[Events] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.events_block) != -1 &&
-            beatmap_block_type.is_event_block) {
+        else if (is_properties_has_events_block && beatmap_block_type.is_event_block) {
             let row_escaped = row.replace('\r', '');
             if (row_escaped.length >= 1) {
-                beatmap.events.push(row_escaped);
+                beatmap.events.push((0, beatmap_events_1.event_string_parse)(row_escaped, osu_file_beatmap_properties));
             }
         }
         //[TimingPoints] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_block) != -1 &&
+        else if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_block) !== -1 &&
             beatmap_block_type.is_timing_points_block) {
             let row_splitted = row.replace('\r', '').split(',');
             if (row_splitted.length >= 2) {
@@ -376,7 +436,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             }
         }
         //[Colours] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.colors_block) != -1 &&
+        else if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.colors_block) !== -1 &&
             beatmap_block_type.is_color_block) {
             let row_splitted = row.split(':');
             if (row_splitted.length >= 2) {
@@ -398,7 +458,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
             }
         }
         //[HitObjects] block
-        if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_block) != -1 &&
+        else if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_block) !== -1 &&
             beatmap_block_type.is_hit_objects_block) {
             let row_splitted = row.replace('\r', '').split(',');
             if (row_splitted.length >= 5) {
@@ -456,58 +516,109 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
     }
     //set defaults
     //[General] block
-    if (beatmap.general.audio_lead_in === undefined) {
-        beatmap.general.audio_lead_in = 0;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_audio_lead_in) !== -1) {
+        if (beatmap.general.audio_lead_in === undefined) {
+            beatmap.general.audio_lead_in = 0;
+        }
     }
-    if (beatmap.general.preview_time === undefined) {
-        beatmap.general.preview_time = -1;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_preview_time) !== -1) {
+        if (beatmap.general.preview_time === undefined) {
+            beatmap.general.preview_time = -1;
+        }
     }
-    if (beatmap.general.countdown === undefined) {
-        beatmap.general.countdown = beatmap_data_1.beatmap_countdown.normal;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown) !== -1) {
+        if (beatmap.general.countdown === undefined) {
+            beatmap.general.countdown = beatmap_data_1.beatmap_countdown.normal;
+        }
     }
-    if (beatmap.general.sample_set === undefined) {
-        beatmap.general.sample_set = beatmap_data_1.beatmap_sample_set.Normal;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_sample_set) !== -1) {
+        if (beatmap.general.sample_set === undefined) {
+            beatmap.general.sample_set = beatmap_data_1.beatmap_sample_set.Normal;
+        }
     }
-    if (beatmap.general.stack_leniency === undefined) {
-        beatmap.general.stack_leniency = 0.7;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_stack_leniency) !== -1) {
+        if (beatmap.general.stack_leniency === undefined) {
+            beatmap.general.stack_leniency = 0.7;
+        }
     }
-    if (beatmap.general.gamemode === undefined) {
-        beatmap.general.gamemode = variable_types_1.Gamemode.osu;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_gamemode) !== -1) {
+        if (beatmap.general.gamemode === undefined) {
+            beatmap.general.gamemode = variable_types_1.Gamemode.osu;
+        }
     }
-    if (beatmap.general.is_letterbox_in_break === undefined) {
-        beatmap.general.is_letterbox_in_break = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_letterbox_in_break) !== -1) {
+        if (beatmap.general.is_letterbox_in_break === undefined) {
+            beatmap.general.is_letterbox_in_break = false;
+        }
     }
-    if (beatmap.general.is_storyfire_in_front === undefined) {
-        beatmap.general.is_storyfire_in_front = true;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_storyfire_in_front) !== -1) {
+        if (beatmap.general.is_storyfire_in_front === undefined) {
+            beatmap.general.is_storyfire_in_front = true;
+        }
     }
-    if (beatmap.general.is_use_skin_sprites === undefined) {
-        beatmap.general.is_use_skin_sprites = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_use_skin_sprites) !== -1) {
+        if (beatmap.general.is_use_skin_sprites === undefined) {
+            beatmap.general.is_use_skin_sprites = false;
+        }
     }
-    if (beatmap.general.is_always_show_playfield === undefined) {
-        beatmap.general.is_always_show_playfield = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_always_show_playfield) !== -1) {
+        if (beatmap.general.is_always_show_playfield === undefined) {
+            beatmap.general.is_always_show_playfield = false;
+        }
     }
-    if (beatmap.general.overlay_position === undefined) {
-        beatmap.general.overlay_position = beatmap_data_1.beatmap_overlay_position.NoChange;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_overlay_position) !== -1) {
+        if (beatmap.general.overlay_position === undefined) {
+            beatmap.general.overlay_position = beatmap_data_1.beatmap_overlay_position.NoChange;
+        }
     }
-    if (beatmap.general.is_epilepsy_warning === undefined) {
-        beatmap.general.is_epilepsy_warning = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_epilepsy_warning) !== -1) {
+        if (beatmap.general.is_epilepsy_warning === undefined) {
+            beatmap.general.is_epilepsy_warning = false;
+        }
     }
-    if (beatmap.general.countdown_offset === undefined) {
-        beatmap.general.countdown_offset = 0;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_countdown_offset) !== -1) {
+        if (beatmap.general.countdown_offset === undefined) {
+            beatmap.general.countdown_offset = 0;
+        }
     }
-    if (beatmap.general.is_special_style === undefined) {
-        beatmap.general.is_special_style = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_special_style) !== -1) {
+        if (beatmap.general.is_special_style === undefined) {
+            beatmap.general.is_special_style = false;
+        }
     }
-    if (beatmap.general.is_widescreen_storyboard === undefined) {
-        beatmap.general.is_widescreen_storyboard = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_widescreen_storyboard) !== -1) {
+        if (beatmap.general.is_widescreen_storyboard === undefined) {
+            beatmap.general.is_widescreen_storyboard = false;
+        }
     }
-    if (beatmap.general.is_samples_match_playback_rate === undefined) {
-        beatmap.general.is_samples_match_playback_rate = false;
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.general_is_samples_match_playback_rate) !== -1) {
+        if (beatmap.general.is_samples_match_playback_rate === undefined) {
+            beatmap.general.is_samples_match_playback_rate = false;
+        }
+    }
+    for (let key in beatmap) {
+        if (Array.isArray(beatmap[key]) && beatmap[key].length === 0) {
+            delete beatmap[key];
+        }
+        else if (typeof beatmap[key] === 'object' && Object.keys(beatmap[key]).length === 0) {
+            delete beatmap[key];
+        }
     }
     return beatmap;
-}
-function onlyUnique(arr) {
-    return arr.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    });
 }
