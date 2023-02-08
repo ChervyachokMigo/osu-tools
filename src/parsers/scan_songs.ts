@@ -1,24 +1,46 @@
 import { readFileSync, readdirSync } from "fs";
 
 import path from "path";
+
 import { beatmap_countdown, beatmap_data, 
     beatmap_data_hit_object, beatmap_overlay_position, 
     beatmap_sample_set, beatmap_timing_point, 
     hit_sample_set, beatmap_color_type, beatmap_data_hit_object_type, 
     beatmap_data_hit_sound, beatmap_data_hit_sample } from "../consts/beatmap_data";
+
 import md5File from 'md5-file';
+
 import { beatmap_block, beatmap_block_type_defaults, getBlockType } from "../consts/beatmap_block";
+
 import { Gamemode } from "../consts/variable_types";
+
 import bitwise from "bitwise";
 
-import { all_beatmap_properties, all_difficulty_properties, all_editor_properties, all_events_properties, all_general_properties, all_metadata_properties, osu_file_beatmap_property } from "../consts/property_settings";
+import { all_difficulty_properties, all_editor_properties, 
+    all_events_properties, all_general_properties, all_hit_objects_properties, all_metadata_properties, 
+    osu_file_beatmap_property } from "../consts/property_settings";
 
 import { event_string_parse } from "../tools/beatmap_events";
+import { beatmap_event } from "../consts/beatmap_events/beatmap_event";
+import { assert } from "console";
 
-export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], is_read_only: boolean = false, callback: Function): beatmap_data[] {
+export type scanner_options = {
+    is_read_only: boolean,
+    is_hit_objects_only_count: boolean
+}
+
+export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], 
+    options: scanner_options, callback: Function): beatmap_data[] {
+
+    console.assert(
+        options.is_hit_objects_only_count == true && 
+        !osu_file_beatmap_properties.includes(osu_file_beatmap_property.hit_objects_count), 'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!')
+
     console.log('scan starting..');
+
     try{
         const osu_songs = path.join(osufolder, "Songs");
+        console.log(osu_songs)
         const files = readdirSync(osu_songs , { withFileTypes: true });
 
         var count = 0;
@@ -42,11 +64,12 @@ export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap
             }
 
             if (beatmap_folder.isDirectory()){
-                let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties);
 
-                callback(current_beatmaps);
+                let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties, options);
 
-                if (is_read_only === false){
+                callback(current_beatmaps, beatmap_folder);
+
+                if (options.is_read_only === false){
                     beatmaps = beatmaps.concat( current_beatmaps );
                 } else {
                     current_beatmaps = [];
@@ -76,26 +99,30 @@ export function get_all_beatmaps_from_songs (osufolder: string, osu_file_beatmap
         
 }
 
-export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data[] {
+export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: string, 
+    osu_file_beatmap_properties: osu_file_beatmap_property[], options: scanner_options): beatmap_data[] {
+
     const osu_songs = path.join(osufolder, "Songs");
     var beatmaps: beatmap_data[] = [];
 
     try {
-        const beatmapset_files = readdirSync(path.join(osu_songs, folder_path), { withFileTypes: true });
+        const beatmapset_files = readdirSync(
+            path.join(osu_songs, folder_path), { withFileTypes: true });
     
         if (beatmapset_files && beatmapset_files.length > 0) {
 
             for (const beatmapset_file of beatmapset_files) {
                 
-
                 if ( beatmapset_file.isDirectory()) {
                     continue;
                 }
 
-                if (beatmapset_file.name.endsWith(".osu")) {
+                if (beatmapset_file.name.toLowerCase().endsWith(".osu") || 
+                    beatmapset_file.name.toLowerCase().endsWith(".osb")) {
+                        
                     const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file.name);
 
-                    const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties);
+                    const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties, options);
 
                     if (osu_file_beatmap_properties.indexOf (osu_file_beatmap_property.metadata_beatmap_md5) !== -1 ){
                         if (!osu_file_data.metadata)
@@ -119,13 +146,15 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
     
 }
 
-function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_data {
+export function parse_osu_file(osu_file_path: string, 
+    osu_file_beatmap_properties: osu_file_beatmap_property[], options: scanner_options): beatmap_data {
 
     const properties_has_general_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.general_block);
     const properties_has_editor_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.editor_block);
     const properties_has_metadata_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.metadata_block);
     const properties_has_difficulty_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.difficulty_block);
     const properties_has_events_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.events_block);
+    const properties_has_hit_objects_block =  osu_file_beatmap_properties.includes(osu_file_beatmap_property.hit_objects_block);
 
     const is_properties_has_general_block = properties_has_general_block || 
         all_general_properties.some(property => osu_file_beatmap_properties.includes(property));
@@ -141,6 +170,9 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
 
     const is_properties_has_events_block = properties_has_events_block || 
         all_events_properties.some(property => osu_file_beatmap_properties.includes(property));
+    
+    const is_properties_has_hit_objects_block = properties_has_hit_objects_block || 
+        all_hit_objects_properties.some(property => osu_file_beatmap_properties.includes(property));
 
 
     const beatmap: beatmap_data = {
@@ -151,7 +183,7 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
         events: [],
         timing_points: [],
         colors: [],
-        hit_objects: []
+        hit_objects: {},
     }
 
     const filedata = readFileSync(osu_file_path, {encoding: 'utf-8'});
@@ -512,7 +544,9 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
 
             if (row_escaped.length >= 1) {
 
-                beatmap.events.push( event_string_parse( row_escaped , osu_file_beatmap_properties ) );
+                let current_event = event_string_parse( row_escaped , osu_file_beatmap_properties );
+
+                if (current_event) beatmap.events.push( current_event as beatmap_event );
 
             }
         }
@@ -569,69 +603,85 @@ function parse_osu_file(osu_file_path: string, osu_file_beatmap_properties: osu_
         }
 
         //[HitObjects] block
-        else if (osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_block) !== -1 &&
-        beatmap_block_type.is_hit_objects_block) {
+        else if (is_properties_has_hit_objects_block && beatmap_block_type.is_hit_objects_block) {
 
             let row_splitted = row.replace('\r', '').split(',');
-            if (row_splitted.length >= 5) {
-                let type = 0;
-                if (bitwise.integer.getBit(Number(row_splitted[3]), 0) == 1){
-                    type = beatmap_data_hit_object_type.hitcircle;
-                }
-                if (bitwise.integer.getBit(Number(row_splitted[3]), 1) == 1){
-                    type = beatmap_data_hit_object_type.slider;
-                }
-                if (bitwise.integer.getBit(Number(row_splitted[3]), 3) == 1){
-                    type = beatmap_data_hit_object_type.spinner;
-                }
-                if (bitwise.integer.getBit(Number(row_splitted[3]), 7) == 1){
-                    type = beatmap_data_hit_object_type.mania_hold;
-                }
 
-                let hit_sample: beatmap_data_hit_sample = {}
-                let hit_sample_row = row_splitted.pop();
-                if (hit_sample_row){
-                    if ( hit_sample_row.length>=5 ){
-                        let hit_sample_splitted = hit_sample_row.split(':');
-                        hit_sample.normal_set = Number(hit_sample_splitted[0]) as hit_sample_set;
-                        hit_sample.addition_set = Number(hit_sample_splitted[1]) as hit_sample_set;
-                        hit_sample.index = Number(hit_sample_splitted[2]);
-                        hit_sample.volume = Number(hit_sample_splitted[3]);
-                        hit_sample.filename = hit_sample_splitted[4];
-                    } else {
-                        row_splitted.push (hit_sample_row);
-                    }
-                }                
-
-                let is_new_combo = Boolean(bitwise.integer.getBit(Number(row_splitted[3]), 2) );
-                let hit_object: beatmap_data_hit_object = {
-                    x: Number(row_splitted[0]),
-                    y: Number(row_splitted[1]),
-                    time: Number(row_splitted[2]),
-                    type: type as beatmap_data_hit_object_type,
-
-                    is_new_combo: is_new_combo,
-
-                    hit_sound: Number(row_splitted[4]) as beatmap_data_hit_sound,
-                    object_params: row_splitted.slice(5).join(','),
-                    hit_sample: hit_sample
-
-                    
-                }
+            if (properties_has_hit_objects_block ||
+                osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_count) !== -1){
                 
-                if (is_new_combo){
-                    let skip_colors_bits = [
-                        Number(bitwise.integer.getBit(Number(row_splitted[3]), 4)),
-                        Number(bitwise.integer.getBit(Number(row_splitted[3]), 5)),
-                        Number(bitwise.integer.getBit(Number(row_splitted[3]), 6))
-                    ];
-                    hit_object.new_combo_colors_skip = parseInt(
-                        `${skip_colors_bits[0]}${skip_colors_bits[1]}${skip_colors_bits[2]}`, 2);
-                }
-                
-                beatmap.hit_objects.push(hit_object);
+                beatmap.hit_objects.count = row_splitted.filter( value => value.length >=5 ).length;
+
             }
 
+            if ( options.is_hit_objects_only_count === false && 
+                (properties_has_hit_objects_block ||
+                osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects) !== -1)) {
+                
+                if (row_splitted.length >= 5) {
+                    let type = 0;
+                    if (bitwise.integer.getBit(Number(row_splitted[3]), 0) == 1){
+                        type = beatmap_data_hit_object_type.hitcircle;
+                    }
+                    if (bitwise.integer.getBit(Number(row_splitted[3]), 1) == 1){
+                        type = beatmap_data_hit_object_type.slider;
+                    }
+                    if (bitwise.integer.getBit(Number(row_splitted[3]), 3) == 1){
+                        type = beatmap_data_hit_object_type.spinner;
+                    }
+                    if (bitwise.integer.getBit(Number(row_splitted[3]), 7) == 1){
+                        type = beatmap_data_hit_object_type.mania_hold;
+                    }
+
+                    let hit_sample: beatmap_data_hit_sample = {};
+                    let hit_sample_row = row_splitted.pop();
+                    if (hit_sample_row){
+                        if ( hit_sample_row.length>=5 ){
+                            let hit_sample_splitted = hit_sample_row.split(':');
+                            hit_sample.normal_set = Number(hit_sample_splitted[0]) as hit_sample_set;
+                            hit_sample.addition_set = Number(hit_sample_splitted[1]) as hit_sample_set;
+                            hit_sample.index = Number(hit_sample_splitted[2]);
+                            hit_sample.volume = Number(hit_sample_splitted[3]);
+                            hit_sample.filename = hit_sample_splitted[4];
+                        } else {
+                            row_splitted.push (hit_sample_row);
+                        }
+                    }                
+
+                    let is_new_combo = Boolean(bitwise.integer.getBit(Number(row_splitted[3]), 2) );
+                    let hit_object: beatmap_data_hit_object = {
+                        x: Number(row_splitted[0]),
+                        y: Number(row_splitted[1]),
+                        time: Number(row_splitted[2]),
+                        type: type as beatmap_data_hit_object_type,
+
+                        is_new_combo: is_new_combo,
+
+                        hit_sound: Number(row_splitted[4]) as beatmap_data_hit_sound,
+                        object_params: row_splitted.slice(5).join(','),
+                        hit_sample: hit_sample
+
+                        
+                    }
+                    
+                    if (is_new_combo){
+                        let skip_colors_bits = [
+                            Number(bitwise.integer.getBit(Number(row_splitted[3]), 4)),
+                            Number(bitwise.integer.getBit(Number(row_splitted[3]), 5)),
+                            Number(bitwise.integer.getBit(Number(row_splitted[3]), 6))
+                        ];
+                        hit_object.new_combo_colors_skip = parseInt(
+                            `${skip_colors_bits[0]}${skip_colors_bits[1]}${skip_colors_bits[2]}`, 2);
+                    }
+
+                    if (typeof beatmap.hit_objects.hit_objects  === 'undefined'){
+                        beatmap.hit_objects.hit_objects = [];
+                    }
+
+                    beatmap.hit_objects.hit_objects.push(hit_object);
+
+                }
+            }
         }
 
     

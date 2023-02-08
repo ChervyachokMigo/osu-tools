@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Buffer_parse } from '../tools/Buffer_parse';
+import { buffer_parse } from '../tools/buffer_parse';
 import { osu_file_type } from '../consts/osu_file_type';
 import mmap from '@raygun-nickj/mmap-io';
 
@@ -10,7 +10,7 @@ export class osu_file {
     public file_path: string;
     public file_type: osu_file_type;
     public property_settings: Array<any>;
-    public buff: Buffer_parse;
+    public buff: buffer_parse;
     public file_buffer: Buffer;
     public file_size: number;
 
@@ -36,7 +36,7 @@ export class osu_file {
 
             this.file_size = fstats.size;
             this.file_buffer = mmap.map(this.file_size, mmap.PROT_READ, mmap.MAP_PRIVATE, this.file_handle, 0, mmap.MADV_NORMAL);
-            this.buff = new Buffer_parse(this.file_handle, this.file_buffer);
+            this.buff = new buffer_parse(this.file_handle, this.file_buffer);
 
         } catch (error) {
             console.log(error);

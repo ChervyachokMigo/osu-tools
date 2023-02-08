@@ -1,4 +1,4 @@
-import * as osu_tools from '../built/index.js';
+import * as osu_tools from '../src/index';
 
 import { beatmap_property, all_beatmap_properties, all_score_properties, score_property, 
     osu_file_beatmap_property, all_osu_file_properties} from "../src/consts/property_settings";
@@ -45,7 +45,7 @@ const events_props: osu_file_beatmap_property[] = [
 
 //open('console.log', 'w', (err, fd)=>{
 
-    osu_tools.songs.scan(osu_path, events_props, true, (beatmaps: beatmap_data[])=>{
+    /*osu_tools.songs_get_all_beatmaps(osu_path, events_props, (beatmaps: beatmap_data[])=>{
 
         beatmaps.map((beatmap)=>{
             console.log(beatmap);
@@ -56,7 +56,7 @@ const events_props: osu_file_beatmap_property[] = [
             //appendFile(fd, JSON.stringify(beatmap) , ()=>{});
     
 
-    });
+    });*/
 
    // close(fd)
 

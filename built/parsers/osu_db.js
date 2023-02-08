@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.find_beatmaps = exports.osu_db_load = exports.osu_db = void 0;
+exports.osu_db_find_beatmaps = exports.osu_db_load = exports.osu_db = void 0;
 const property_settings_1 = require("../consts/property_settings");
 const osu_file_1 = require("./osu_file");
 const osu_file_type_1 = require("../consts/osu_file_type");
@@ -421,7 +421,7 @@ exports.osu_db_load = osu_db_load;
  * //returns all beatmaps with id < 100
  * find_beatmaps( osu_db_result, (beatmap) => beatmap.beatmap_id && beatmap.beatmap_id < 100 );
  */
-function find_beatmaps(osu_db_result, search_function) {
+function osu_db_find_beatmaps(osu_db_result, search_function) {
     let beatmaps = osu_db_result.beatmaps.filter(search_function);
     if (typeof beatmaps !== 'undefined') {
         return beatmaps;
@@ -430,4 +430,4 @@ function find_beatmaps(osu_db_result, search_function) {
         return [];
     }
 }
-exports.find_beatmaps = find_beatmaps;
+exports.osu_db_find_beatmaps = osu_db_find_beatmaps;

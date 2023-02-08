@@ -2,9 +2,9 @@ import { score_property } from '../consts/property_settings';
 import { Gamemode } from '../consts/variable_types';
 import { ModsIntToText } from '../consts/modes';
 import { score } from '../consts/score';
-import { Buffer_parse } from './Buffer_parse';
+import { buffer_parse } from './buffer_parse';
 
-export function score_parse(buffer: Buffer_parse, property_settings: score_property[]): score {
+export function score_parse(buffer: buffer_parse, property_settings: score_property[]): score {
     let score: score = {};
 
     if (property_settings.indexOf(score_property.gamemode) != -1) {

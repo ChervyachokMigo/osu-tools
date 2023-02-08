@@ -441,7 +441,7 @@ type SearchFunction = (beatmap: beatmap_results) => any;
  * //returns all beatmaps with id < 100
  * find_beatmaps( osu_db_result, (beatmap) => beatmap.beatmap_id && beatmap.beatmap_id < 100 );
  */
-export function find_beatmaps( osu_db_result: osu_db_results, search_function: SearchFunction ): beatmap_results[] {
+export function osu_db_find_beatmaps( osu_db_result: osu_db_results, search_function: SearchFunction ): beatmap_results[] {
         
     let beatmaps = osu_db_result.beatmaps.filter(search_function);
 

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_beatmaps_from_beatmap_folder = exports.get_all_beatmaps_from_songs = void 0;
+exports.parse_osu_file = exports.get_beatmaps_from_beatmap_folder = exports.songs_get_all_beatmaps = void 0;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const beatmap_data_1 = require("../consts/beatmap_data");
@@ -13,7 +13,7 @@ const variable_types_1 = require("../consts/variable_types");
 const bitwise_1 = __importDefault(require("bitwise"));
 const property_settings_1 = require("../consts/property_settings");
 const beatmap_events_1 = require("../tools/beatmap_events");
-function get_all_beatmaps_from_songs(osufolder, osu_file_beatmap_properties, is_read_only = false, callback) {
+function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, is_read_only = false, callback) {
     console.log('scan starting..');
     try {
         const osu_songs = path_1.default.join(osufolder, "Songs");
@@ -33,7 +33,7 @@ function get_all_beatmaps_from_songs(osufolder, osu_file_beatmap_properties, is_
             }
             if (beatmap_folder.isDirectory()) {
                 let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties);
-                callback(current_beatmaps);
+                callback(current_beatmaps, beatmap_folder);
                 if (is_read_only === false) {
                     beatmaps = beatmaps.concat(current_beatmaps);
                 }
@@ -60,7 +60,7 @@ function get_all_beatmaps_from_songs(osufolder, osu_file_beatmap_properties, is_
         throw new Error('Error scanning folder');
     }
 }
-exports.get_all_beatmaps_from_songs = get_all_beatmaps_from_songs;
+exports.songs_get_all_beatmaps = songs_get_all_beatmaps;
 function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatmap_properties) {
     const osu_songs = path_1.default.join(osufolder, "Songs");
     var beatmaps = [];
@@ -622,3 +622,4 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties) {
     }
     return beatmap;
 }
+exports.parse_osu_file = parse_osu_file;

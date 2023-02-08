@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.osu_file = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const Buffer_parse_1 = require("../tools/Buffer_parse");
+const buffer_parse_1 = require("../tools/buffer_parse");
 const osu_file_type_1 = require("../consts/osu_file_type");
 const mmap_io_1 = __importDefault(require("@raygun-nickj/mmap-io"));
 class osu_file {
@@ -28,7 +28,7 @@ class osu_file {
             let fstats = fs_1.default.fstatSync(this.file_handle);
             this.file_size = fstats.size;
             this.file_buffer = mmap_io_1.default.map(this.file_size, mmap_io_1.default.PROT_READ, mmap_io_1.default.MAP_PRIVATE, this.file_handle, 0, mmap_io_1.default.MADV_NORMAL);
-            this.buff = new Buffer_parse_1.Buffer_parse(this.file_handle, this.file_buffer);
+            this.buff = new buffer_parse_1.buffer_parse(this.file_handle, this.file_buffer);
         }
         catch (error) {
             console.log(error);

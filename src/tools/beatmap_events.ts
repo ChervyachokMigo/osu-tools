@@ -8,7 +8,7 @@ import { beatmap_event_loop_type } from "../consts/beatmap_events/beatmap_event_
 
 import { osu_file_beatmap_property } from "../consts/property_settings";
 
-export function event_string_parse(row_escaped: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_event {
+export function event_string_parse(row_escaped: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_event | undefined {
     const properties_has_events_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.events_block);
 
     //Background event
@@ -208,10 +208,12 @@ export function event_string_parse(row_escaped: string, osu_file_beatmap_propert
     }
 
     //unknown_event return if string not found
-    return { 
+    /*return { 
         type: beatmap_event_type.unknown,
         data_string: row_escaped 
-    }; 
+    }; */
+
+    return undefined;
 
     
 }

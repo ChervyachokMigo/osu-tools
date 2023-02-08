@@ -82,7 +82,7 @@ export type beatmap_data = {
      * 
      * Hit objects
      */
-    hit_objects: beatmap_data_hit_object[];
+    hit_objects: beatmap_hit_objects 
 
 }
 
@@ -663,6 +663,26 @@ export type beatmap_data_color = {
      * Blue component of color
      */
     blue?: number;
+}
+
+/**
+ * [Hit objects]
+ * 
+ * Count and hit_objects types
+ */
+export type beatmap_hit_objects = {
+    /**
+     * [Hit objects]
+     * 
+     * Count of beatmap hit objects
+     */
+    count?: number,
+    /**
+     * [Hit objects]
+     * 
+     * Hit object syntax: x,y,time,type,hitSound,objectParams,hitSample
+     */
+    hit_objects?: beatmap_data_hit_object[];
 }
 
 /**
