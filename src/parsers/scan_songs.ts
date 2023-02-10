@@ -34,7 +34,8 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
 
     console.assert(
         options.is_hit_objects_only_count == true && 
-        !osu_file_beatmap_properties.includes(osu_file_beatmap_property.hit_objects_count), 'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!')
+        osu_file_beatmap_properties.includes(osu_file_beatmap_property.hit_objects_count),
+         'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!')
 
     console.log('scan starting..');
 
