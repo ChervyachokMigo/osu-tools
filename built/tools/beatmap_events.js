@@ -152,9 +152,10 @@ function event_string_parse(row_escaped, osu_file_beatmap_properties) {
         }
     }
     //unknown_event return if string not found
-    return {
-        type: beatmap_event_type_1.beatmap_event_type.unknown,
+    /*return {
+        type: beatmap_event_type.unknown,
         data_string: row_escaped
-    };
+    }; */
+    return undefined;
 }
 exports.event_string_parse = event_string_parse;
