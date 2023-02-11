@@ -283,6 +283,11 @@ export type beatmap_data_hit_sample ={
 export type beatmap_data_general = {
         /**[General]
 
+        Beatmap (osu-file) filename
+        */
+    beatmap_filename?: string;
+        /**[General]
+
         Location of the audio file relative to the current folder
         */
     audio_filename?: string;

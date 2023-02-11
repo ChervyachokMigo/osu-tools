@@ -167,6 +167,7 @@ export enum osu_file_beatmap_property {
     //activate all gerenal properties
     general_block,
 
+    general_beatmap_filename,
     general_audio_filename,
     general_audio_lead_in,
     general_audio_hash,
@@ -240,6 +241,7 @@ export enum osu_file_beatmap_property {
 }
 
 export const all_general_properties = [
+    osu_file_beatmap_property.general_beatmap_filename,
     osu_file_beatmap_property.general_audio_filename,
     osu_file_beatmap_property.general_audio_lead_in,
     osu_file_beatmap_property.general_audio_hash,
