@@ -321,3 +321,5 @@ export const all_osu_file_properties = [
     osu_file_beatmap_property.colors_block,
     osu_file_beatmap_property.hit_objects_block,
 ];
+
+export const none_osu_file_properties: osu_file_beatmap_property[] = [];

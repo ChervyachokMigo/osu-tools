@@ -1,7 +1,7 @@
 
 import * as bitwise from 'bitwise';
 
-const mod_names = ['NoFail',     'Easy',
+export const mod_names = ['NoFail',     'Easy',
 'TouchDevice', 'Hidden',     'HardRock',
 'SuddenDeath', 'DoubleTime', 'Relax',
 'HalfTime',    'Nightcore',  'Flashlight',

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.all_osu_file_properties = exports.all_hit_objects_properties = exports.all_events_properties = exports.all_difficulty_properties = exports.all_metadata_properties = exports.all_editor_properties = exports.all_general_properties = exports.osu_file_beatmap_property = exports.none_score_properties = exports.all_score_properties = exports.score_property = exports.none_beatmap_properties = exports.all_beatmap_properties = exports.beatmap_property = void 0;
+exports.none_osu_file_properties = exports.all_osu_file_properties = exports.all_hit_objects_properties = exports.all_events_properties = exports.all_difficulty_properties = exports.all_metadata_properties = exports.all_editor_properties = exports.all_general_properties = exports.osu_file_beatmap_property = exports.none_score_properties = exports.all_score_properties = exports.score_property = exports.none_beatmap_properties = exports.all_beatmap_properties = exports.beatmap_property = void 0;
 var beatmap_property;
 (function (beatmap_property) {
     beatmap_property[beatmap_property["beatmap_size"] = 0] = "beatmap_size";
@@ -301,3 +301,4 @@ exports.all_osu_file_properties = [
     osu_file_beatmap_property.colors_block,
     osu_file_beatmap_property.hit_objects_block,
 ];
+exports.none_osu_file_properties = [];

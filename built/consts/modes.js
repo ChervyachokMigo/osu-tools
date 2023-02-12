@@ -23,9 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModsIntToText = void 0;
+exports.ModsIntToText = exports.mod_names = void 0;
 const bitwise = __importStar(require("bitwise"));
-const mod_names = ['NoFail', 'Easy',
+exports.mod_names = ['NoFail', 'Easy',
     'TouchDevice', 'Hidden', 'HardRock',
     'SuddenDeath', 'DoubleTime', 'Relax',
     'HalfTime', 'Nightcore', 'Flashlight',
@@ -44,7 +44,7 @@ function ModsIntToText(modsBits) {
     for (let i = 0; i < 32; i++) {
         let bit = bitwise.integer.getBit(modsBits, i);
         if (bit) {
-            result_mods.push(mod_names[i]);
+            result_mods.push(exports.mod_names[i]);
         }
     }
     return result_mods;

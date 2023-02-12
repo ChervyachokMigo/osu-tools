@@ -1,0 +1,1 @@
+{"version":3,"file":"beatmap_event_type.d.ts","sourceRoot":"","sources":["../../../src/consts/beatmap_events/beatmap_event_type.ts"],"names":[],"mappings":"AAAA,oBAAY,kBAAkB;IAC1B,OAAO,MAAM;IAEb,OAAO,OAAO;IACd,UAAU,OAAO;IAEjB,UAAU,IAAI;IACd,KAAK,IAAI;IACT,aAAa,IAAI;IACjB,KAAK,IAAI;IAET,MAAM,IAAI;IACV,MAAM,IAAI;IACV,SAAS,IAAI;CAChB"}
