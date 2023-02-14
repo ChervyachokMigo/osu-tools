@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buffer_parse = void 0;
+exports.buffer_parse = exports.UTC1970Years = void 0;
 const decompressLZMASync_1 = require("../lib/decompressLZMASync");
 const bitwise_1 = __importDefault(require("bitwise"));
-const UTC1970Years = BigInt(62135596800000);
+exports.UTC1970Years = BigInt(62135596800000);
 class buffer_parse {
     constructor(file_handle, file_buffer) {
         this.file_buffer = file_buffer;
@@ -21,11 +21,15 @@ class buffer_parse {
         this.cursor_offset += length;
         return buf;
     }
+    getWindowsTickDate() {
+        return this.bufferRead(8).readBigInt64LE();
+    }
     getDateTime() {
-        let windows_tick_date_value = this.bufferRead(8).readBigInt64LE();
+        let windows_tick_date_value = this.getWindowsTickDate();
+        console.log(windows_tick_date_value);
         if (windows_tick_date_value > 0) {
             let date_value_without_ns = windows_tick_date_value / BigInt(10000);
-            return new Date(Number(date_value_without_ns - UTC1970Years));
+            return new Date(Number(date_value_without_ns - exports.UTC1970Years));
         }
         else {
             return new Date(0);
@@ -175,13 +179,14 @@ class buffer_parse {
         return (0, decompressLZMASync_1.decompressLZMASync)(encoded_buffer);
     }
     getReplayData() {
-        const result = { replay_seed: 0, replay_frames: [] };
+        const result = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
         const replay_data_size = this.bufferRead(4).readInt32LE();
         if (replay_data_size > 0) {
             let buffer = this.bufferRead(replay_data_size);
             let replay_data_array = this.getLZMAString(buffer).split(',')
                 .map(value => value.split('|'))
                 .filter(value => value.length === 4);
+            result.replay_frames_raw = replay_data_array;
             if (replay_data_array.length > 0) {
                 if (replay_data_array[replay_data_array.length - 1][0] == '-12345') {
                     let replay_seed = replay_data_array.pop();

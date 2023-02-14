@@ -4,7 +4,7 @@ import { ModsIntToText }  from '../consts/modes';
 import { decompressLZMASync } from '../lib/decompressLZMASync';
 import bitwise from 'bitwise';
 
-const UTC1970Years = BigInt(62135596800000);
+export const UTC1970Years = BigInt(62135596800000);
 
 export class buffer_parse {
     file_handle: number;
@@ -28,8 +28,13 @@ export class buffer_parse {
         return buf;
     }
 
+    getWindowsTickDate(): BigInt {
+       return this.bufferRead(8).readBigInt64LE();
+    }
+
     getDateTime(): Date {
-        let windows_tick_date_value = this.bufferRead(8).readBigInt64LE();
+        let windows_tick_date_value: any = this.getWindowsTickDate();
+        console.log(windows_tick_date_value)
         if (windows_tick_date_value > 0){
             let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
             return new Date( Number(date_value_without_ns - UTC1970Years ) );
@@ -203,7 +208,6 @@ export class buffer_parse {
     getHpBar(): HP_Bar[] {
         let hp_bar_raw: string = this.getString();
         let hp_bar: HP_Bar[] = [];
-
         if (hp_bar_raw.length > 0) {
             for (let hp_value of hp_bar_raw.split(',') .map( value => value.split('|')) .filter( value => value.length >= 2)){
                 let hp_bar_item: HP_Bar = {
@@ -221,16 +225,16 @@ export class buffer_parse {
     }
 
     getReplayData(): ReplayData {
-        const result: ReplayData = { replay_seed: 0, replay_frames: [] };
+        const result: ReplayData = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
         const replay_data_size = this.bufferRead(4).readInt32LE();
 
         if (replay_data_size > 0){
 			let buffer = this.bufferRead(replay_data_size);
-
             let replay_data_array = this.getLZMAString(buffer).split(',') 
                 .map( value => value.split('|'))
                 .filter ( value => value.length === 4 );
-    
+            result.replay_frames_raw = replay_data_array;
+
             if (replay_data_array.length > 0){
 
                 if (replay_data_array[replay_data_array.length-1][0] == '-12345' ){

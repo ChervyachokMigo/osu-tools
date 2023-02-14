@@ -1,8 +1,8 @@
-declare namespace _default {
+export default LZMA;
+declare namespace LZMA {
     export { compress };
     export { decompress };
 }
-export default _default;
 /** cs */
 declare function compress(str: any, mode: any, on_finish: any, on_progress: any): any;
 /** ce */

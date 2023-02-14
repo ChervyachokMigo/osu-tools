@@ -104,7 +104,7 @@ function score_parse(buffer, property_settings) {
         }
     } //else nothing
     if (property_settings.indexOf(property_settings_1.score_property.date) != -1) {
-        score.date = buffer.getDateTime();
+        score.windows_tick_date = buffer.getWindowsTickDate();
     }
     else {
         buffer.skipDateTime();

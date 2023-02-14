@@ -1,1 +1,1 @@
-npm pack
+npx tsc && npm pack

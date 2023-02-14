@@ -7,7 +7,7 @@ export {ModsIntToText, mod_names} from "./consts/modes";
 export {IntDoublePair,StarRating,TimingPoint,UserPermissions,
     Gamemode,RankedStatus,HP_Bar,ReplayFrame,ReplayData,KeysPressed} from "./consts/variable_types";
 
-export {buffer_parse} from './tools/buffer_parse';
+export {UTC1970Years, buffer_parse} from './tools/buffer_parse';
 
 export {get_collections_detailed,get_scores_detailed,get_score_detailed} from './tools/union';
 
@@ -42,9 +42,7 @@ export {event_string_parse } from './tools/beatmap_events';
 
 
 export { scanner_options, 
-    songs_get_all_beatmaps, 
-    get_beatmaps_from_beatmap_folder, 
-    parse_osu_file } from './parsers/scan_songs';
+    songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file } from './parsers/scan_songs';
 
 export {score} from "./consts/score";
 export {score_parse} from './tools/score_parse';
@@ -53,3 +51,4 @@ export { scores_db_results, scores_db, scores_db_load } from './parsers/scores_d
 export { replay_osr, replay_load } from './parsers/replay_osr';
 
 
+export { decompressLZMASync, compressLZMASync } from './lib/decompressLZMASync';

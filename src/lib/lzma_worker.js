@@ -16,7 +16,7 @@
 /// do    (decompression only)
 /** xe */
 
-export default (function () {
+const LZMA = function () {
     
     "use strict";
     
@@ -2662,5 +2662,6 @@ export default (function () {
         /// co:compress:   compress
         /// do:decompress: decompress
     };
-}());
+}();
 
+export default LZMA;

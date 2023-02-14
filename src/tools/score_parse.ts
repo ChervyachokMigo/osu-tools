@@ -108,7 +108,7 @@ export function score_parse(buffer: buffer_parse, property_settings: score_prope
     } //else nothing
 
     if (property_settings.indexOf(score_property.date) != -1) {
-        score.date = buffer.getDateTime();
+        score.windows_tick_date = buffer.getWindowsTickDate();
     } else {
         buffer.skipDateTime();
     }

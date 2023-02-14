@@ -18,7 +18,7 @@ export type score = {
     mods_int?: number;
     mods?: string[];
     hp_bar?: HP_Bar[];
-    date?: Date;
+    windows_tick_date?: BigInt;
     replay_data?: ReplayData;
     online_id?: bigint;
     target_practice_accuracy?: number;

@@ -52,6 +52,7 @@ export type ReplayFrame = {
 export type ReplayData = {
     replay_seed: number;
     replay_frames: ReplayFrame[];
+    replay_frames_raw: string[][];
 };
 export type KeysPressed = {
     Key_1: boolean;

@@ -14,7 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// co    (compression only)
 /// do    (decompression only)
 /** xe */
-exports.default = (function () {
+const LZMA = function () {
     "use strict";
     var /** cs */ action_compress = 1, 
     /** ce */
@@ -2531,4 +2531,5 @@ exports.default = (function () {
         /// co:compress:   compress
         /// do:decompress: decompress
     };
-}());
+}();
+exports.default = LZMA;

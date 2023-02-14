@@ -2,7 +2,7 @@ export { beatmap_results, } from './consts/beatmap_results';
 export { color } from "./consts/color";
 export { ModsIntToText, mod_names } from "./consts/modes";
 export { IntDoublePair, StarRating, TimingPoint, UserPermissions, Gamemode, RankedStatus, HP_Bar, ReplayFrame, ReplayData, KeysPressed } from "./consts/variable_types";
-export { buffer_parse } from './tools/buffer_parse';
+export { UTC1970Years, buffer_parse } from './tools/buffer_parse';
 export { get_collections_detailed, get_scores_detailed, get_score_detailed } from './tools/union';
 export { osu_file_type } from "./consts/osu_file_type";
 export { osu_file } from './parsers/osu_file';
@@ -26,4 +26,5 @@ export { score_parse } from './tools/score_parse';
 export { scores_beatmap, score_beatmap } from "./consts/scores_beatmap";
 export { scores_db_results, scores_db, scores_db_load } from './parsers/scores_db';
 export { replay_osr, replay_load } from './parsers/replay_osr';
+export { decompressLZMASync, compressLZMASync } from './lib/decompressLZMASync';
 //# sourceMappingURL=index.d.ts.map
