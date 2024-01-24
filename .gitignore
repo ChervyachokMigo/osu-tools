@@ -1,4 +1,5 @@
-/.trash
+﻿/.trash
+/node_modules
 event_types.txt
 events.txt
 events_Type.txt

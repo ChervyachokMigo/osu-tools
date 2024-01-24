@@ -408,7 +408,7 @@ function osu_db_load(osu_db_path, parse_settings) {
         return file_parse_result;
     }
     catch (e) {
-        console.log(e);
+        console.error(e);
         return file_parse_result;
     }
 }

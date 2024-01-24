@@ -1,6 +1,6 @@
 {
   "name": "osu-tools",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "osu parser for db/osr files and some stuff ",
   "main": "built/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "clean_build_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
     "run (debug)": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
     "test_osu_db": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts",
+    "test_osu_db_2": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_2.ts",
     "test_scan_songs": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_scan_songs.ts",
     "test_random": "npx tsc && ts-node tests/test_random.ts"
   },
@@ -18,15 +19,16 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.11.13",
-    "typescript": "^4.9.4",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
-    "ticks-to-date": "^1.0.3",
-    "deasync": "^0.1.28",
     "@raygun-nickj/mmap-io": "^1.4.0",
     "bitwise": "^2.1.0",
-    "md5-file": "^5.0.0"
+    "deasync": "^0.1.29",
+    "md5-file": "^5.0.0",
+    "semver": "^7.5.4",
+    "ticks-to-date": "^1.0.3"
   },
   "bundleDependencies": [
     "deasync",

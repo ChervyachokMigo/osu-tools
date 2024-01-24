@@ -426,7 +426,7 @@ export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_
 
         return file_parse_result;
     } catch (e){
-        console.log(e)
+        console.error(e)
         return file_parse_result;
     }
 }

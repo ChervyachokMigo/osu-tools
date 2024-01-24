@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { buffer_parse } from '../tools/buffer_parse';
 import { osu_file_type } from '../consts/osu_file_type';
 import mmap from '@raygun-nickj/mmap-io';
