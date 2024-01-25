@@ -1,4 +1,4 @@
-export type color = {
+export declare type color = {
     r: number;
     g: number;
     b: number;

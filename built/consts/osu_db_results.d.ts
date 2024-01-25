@@ -1,6 +1,6 @@
 import { UserPermissions } from './variable_types';
 import { beatmap_results } from './beatmap_results';
-export type osu_db_results = {
+export declare type osu_db_results = {
     number_beatmaps?: number;
     beatmaps: beatmap_results[];
     osu_version?: number;

@@ -10,7 +10,7 @@ class replay_osr extends osu_file_1.osu_file {
     }
     replay_osr_parse() {
         console.log('start parsing replay..');
-        var result = (0, score_parse_1.score_parse)(this.buff, this.property_settings);
+        var result = score_parse_1.score_parse(this.buff, this.property_settings);
         console.log('end parsing replay');
         return result;
     }

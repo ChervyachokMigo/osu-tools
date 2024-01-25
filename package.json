@@ -23,7 +23,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@raygun-nickj/mmap-io": "^1.4.0",
+    "@raygun-nickj/mmap-io": "github:ChervyachokMigo/mmap-io",
     "bitwise": "^2.1.0",
     "deasync": "^0.1.29",
     "md5-file": "^5.0.0",

@@ -1,6 +1,6 @@
 import { beatmap_data } from "../consts/beatmap_data";
 import { osu_file_beatmap_property } from "../consts/property_settings";
-export type scanner_options = {
+export declare type scanner_options = {
     is_read_only: boolean;
     is_hit_objects_only_count: boolean;
 };

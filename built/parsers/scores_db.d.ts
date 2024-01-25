@@ -1,7 +1,7 @@
 import { osu_file } from './osu_file';
 import { score_property } from '../consts/property_settings';
 import { scores_beatmap } from '../consts/scores_beatmap';
-export type scores_db_results = {
+export declare type scores_db_results = {
     osu_version?: number;
     beatmaps_scores: scores_beatmap[];
 };

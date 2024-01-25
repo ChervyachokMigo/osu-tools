@@ -20,7 +20,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
     try {
         const osu_songs = path_1.default.join(osufolder, "Songs");
         console.log(osu_songs);
-        const files = (0, fs_1.readdirSync)(osu_songs, { withFileTypes: true });
+        const files = fs_1.readdirSync(osu_songs, { withFileTypes: true });
         var count = 0;
         console.time('thousand');
         var beatmaps = [];
@@ -70,7 +70,7 @@ function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatm
     const osu_songs = path_1.default.join(osufolder, "Songs");
     var beatmaps = [];
     try {
-        const beatmapset_files = (0, fs_1.readdirSync)(path_1.default.join(osu_songs, folder_path), { withFileTypes: true });
+        const beatmapset_files = fs_1.readdirSync(path_1.default.join(osu_songs, folder_path), { withFileTypes: true });
         if (beatmapset_files && beatmapset_files.length > 0) {
             for (const beatmapset_file of beatmapset_files) {
                 if (beatmapset_file.isDirectory()) {
@@ -133,13 +133,13 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         colors: [],
         hit_objects: {},
     };
-    const filedata = (0, fs_1.readFileSync)(osu_file_path, { encoding: 'utf-8' });
+    const filedata = fs_1.readFileSync(osu_file_path, { encoding: 'utf-8' });
     const rows = filedata.split('\n')
         .filter((value) => value.length > 0 && !value.startsWith('//'));
     var beatmap_block_type = Object.assign({}, beatmap_block_1.beatmap_block_type_defaults);
     for (const row of rows) {
         if (row.startsWith('[')) {
-            beatmap_block_type = (0, beatmap_block_1.getBlockType)(row);
+            beatmap_block_type = beatmap_block_1.getBlockType(row);
             continue;
         }
         //[General] block
@@ -427,7 +427,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         else if (is_properties_has_events_block && beatmap_block_type.is_event_block) {
             let row_escaped = row.replace('\r', '');
             if (row_escaped.length >= 1) {
-                let current_event = (0, beatmap_events_1.event_string_parse)(row_escaped, osu_file_beatmap_properties);
+                let current_event = beatmap_events_1.event_string_parse(row_escaped, osu_file_beatmap_properties);
                 if (current_event)
                     beatmap.events.push(current_event);
             }

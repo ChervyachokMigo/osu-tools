@@ -1,5 +1,5 @@
 import { Gamemode, HP_Bar, ReplayData } from './variable_types';
-export type score = {
+export declare type score = {
     gamemode_int?: Gamemode;
     gamemode?: string;
     score_version?: number;

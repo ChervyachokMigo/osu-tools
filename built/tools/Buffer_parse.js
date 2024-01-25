@@ -176,7 +176,7 @@ class buffer_parse {
         return hp_bar;
     }
     getLZMAString(encoded_buffer) {
-        return (0, decompressLZMASync_1.decompressLZMASync)(encoded_buffer);
+        return decompressLZMASync_1.decompressLZMASync(encoded_buffer);
     }
     getReplayData() {
         const result = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
