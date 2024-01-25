@@ -1,6 +1,6 @@
 {
   "name": "osu-tools",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "osu parser for db/osr files and some stuff ",
   "main": "built/index.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "@raygun-nickj/mmap-io": "github:ChervyachokMigo/mmap-io",
     "bitwise": "^2.1.0",
     "deasync": "^0.1.29",
+    "glob": "^10.3.10",
     "md5-file": "^5.0.0",
     "semver": "^7.5.4",
     "ticks-to-date": "^1.0.3"

@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "fs";
+import { readFileSync } from "fs";
 
 import path from "path";
 
@@ -24,6 +24,8 @@ import { event_string_parse } from "../tools/beatmap_events";
 import { beatmap_event } from "../consts/beatmap_events/beatmap_event";
 import { assert } from "console";
 
+import { globSync, glob, Path } from "glob";
+
 export type scanner_options = {
     is_read_only: boolean,
     is_hit_objects_only_count: boolean
@@ -41,8 +43,12 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
 
     try{
         const osu_songs = path.join(osufolder, "Songs");
-        console.log(osu_songs)
-        const files = readdirSync(osu_songs , { withFileTypes: true });
+        
+        const files = globSync(osu_songs , { 
+            withFileTypes: true,
+            absolute: false, 
+            cwd: osu_songs
+        }) as Path[];
 
         var count = 0;
         console.time('thousand')
@@ -109,8 +115,11 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
     var beatmaps: beatmap_data[] = [];
 
     try {
-        const beatmapset_files = readdirSync(
-            path.join(osu_songs, folder_path), { withFileTypes: true });
+        const beatmapset_files = globSync(path.join(osu_songs, folder_path) , { 
+            withFileTypes: true,
+            absolute: false, 
+            cwd: path.join(osu_songs, folder_path)
+        }) as Path[];
     
         if (beatmapset_files && beatmapset_files.length > 0) {
 
