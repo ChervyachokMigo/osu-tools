@@ -1,4 +1,4 @@
-export declare type beatmap_block = {
+export type beatmap_block = {
     is_general_block: boolean;
     is_editor_block: boolean;
     is_metadata_block: boolean;

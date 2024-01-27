@@ -48,6 +48,8 @@ export {score} from "./consts/score";
 export {score_parse} from './tools/score_parse';
 export {scores_beatmap, score_beatmap} from "./consts/scores_beatmap";
 export { scores_db_results, scores_db, scores_db_load } from './parsers/scores_db';
+export { scores_db_concat } from './tools/score_db_concat';
+
 export { replay_osr, replay_load } from './parsers/replay_osr';
 
 

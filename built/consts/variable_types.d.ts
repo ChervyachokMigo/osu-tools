@@ -1,12 +1,12 @@
-export declare type IntDoublePair = {
+export type IntDoublePair = {
     int: number;
     double: number;
 };
-export declare type StarRating = {
+export type StarRating = {
     mods_int?: number;
     stars?: number;
 };
-export declare type TimingPoint = {
+export type TimingPoint = {
     bpm: number;
     offset: number;
     is_inherit: boolean;
@@ -38,23 +38,23 @@ export declare enum RankedStatus {
     qualified = 6,
     loved = 7
 }
-export declare type HP_Bar = {
+export type HP_Bar = {
     offset: number;
     hp: number;
 };
-export declare type ReplayFrame = {
+export type ReplayFrame = {
     offset: bigint;
     time: bigint;
     x: number;
     y: number;
     keys_pressed: KeysPressed;
 };
-export declare type ReplayData = {
+export type ReplayData = {
     replay_seed: number;
     replay_frames: ReplayFrame[];
     replay_frames_raw: string[][];
 };
-export declare type KeysPressed = {
+export type KeysPressed = {
     Key_1: boolean;
     Key_2: boolean;
     Key_3: boolean;

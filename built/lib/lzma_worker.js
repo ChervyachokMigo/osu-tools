@@ -2527,6 +2527,9 @@ const LZMA = function () {
         /** xs */
         compress: compress,
         decompress: decompress,
+        /** xe */
+        /// co:compress:   compress
+        /// do:decompress: decompress
     };
 }();
 exports.default = LZMA;

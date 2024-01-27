@@ -26,7 +26,7 @@ class scores_db extends osu_file_1.osu_file {
             let scores_size = this.buff.getInt();
             if (scores_size > 0) {
                 for (let s = 0; s < scores_size; s++) {
-                    current_beatmap.scores.push(score_parse_1.score_parse(this.buff, this.property_settings));
+                    current_beatmap.scores.push((0, score_parse_1.score_parse)(this.buff, this.property_settings));
                 }
             }
             scores_db.beatmaps_scores.push(current_beatmap);

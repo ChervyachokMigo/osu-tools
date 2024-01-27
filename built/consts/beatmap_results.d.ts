@@ -1,5 +1,5 @@
 import { TimingPoint, RankedStatus, Gamemode, StarRating } from './variable_types';
-export declare type beatmap_results = {
+export type beatmap_results = {
     beatmap_size?: number;
     artist?: string;
     artist_unicode?: string;

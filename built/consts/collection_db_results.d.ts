@@ -1,5 +1,5 @@
 import { collection } from "./collection";
-export declare type collection_db_results = {
+export type collection_db_results = {
     osu_version?: number;
     collections: collection[];
 };

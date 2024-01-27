@@ -92,7 +92,7 @@ function score_parse(buffer, property_settings) {
         buffer.skipBool();
     }
     const mods_int = buffer.getInt();
-    const mods = modes_1.ModsIntToText(mods_int);
+    const mods = (0, modes_1.ModsIntToText)(mods_int);
     if (property_settings.indexOf(property_settings_1.score_property.is_fc) != -1) {
         score.mods_int = mods_int;
         //score.mods = mods;

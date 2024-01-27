@@ -36,7 +36,7 @@ function decompressAsync(buffer, on_finish) {
     });
 }
 exports.decompressAsync = decompressAsync;
-exports.decompressLZMASync = function (buffer) {
+const decompressLZMASync = function (buffer) {
     var done = false;
     var data = '';
     decompressAsync(buffer, function cb(result) {
@@ -46,6 +46,7 @@ exports.decompressLZMASync = function (buffer) {
     loopWhile(function () { return !done; });
     return data;
 };
+exports.decompressLZMASync = decompressLZMASync;
 //{s: number, f: number, m: number}
 function compressAsync(str, mode, on_finish) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -67,7 +68,7 @@ function compressAsync(str, mode, on_finish) {
     });
 }
 exports.compressAsync = compressAsync;
-exports.compressLZMASync = function (str, mode) {
+const compressLZMASync = function (str, mode) {
     var done = false;
     var data = Buffer.alloc(0);
     compressAsync(str, mode, function cb(result) {
@@ -77,3 +78,4 @@ exports.compressLZMASync = function (str, mode) {
     loopWhile(function () { return !done; });
     return data;
 };
+exports.compressLZMASync = compressLZMASync;

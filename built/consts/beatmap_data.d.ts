@@ -5,7 +5,7 @@ import { Gamemode } from "./variable_types";
  *
  * .osu is a human-readable file format containing information about a beatmap.
  */
-export declare type beatmap_data = {
+export type beatmap_data = {
     /**
      * [General]
      *
@@ -158,7 +158,7 @@ export declare enum beatmap_overlay_position {
  *
  * Timing points have two extra effects that can be toggled
  */
-export declare type timing_point_effect = {
+export type timing_point_effect = {
     /** [Timing points]
      *
      * Whether or not kiai time is enabled
@@ -231,7 +231,7 @@ export declare enum beatmap_data_hit_sound {
  * `hitSound` is normal, whistle, finish, or clap
  *
  * `index` is the same index as above, except it is not written if the value is 0 or 1 */
-export declare type beatmap_data_hit_sample = {
+export type beatmap_data_hit_sample = {
     /**
      * Sample set of the normal sound.
      */
@@ -258,7 +258,7 @@ export declare type beatmap_data_hit_sample = {
  *
  * General information about the beatmap
  */
-export declare type beatmap_data_general = {
+export type beatmap_data_general = {
     /**[General]
 
     Beatmap (osu-file) filename
@@ -382,7 +382,7 @@ export declare type beatmap_data_general = {
  *
  * These options are only relevant when opening maps in the beatmap editor. They do not affect gameplay.
  */
-export declare type beatmap_data_editor = {
+export type beatmap_data_editor = {
     /**[Editor]
 
     Comma-separated list of integers
@@ -410,7 +410,7 @@ export declare type beatmap_data_editor = {
  *
  * Information used to identify the beatmap
  */
-export declare type beatmap_metadata = {
+export type beatmap_metadata = {
     /**[Metadata]
 
     Beatmap MD5 hash string */
@@ -461,7 +461,7 @@ export declare type beatmap_metadata = {
  *
  * Difficulty settings
  */
-export declare type beatmap_data_difficulty = {
+export type beatmap_data_difficulty = {
     /**
      * [Difficulty]
      *
@@ -508,7 +508,7 @@ export declare type beatmap_data_difficulty = {
  *
  * The .osu file format requires these to be sorted in chronological order.
  */
-export declare type beatmap_timing_point = {
+export type beatmap_timing_point = {
     /** [Timing points]
      *
      * Start time of the timing section, in milliseconds from the beginning of the beatmap's audio.
@@ -567,7 +567,7 @@ export declare type beatmap_timing_point = {
  *
  * They are comma-separated triplets of integers 0–255, representing the red, green, and blue components of the colours.
  */
-export declare type beatmap_data_color = {
+export type beatmap_data_color = {
     /** [Colors]
      *
      * Type of color
@@ -594,7 +594,7 @@ export declare type beatmap_data_color = {
  *
  * Count and hit_objects types
  */
-export declare type beatmap_hit_objects = {
+export type beatmap_hit_objects = {
     /**
      * [Hit objects]
      *
@@ -613,7 +613,7 @@ export declare type beatmap_hit_objects = {
  *
  * Hit object syntax: x,y,time,type,hitSound,objectParams,hitSample
  */
-export declare type beatmap_data_hit_object = {
+export type beatmap_data_hit_object = {
     /** [Hit objects]
      *
      *  Position x in osu! pixels of the object.
