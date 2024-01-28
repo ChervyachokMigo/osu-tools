@@ -48,6 +48,7 @@ export class buffer_saver {
             this.addULEB128(val.length);
             this.buffer_write(Buffer.from(val));
         } else {
+            this.addByte(11);
             this.addByte(0);
         }
     }

@@ -37,6 +37,7 @@ class buffer_saver {
             this.buffer_write(Buffer.from(val));
         }
         else {
+            this.addByte(11);
             this.addByte(0);
         }
     }

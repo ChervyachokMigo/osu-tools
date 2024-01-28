@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.scores_db_save = void 0;
 const fs_1 = require("fs");
 const buffer_saver_1 = require("./buffer_saver");
-const scores_db_save = (scores, file_path) => {
+const scores_db_save = (scores, file_path = 'scores.db') => {
     let buffer = new buffer_saver_1.buffer_saver();
     buffer.addInt(scores.osu_version);
     buffer.addInt(scores.beatmaps_scores.length);
@@ -26,15 +26,16 @@ const scores_db_save = (scores, file_path) => {
             buffer.addShort(score.combo);
             buffer.addBool(score.is_fc);
             buffer.addInt(score.mods_int);
-            buffer.addString('');
+            //buffer.addString('');
+            buffer.addByte(0);
             buffer.addWindowTickrate(score.windows_tick_date);
             buffer.addInt(-1);
             buffer.addLong(score.online_id);
-            if (score.mods && score.mods.indexOf('TP') > -1) {
+            if (score.mods && score.mods.indexOf('Target') > -1) {
                 buffer.addDouble(score.target_practice_accuracy);
             }
         }
     }
-    (0, fs_1.writeFileSync)('scores_new.db', buffer.getBuffer(), { encoding: 'binary' });
+    (0, fs_1.writeFileSync)(file_path, buffer.getBuffer(), { encoding: 'binary' });
 };
 exports.scores_db_save = scores_db_save;

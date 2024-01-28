@@ -1,1 +1,1 @@
-{"version":3,"file":"score_db_saver.d.ts","sourceRoot":"","sources":["../../src/tools/score_db_saver.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,iBAAiB,EAAE,MAAM,sBAAsB,CAAC;AAIzD,eAAO,MAAM,cAAc,WAAa,iBAAiB,aAAa,MAAM,SAkC3E,CAAA"}
+{"version":3,"file":"score_db_saver.d.ts","sourceRoot":"","sources":["../../src/tools/score_db_saver.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,iBAAiB,EAAE,MAAM,sBAAsB,CAAC;AAIzD,eAAO,MAAM,cAAc,WAAa,iBAAiB,cAAa,MAAM,SAmC3E,CAAA"}
