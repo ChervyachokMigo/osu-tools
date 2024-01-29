@@ -21,10 +21,8 @@ export const scores_db_concat = (score_1: scores_db_results, score_2: scores_db_
         let k = result.beatmaps_scores.findIndex(v => v.beatmap_md5 === beatmap.beatmap_md5);
         if (k>-1){
             for (let score of beatmap.scores){
-                if (score.playername?.toString() === 'SadGod' ){
-                    if (result.beatmaps_scores[k].scores.findIndex ( v => v.replay_md5 === score.replay_md5 ) === -1){
-                        result.beatmaps_scores[k].scores.push(score);
-                    }
+                if (result.beatmaps_scores[k].scores.findIndex ( v => v.replay_md5 === score.replay_md5 ) === -1){
+                    result.beatmaps_scores[k].scores.push(score);
                 }
             }
         } else {

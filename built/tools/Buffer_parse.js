@@ -135,22 +135,40 @@ class buffer_parse {
     }
     getString() {
         let stringCode = this.bufferRead(1).readUInt8();
-        let res;
+        let res = '';
         if (stringCode === 0) {
-            return Buffer.alloc(0);
+            return res;
         }
         if (stringCode === 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
-                res = this.bufferRead(stringLength);
-                //res = buff.toString('utf8');
+                res = this.bufferRead(stringLength).toString('utf8');
             }
             return res;
         }
         else {
             console.log('stringCode', stringCode);
             console.log('error read string');
-            return Buffer.alloc(0);
+            return res;
+        }
+    }
+    getStringAsBuffer() {
+        let stringCode = this.bufferRead(1).readUInt8();
+        let res = Buffer.alloc(0);
+        if (stringCode === 0) {
+            return res;
+        }
+        if (stringCode === 11) {
+            let stringLength = this.getULEB128();
+            if (stringLength > 0) {
+                res = this.bufferRead(stringLength);
+            }
+            return res;
+        }
+        else {
+            console.log('stringCode', stringCode);
+            console.log('error read string');
+            return res;
         }
     }
     skipString() {
@@ -178,7 +196,7 @@ class buffer_parse {
         let hp_bar_raw = this.getString();
         let hp_bar = [];
         if (hp_bar_raw.length > 0) {
-            for (let hp_value of hp_bar_raw.toString().split(',').map(value => value.split('|')).filter(value => value.length >= 2)) {
+            for (let hp_value of hp_bar_raw.split(',').map(value => value.split('|')).filter(value => value.length >= 2)) {
                 let hp_bar_item = {
                     offset: parseInt(hp_value[0]),
                     hp: parseFloat(hp_value[1])

@@ -29,7 +29,8 @@ export declare class buffer_parse {
     skipSingle(): void;
     getDouble(): number;
     skipDouble(): void;
-    getString(): Buffer;
+    getString(): string;
+    getStringAsBuffer(): Buffer;
     skipString(): void;
     getULEB128(): number;
     getHpBar(): HP_Bar[];
