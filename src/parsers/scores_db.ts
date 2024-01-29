@@ -32,7 +32,7 @@ export class scores_db extends osu_file {
 
         for ( let b = 0; b < beatmaps_size; b++ ) {
             let current_beatmap: scores_beatmap = {
-                beatmap_md5: this.buff.getString(), 
+                beatmap_md5: this.buff.getString().toString(), 
                 scores: []
             };
 
