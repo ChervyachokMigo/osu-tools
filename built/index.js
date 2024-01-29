@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.score_parse = exports.parse_osu_file = exports.get_beatmaps_from_beatmap_folder = exports.songs_get_all_beatmaps = exports.event_string_parse = exports.beatmap_event_type = exports.beatmap_event_origin = exports.beatmap_event_loop_type = exports.beatmap_event_layer = exports.getBlockType = exports.beatmap_block_type_defaults = exports.beatmap_data_hit_sound = exports.beatmap_data_hit_object_type = exports.beatmap_color_type = exports.beatmap_overlay_position = exports.hit_sample_set = exports.beatmap_countdown = exports.beatmap_sample_set = exports.osu_db_find_beatmaps = exports.osu_db_load = exports.osu_db = exports.collection_db_load = exports.collection_db = exports.all_hit_objects_properties = exports.all_events_properties = exports.all_difficulty_properties = exports.all_metadata_properties = exports.all_editor_properties = exports.all_general_properties = exports.none_osu_file_properties = exports.all_osu_file_properties = exports.osu_file_beatmap_property = exports.none_score_properties = exports.all_score_properties = exports.score_property = exports.all_beatmap_properties = exports.none_beatmap_properties = exports.beatmap_property = exports.osu_file = exports.osu_file_type = exports.get_score_detailed = exports.get_scores_detailed = exports.get_collections_detailed = exports.buffer_parse = exports.UTC1970Years = exports.RankedStatus = exports.Gamemode = exports.UserPermissions = exports.mod_names = exports.ModsIntToText = void 0;
-exports.compressLZMASync = exports.decompressLZMASync = exports.replay_load = exports.replay_osr = exports.scores_db_save = exports.scores_db_concat = exports.scores_db_load = exports.scores_db = void 0;
+exports.compressLZMASync = exports.decompressLZMASync = exports.compare_files = exports.replay_load = exports.replay_osr = exports.scores_db_save = exports.scores_db_concat = exports.scores_db_load = exports.scores_db = void 0;
 var modes_1 = require("./consts/modes");
 Object.defineProperty(exports, "ModsIntToText", { enumerable: true, get: function () { return modes_1.ModsIntToText; } });
 Object.defineProperty(exports, "mod_names", { enumerable: true, get: function () { return modes_1.mod_names; } });
@@ -80,6 +80,8 @@ Object.defineProperty(exports, "scores_db_save", { enumerable: true, get: functi
 var replay_osr_1 = require("./parsers/replay_osr");
 Object.defineProperty(exports, "replay_osr", { enumerable: true, get: function () { return replay_osr_1.replay_osr; } });
 Object.defineProperty(exports, "replay_load", { enumerable: true, get: function () { return replay_osr_1.replay_load; } });
+var compare_1 = require("./tools/compare");
+Object.defineProperty(exports, "compare_files", { enumerable: true, get: function () { return compare_1.compare_files; } });
 var decompressLZMASync_1 = require("./lib/decompressLZMASync");
 Object.defineProperty(exports, "decompressLZMASync", { enumerable: true, get: function () { return decompressLZMASync_1.decompressLZMASync; } });
 Object.defineProperty(exports, "compressLZMASync", { enumerable: true, get: function () { return decompressLZMASync_1.compressLZMASync; } });

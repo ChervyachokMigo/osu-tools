@@ -1,1 +1,1 @@
-{"version":3,"file":"score_db_concat.d.ts","sourceRoot":"","sources":["../../src/tools/score_db_concat.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,iBAAiB,EAAE,MAAM,sBAAsB,CAAC;AAEzD,eAAO,MAAM,gBAAgB,YAAa,iBAAiB,WAAW,iBAAiB,sBAatF,CAAA"}
+{"version":3,"file":"score_db_concat.d.ts","sourceRoot":"","sources":["../../src/tools/score_db_concat.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,iBAAiB,EAAE,MAAM,sBAAsB,CAAC;AAEzD,eAAO,MAAM,gBAAgB,YAAa,iBAAiB,WAAW,iBAAiB,sBA4BtF,CAAA"}

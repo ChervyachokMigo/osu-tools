@@ -26,10 +26,9 @@ const scores_db_save = (scores, file_path = 'scores.db') => {
             buffer.addShort(score.combo);
             buffer.addBool(score.is_fc);
             buffer.addInt(score.mods_int);
-            //buffer.addString('');
             buffer.addByte(0);
             buffer.addWindowTickrate(score.windows_tick_date);
-            buffer.addInt(-1);
+            buffer.addInt(0xffffffff);
             buffer.addLong(score.online_id);
             if (score.mods && score.mods.indexOf('Target') > -1) {
                 buffer.addDouble(score.target_practice_accuracy);

@@ -2,6 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buffer_saver = exports.UTC1970Years = void 0;
 exports.UTC1970Years = BigInt(62135596800000);
+/*
+import fs from 'fs';
+import util from 'util';
+import path from 'path';
+
+var log_file = fs.createWriteStream(path.join(path.dirname(process.argv[1]),'debug.log'), {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+    log_file.write(util.format(d) + '\n');
+    log_stdout.write(util.format(d) + '\n');
+};*/
 class buffer_saver {
     constructor() {
         this.file_buffer = Buffer.alloc(0);
@@ -28,16 +40,16 @@ class buffer_saver {
                 byte = byte | 0b10000000; /* if remaining is truthy (!= 0), set highest bit */
             out.push(byte);
         } while (a);
-        this.buffer_write(Buffer.from(Uint8Array.from(out)));
+        this.buffer_write(Buffer.from(out));
     }
     addString(val) {
-        if (val.length > 0) {
-            this.addByte(11);
+        if (val && val.length > 0) {
+            this.addByte(0x0b);
             this.addULEB128(val.length);
             this.buffer_write(Buffer.from(val));
         }
         else {
-            this.addByte(11);
+            this.addByte(0x0b);
             this.addByte(0);
         }
     }
@@ -53,12 +65,12 @@ class buffer_saver {
     }
     addShort(val) {
         let buf = Buffer.alloc(2);
-        buf.writeInt16LE(val, 0);
+        buf.writeUInt16LE(val, 0);
         this.buffer_write(buf);
     }
     addInt(val) {
         let buf = Buffer.alloc(4);
-        buf.writeInt32LE(val, 0);
+        buf.writeUInt32LE(val, 0);
         this.buffer_write(buf);
     }
     addLong(val) {

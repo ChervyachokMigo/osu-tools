@@ -1,10 +1,22 @@
-import fs from 'fs';
 import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame } from '../consts/variable_types';
-import { ModsIntToText }  from '../consts/modes';
+
 import { decompressLZMASync } from '../lib/decompressLZMASync';
 import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
+/*
+import fs from 'fs';
+import util from 'util';
+import path from 'path';
+
+var log_file = fs.createWriteStream(path.join(path.dirname(process.argv[1]),'debug.log'), {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+    log_file.write(util.format(d) + '\n');
+    log_stdout.write(util.format(d) + '\n');
+};*/
+
 
 export class buffer_parse {
     file_handle: number;
@@ -29,7 +41,7 @@ export class buffer_parse {
     }
 
     getWindowsTickDate(): BigInt {
-       return this.bufferRead(8).readBigInt64LE();
+        return this.bufferRead(8).readBigInt64LE();
     }
 
     getDateTime(): Date {
@@ -118,7 +130,7 @@ export class buffer_parse {
 
     getTimingPoints(): Array<TimingPoint> {
         let results: Array<TimingPoint> = [];
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
@@ -157,27 +169,29 @@ export class buffer_parse {
         this.cursor_offset += 8;
     }
 
-    getString(): string {
+    getString(): Buffer {
         let stringCode = this.bufferRead(1).readUInt8();
-        let res = '';
+        let res;
 
         if ( stringCode === 0 ) {
-            return res;
+            return Buffer.alloc(0);
         }
 
         if (stringCode === 11) {
 
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
-                res = this.bufferRead(stringLength).toString('utf8');
+                res = this.bufferRead(stringLength)
+                //res = buff.toString('utf8');
+                
             }
-            return res;
+            return res as Buffer;
 
         } else {
 
             console.log('stringCode',stringCode)
             console.log('error read string');
-            return '';
+           return Buffer.alloc(0);
 
         }
     }
@@ -202,14 +216,15 @@ export class buffer_parse {
                 break;
             shift += 7;
         }
+
         return result;
     }
 
     getHpBar(): HP_Bar[] {
-        let hp_bar_raw: string = this.getString();
+        let hp_bar_raw: Buffer = this.getString();
         let hp_bar: HP_Bar[] = [];
         if (hp_bar_raw.length > 0) {
-            for (let hp_value of hp_bar_raw.split(',') .map( value => value.split('|')) .filter( value => value.length >= 2)){
+            for (let hp_value of hp_bar_raw.toString().split(',') .map( value => value.split('|')) .filter( value => value.length >= 2)){
                 let hp_bar_item: HP_Bar = {
                     offset: parseInt(hp_value[0]), 
                     hp: parseFloat(hp_value[1])
@@ -228,7 +243,11 @@ export class buffer_parse {
         const result: ReplayData = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
         const replay_data_size = this.bufferRead(4).readInt32LE();
 
-        if (replay_data_size > 0){
+        if (replay_data_size === 0xffffffff || replay_data_size <= 0 ) {
+            return result;
+        }
+
+        if (replay_data_size > 0 ){
 			let buffer = this.bufferRead(replay_data_size);
             let replay_data_array = this.getLZMAString(buffer).split(',') 
                 .map( value => value.split('|'))

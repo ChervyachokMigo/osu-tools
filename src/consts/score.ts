@@ -5,7 +5,7 @@ export type score = {
     gamemode?: string;
     score_version?: number;
     beatmap_md5?: string;
-    playername?: string;
+    playername?: Buffer;
     replay_md5?: string;
     count_300?: number;
     count_100?: number;

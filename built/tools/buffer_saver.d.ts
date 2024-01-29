@@ -7,7 +7,7 @@ export declare class buffer_saver {
     buffer_write(val: Buffer): void;
     addWindowTickrate(val: bigint): void;
     addULEB128(number: number): void;
-    addString(val: string): void;
+    addString(val: string | Buffer): void;
     addBool(val: boolean): void;
     addByte(val: number): void;
     addShort(val: number): void;

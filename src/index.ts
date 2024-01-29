@@ -53,5 +53,5 @@ export { scores_db_save } from './tools/score_db_saver';
 
 export { replay_osr, replay_load } from './parsers/replay_osr';
 
-
+export { compare_files } from './tools/compare';
 export { decompressLZMASync, compressLZMASync } from './lib/decompressLZMASync';

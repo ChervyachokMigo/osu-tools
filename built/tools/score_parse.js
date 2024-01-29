@@ -20,7 +20,7 @@ function score_parse(buffer, property_settings) {
         buffer.skipInt();
     }
     if (property_settings.indexOf(property_settings_1.score_property.beatmap_md5) != -1) {
-        score.beatmap_md5 = buffer.getString();
+        score.beatmap_md5 = buffer.getString().toString();
     }
     else {
         buffer.skipString();
@@ -32,7 +32,7 @@ function score_parse(buffer, property_settings) {
         buffer.skipString();
     }
     if (property_settings.indexOf(property_settings_1.score_property.replay_md5) != -1) {
-        score.replay_md5 = buffer.getString();
+        score.replay_md5 = buffer.getString().toString();
     }
     else {
         buffer.skipString();

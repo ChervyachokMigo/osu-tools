@@ -1,11 +1,17 @@
-import fs from 'fs';
-import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame } from '../consts/variable_types';
-import { ModsIntToText }  from '../consts/modes';
-import { decompressLZMASync } from '../lib/decompressLZMASync';
-import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
+/*
+import fs from 'fs';
+import util from 'util';
+import path from 'path';
 
+var log_file = fs.createWriteStream(path.join(path.dirname(process.argv[1]),'debug.log'), {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+    log_file.write(util.format(d) + '\n');
+    log_stdout.write(util.format(d) + '\n');
+};*/
 export class buffer_saver {
 
     file_buffer: Buffer;
@@ -39,16 +45,16 @@ export class buffer_saver {
             out.push(byte);
         }
         while (a);
-        this.buffer_write(Buffer.from(Uint8Array.from(out)));
+        this.buffer_write(Buffer.from(out));
     }
 
-    addString(val: string) {
-        if (val.length > 0) {
-            this.addByte(11);
+    addString(val: string | Buffer) {
+        if (val && val.length > 0) {
+            this.addByte(0x0b);
             this.addULEB128(val.length);
             this.buffer_write(Buffer.from(val));
         } else {
-            this.addByte(11);
+            this.addByte(0x0b);
             this.addByte(0);
         }
     }
@@ -67,13 +73,13 @@ export class buffer_saver {
 
     addShort(val: number): void {
         let buf = Buffer.alloc(2);
-        buf.writeInt16LE(val, 0);
+        buf.writeUInt16LE(val, 0);
         this.buffer_write(buf);
     }
 
     addInt(val: number): void {
         let buf = Buffer.alloc(4);
-        buf.writeInt32LE(val, 0);
+        buf.writeUInt32LE(val, 0);
         this.buffer_write(buf);
     }
 
