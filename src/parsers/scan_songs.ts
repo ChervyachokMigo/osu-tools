@@ -1,4 +1,4 @@
-import { fstatSync, lstatSync, readFileSync } from "fs";
+import { existsSync, fstatSync, lstatSync, readFileSync } from "fs";
 
 import path from "path";
 
@@ -44,7 +44,7 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
     try{
         const osu_songs = path.join(osufolder, "Songs");
         
-        const files = globSync( osu_songs + '/**/*' , {
+        const files = globSync( osu_songs + '/*/' , {
             absolute: false,
             cwd: osu_songs
         }) as string[];
@@ -69,7 +69,7 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
                 console.time('thousand')
             }
 
-            if ( lstatSync(path.join(osu_songs, beatmap_folder)).isDirectory() ){
+            if ( existsSync(path.join(osu_songs, beatmap_folder)) && lstatSync(path.join(osu_songs, beatmap_folder)).isDirectory() ){
 
                 let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder, osu_file_beatmap_properties, options);
 
@@ -125,7 +125,7 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
 
             for (const beatmapset_file of beatmapset_files) {
                 
-                if ( lstatSync(path.join(current_folder, beatmapset_file)).isDirectory() ) {
+                if ( existsSync(path.join(current_folder, beatmapset_file)) && lstatSync(path.join(current_folder, beatmapset_file)).isDirectory() ) {
                     continue;
                 }
 

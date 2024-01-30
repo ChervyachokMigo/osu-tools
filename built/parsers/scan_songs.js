@@ -20,7 +20,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
     console.log('scan starting..');
     try {
         const osu_songs = path_1.default.join(osufolder, "Songs");
-        const files = (0, glob_1.globSync)(osu_songs + '/**/*', {
+        const files = (0, glob_1.globSync)(osu_songs + '/*/', {
             absolute: false,
             cwd: osu_songs
         });
@@ -37,7 +37,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
                 console.timeEnd('thousand');
                 console.time('thousand');
             }
-            if ((0, fs_1.lstatSync)(path_1.default.join(osu_songs, beatmap_folder)).isDirectory()) {
+            if ((0, fs_1.existsSync)(path_1.default.join(osu_songs, beatmap_folder)) && (0, fs_1.lstatSync)(path_1.default.join(osu_songs, beatmap_folder)).isDirectory()) {
                 let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder, osu_file_beatmap_properties, options);
                 callback(current_beatmaps, beatmap_folder);
                 if (options.is_read_only === false) {
@@ -80,7 +80,7 @@ function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatm
         });
         if (beatmapset_files && beatmapset_files.length > 0) {
             for (const beatmapset_file of beatmapset_files) {
-                if ((0, fs_1.lstatSync)(path_1.default.join(current_folder, beatmapset_file)).isDirectory()) {
+                if ((0, fs_1.existsSync)(path_1.default.join(current_folder, beatmapset_file)) && (0, fs_1.lstatSync)(path_1.default.join(current_folder, beatmapset_file)).isDirectory()) {
                     continue;
                 }
                 if (beatmapset_file.toLowerCase().endsWith(".osu") ||
