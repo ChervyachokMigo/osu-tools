@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { fstatSync, lstatSync, readFileSync } from "fs";
 
 import path from "path";
 
@@ -44,11 +44,10 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
     try{
         const osu_songs = path.join(osufolder, "Songs");
         
-        const files = globSync(osu_songs , { 
-            withFileTypes: true,
-            absolute: false, 
+        const files = globSync( osu_songs + '/**/*' , {
+            absolute: false,
             cwd: osu_songs
-        }) as Path[];
+        }) as string[];
 
         var count = 0;
         console.time('thousand')
@@ -70,11 +69,11 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
                 console.time('thousand')
             }
 
-            if (beatmap_folder.isDirectory()){
+            if ( lstatSync(path.join(osu_songs, beatmap_folder)).isDirectory() ){
 
-                let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder.name, osu_file_beatmap_properties, options);
+                let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder, osu_file_beatmap_properties, options);
 
-                callback(current_beatmaps, beatmap_folder.name);
+                callback(current_beatmaps, beatmap_folder);
 
                 if (options.is_read_only === false){
                     beatmaps = beatmaps.concat( current_beatmaps );
@@ -115,24 +114,25 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
     var beatmaps: beatmap_data[] = [];
 
     try {
-        const beatmapset_files = globSync(path.join(osu_songs, folder_path) , { 
-            withFileTypes: true,
-            absolute: false, 
-            cwd: path.join(osu_songs, folder_path)
-        }) as Path[];
+        const current_folder = path.join(osu_songs, folder_path);
+
+        const beatmapset_files = globSync( current_folder + '/**/*' , { 
+            absolute: false,
+            cwd: current_folder
+        }) as string[];
     
         if (beatmapset_files && beatmapset_files.length > 0) {
 
             for (const beatmapset_file of beatmapset_files) {
                 
-                if ( beatmapset_file.isDirectory()) {
+                if ( lstatSync(path.join(current_folder, beatmapset_file)).isDirectory() ) {
                     continue;
                 }
 
-                if (beatmapset_file.name.toLowerCase().endsWith(".osu") || 
-                    beatmapset_file.name.toLowerCase().endsWith(".osb")) {
+                if (beatmapset_file.toLowerCase().endsWith(".osu") || 
+                    beatmapset_file.toLowerCase().endsWith(".osb")) {
                         
-                    const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file.name);
+                    const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file);
 
                     const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties, options);
 
@@ -141,7 +141,7 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
                         osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_beatmap_filename) !== -1){
                             if (!osu_file_data.general)
                                 osu_file_data.general = {};
-                            osu_file_data.general.beatmap_filename = beatmapset_file.name;
+                            osu_file_data.general.beatmap_filename = beatmapset_file;
                     }
                         
 
