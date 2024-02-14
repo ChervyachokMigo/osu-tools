@@ -10,7 +10,7 @@ class osu_db extends osu_file_1.osu_file {
         super(file_path, property_settings);
         this.property_settings_fast = [];
     }
-    osu_db_parse() {
+    osu_db_parse(options = { print_progress: false }) {
         let osu_db = { beatmaps: [] };
         console.log('start parsing osu db..');
         if (this.property_settings.length == 0) {
@@ -27,9 +27,9 @@ class osu_db extends osu_file_1.osu_file {
         osu_db.number_beatmaps = this.buff.getInt();
         // this.property_settings_fast = property_settings_boolean_array(this.property_settings);
         //display variables
-        var one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
-        var start_time = new Date().valueOf();
-        var avg_times = [];
+        const one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
+        let start_time = new Date().valueOf();
+        let avg_times = [];
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
             //beatmap parsing
             let beatmap_data = this.beatmap_parse(osu_db.osu_version);
@@ -37,7 +37,7 @@ class osu_db extends osu_file_1.osu_file {
                 osu_db.beatmaps.push(beatmap_data);
             }
             //display progress
-            if (i % one_percent_value == 0) {
+            if (options.print_progress && i % one_percent_value == 0) {
                 console.log(((i / osu_db.number_beatmaps * 10000) / 100).toFixed(1), '% complete');
                 let endtime = (new Date().valueOf() - start_time) * 0.001;
                 console.log('end for', endtime.toFixed(3));

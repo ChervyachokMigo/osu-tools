@@ -6,6 +6,7 @@ import { osu_file_type } from '../consts/osu_file_type';
 import { RankedStatus, Gamemode, UserPermissions } from '../consts/variable_types';
 import { beatmap_results } from '../consts/beatmap_results';
 import { osu_db_results } from '../consts/osu_db_results';
+import { osu_db_options } from '../consts/options';
 
 export class osu_db extends osu_file {
 
@@ -15,7 +16,7 @@ export class osu_db extends osu_file {
         super(file_path, property_settings);
     }
 
-    public osu_db_parse(): osu_db_results {
+    public osu_db_parse( options: osu_db_options = { print_progress: false }): osu_db_results {
         let osu_db: osu_db_results = {beatmaps: []};
         console.log('start parsing osu db..');
 
@@ -38,9 +39,9 @@ export class osu_db extends osu_file {
         // this.property_settings_fast = property_settings_boolean_array(this.property_settings);
 
         //display variables
-        var one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
-        var start_time = new Date().valueOf();
-        var avg_times = [];
+        const one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
+        let start_time = new Date().valueOf();
+        let avg_times = [];
 
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
 
@@ -51,7 +52,7 @@ export class osu_db extends osu_file {
             }
 
             //display progress
-            if ( i % one_percent_value == 0){
+            if ( options.print_progress && i % one_percent_value == 0){
                 console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
                 let endtime = (new Date().valueOf()-start_time)*0.001;
                 console.log('end for', endtime.toFixed(3) );
