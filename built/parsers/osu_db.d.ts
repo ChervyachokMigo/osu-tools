@@ -14,7 +14,7 @@ export declare class osu_db extends osu_file {
  * @param osu_db_path - absolute path to osu.db
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
-export declare function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>): osu_db_results;
+export declare function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>, options?: osu_db_options): osu_db_results;
 type SearchFunction = (beatmap: beatmap_results) => any;
 /**
  * @param osu_db_result osu_db_results object from load osu.db

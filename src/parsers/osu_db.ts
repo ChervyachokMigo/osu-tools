@@ -411,13 +411,13 @@ export class osu_db extends osu_file {
  * @param osu_db_path - absolute path to osu.db
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
-export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>): osu_db_results {
+export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>, options?: osu_db_options): osu_db_results {
     var file_parse_result: osu_db_results = { beatmaps: [] };
     try{
         let osu_db_file = new osu_db(osu_db_path, parse_settings);
         switch (osu_db_file.get_type()){
             case osu_file_type.osu_db:
-                file_parse_result = osu_db_file.osu_db_parse();
+                file_parse_result = osu_db_file.osu_db_parse(options);
                 break;
                 default:
                     throw new Error('file type not osu file');
