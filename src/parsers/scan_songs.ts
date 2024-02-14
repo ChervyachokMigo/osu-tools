@@ -107,8 +107,6 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
 
 export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: string, 
     osu_file_beatmap_properties: osu_file_beatmap_property[], options: scanner_options): beatmap_data[] {
-    const properties_has_general_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.general_block);
-    const properties_has_metadata_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.metadata_block);
 
     const osu_songs = path.join(osufolder, "Songs");
     var beatmaps: beatmap_data[] = [];
@@ -135,22 +133,6 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
                     const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file);
 
                     const osu_file_data = parse_osu_file(osu_file_path, osu_file_beatmap_properties, options);
-
-
-                    if (properties_has_general_block ||
-                        osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_beatmap_filename) !== -1){
-                            if (!osu_file_data.general)
-                                osu_file_data.general = {};
-                            osu_file_data.general.beatmap_filename = beatmapset_file;
-                    }
-                        
-
-                    if (properties_has_metadata_block ||
-                        osu_file_beatmap_properties.indexOf (osu_file_beatmap_property.metadata_beatmap_md5) !== -1 ){
-                        if (!osu_file_data.metadata)
-                            osu_file_data.metadata = {};
-                        osu_file_data.metadata.beatmap_md5 = md5File.sync(osu_file_path);
-                    }
 
                     beatmaps.push(osu_file_data);
 
@@ -822,6 +804,20 @@ export function parse_osu_file(osu_file_path: string,
         if (beatmap.general.is_samples_match_playback_rate === undefined){
             beatmap.general.is_samples_match_playback_rate = false;
         }
+    }
+
+    if (properties_has_general_block ||
+        osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.general_beatmap_filename) !== -1){
+            if (!beatmap.general)
+                beatmap.general = {};
+            beatmap.general.beatmap_filename = path.basename(osu_file_path);
+    }
+
+    if (properties_has_metadata_block ||
+        osu_file_beatmap_properties.indexOf (osu_file_beatmap_property.metadata_beatmap_md5) !== -1 ){
+        if (!beatmap.metadata)
+            beatmap.metadata = {};
+            beatmap.metadata.beatmap_md5 = md5File.sync(osu_file_path);
     }
 
     for (let key in beatmap) {
