@@ -38,7 +38,6 @@ class buffer_parse {
     }
     getDateTime() {
         let windows_tick_date_value = this.getWindowsTickDate();
-        console.log(windows_tick_date_value);
         if (windows_tick_date_value > 0) {
             let date_value_without_ns = windows_tick_date_value / BigInt(10000);
             return new Date(Number(date_value_without_ns - exports.UTC1970Years));
