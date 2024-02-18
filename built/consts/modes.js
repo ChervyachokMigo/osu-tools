@@ -23,9 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModsIntToText = exports.mod_names = void 0;
+exports.ModsIntToText = exports.ModsIntToShortText = exports.mod_names_short = exports.mod_names = void 0;
 const bitwise = __importStar(require("bitwise"));
-exports.mod_names = ['NoFail', 'Easy',
+exports.mod_names = [
+    'NoFail', 'Easy',
     'TouchDevice', 'Hidden', 'HardRock',
     'SuddenDeath', 'DoubleTime', 'Relax',
     'HalfTime', 'Nightcore', 'Flashlight',
@@ -35,7 +36,35 @@ exports.mod_names = ['NoFail', 'Easy',
     'FadeIn', 'Random', 'Cinema',
     'Target', 'Key9', 'KeyCoop',
     'Key1', 'Key3', 'Key2',
-    'ScoreV2', 'Mirror'];
+    'ScoreV2', 'Mirror'
+];
+exports.mod_names_short = [
+    'NF', 'EZ',
+    'TD', 'HD', 'HR',
+    'SD', 'DT', 'RX',
+    'HT', 'NC', 'FL',
+    'AP', 'SP', 'RX2',
+    'PF', 'K4', 'K5',
+    'K6', 'K7', 'K8',
+    'FI', 'RD', 'CI',
+    'TA', 'K9', 'KC',
+    'K1', 'K3', 'K2',
+    'V2', 'MI'
+];
+function ModsIntToShortText(modsBits) {
+    if (modsBits == 0) {
+        return ['No Mods'];
+    }
+    let result_mods = [];
+    for (let i = 0; i < 32; i++) {
+        let bit = bitwise.integer.getBit(modsBits, i);
+        if (bit) {
+            result_mods.push(exports.mod_names_short[i]);
+        }
+    }
+    return result_mods;
+}
+exports.ModsIntToShortText = ModsIntToShortText;
 function ModsIntToText(modsBits) {
     if (modsBits == 0) {
         return ['No Mods'];
