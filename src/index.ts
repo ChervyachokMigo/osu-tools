@@ -26,6 +26,7 @@ export { beatmap_property,          none_beatmap_properties,    all_beatmap_prop
 export { collection_db_results } from "./consts/collection_db_results";
 export { collection } from "./consts/collection";
 export { collection_db, collection_db_load } from './parsers/collection_db';
+export { collection_db_save } from './tools/collection_db_saver';
 
 export { osu_db_results } from "./consts/osu_db_results";
 export { osu_db, osu_db_load, osu_db_find_beatmaps } from './parsers/osu_db';

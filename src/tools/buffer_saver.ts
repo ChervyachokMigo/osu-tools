@@ -30,7 +30,7 @@ export class buffer_saver {
 
     addWindowTickrate(val: bigint) {
         let buf = Buffer.alloc(8);
-        buf.writeBigInt64LE(val, 0);
+        buf.writeBigInt64LE(val);
         this.buffer_write(buf);
     }
 
@@ -61,37 +61,37 @@ export class buffer_saver {
 
     addBool(val: boolean): void {
         let buf = Buffer.alloc(1);
-        buf.writeUInt8(Number(val), 0);
+        buf.writeUInt8(Number(val));
         this.buffer_write(buf);
     }
 
     addByte(val: number): void {
         let buf = Buffer.alloc(1);
-        buf.writeUInt8(val, 0);
+        buf.writeUInt8(val);
         this.buffer_write(buf);
     }
 
     addShort(val: number): void {
         let buf = Buffer.alloc(2);
-        buf.writeUInt16LE(val, 0);
+        buf.writeUInt16LE(val);
         this.buffer_write(buf);
     }
 
     addInt(val: number): void {
         let buf = Buffer.alloc(4);
-        buf.writeUInt32LE(val, 0);
+        buf.writeUInt32LE(val);
         this.buffer_write(buf);
     }
 
     addLong(val: bigint): void {
         let buf = Buffer.alloc(8);
-        buf.writeBigInt64LE(val, 0);
+        buf.writeBigInt64LE(val);
         this.buffer_write(buf);
     }
 
     addDouble(val: number): void {
         let buf = Buffer.alloc(8);
-        buf.writeDoubleLE(val, 0);
+        buf.writeDoubleLE(val);
         this.buffer_write(buf);
     }
 
