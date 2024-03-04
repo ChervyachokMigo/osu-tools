@@ -44,9 +44,10 @@ class buffer_saver {
     }
     addString(val) {
         if (val && val.length > 0) {
+            const val_buf = Buffer.from(val);
             this.addByte(0x0b);
-            this.addULEB128(val.length);
-            this.buffer_write(Buffer.from(val));
+            this.addULEB128(val_buf.length);
+            this.buffer_write(val_buf);
         }
         else {
             this.addByte(0x0b);
