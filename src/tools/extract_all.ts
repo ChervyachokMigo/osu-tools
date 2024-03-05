@@ -21,7 +21,7 @@ export const extract_all = ( archieve_path: string, is_delete_after = false ) =>
 	const absolute_extract_path = path.join( path.dirname(archieve_path), filename );
 
 	if (existsSync(absolute_extract_path)){
-		console.log('file already extracted, skip', archieve_path, absolute_extract_path);
+		console.log('file already extracted, skip', absolute_extract_path );
 		return false;
 	} else {
 		console.log('extracting', filename_ext, 'to', absolute_extract_path);

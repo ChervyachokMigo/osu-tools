@@ -20,7 +20,7 @@ const extract_all = (archieve_path, is_delete_after = false) => {
     const absolute_folder_path = path_1.default.dirname(archieve_path);
     const absolute_extract_path = path_1.default.join(path_1.default.dirname(archieve_path), filename);
     if ((0, fs_1.existsSync)(absolute_extract_path)) {
-        console.log('file already extracted, skip', archieve_path, absolute_extract_path);
+        console.log('file already extracted, skip', absolute_extract_path);
         return false;
     }
     else {
