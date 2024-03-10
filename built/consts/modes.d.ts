@@ -35,4 +35,6 @@ export declare const mod_names_short_to_long: {
 };
 export declare function ModsIntToShortText(modsBits: number): string[];
 export declare function ModsIntToText(modsBits: number): string[];
+export declare const ModsTextToInt: (mods: string[]) => number;
+export declare const ModsShortTextToInt: (mods: string[]) => number;
 //# sourceMappingURL=modes.d.ts.map

@@ -99,3 +99,35 @@ export function ModsIntToText (modsBits: number) {
     
     return result_mods
 }
+
+export const ModsTextToInt = (mods: string[]) => {
+	if (mods.includes('No Mods')){
+		return 0;
+	}
+
+    let result = 0;
+
+    for ( let i = 0; i < mod_names.length; i++ ){
+        if (mods.indexOf(mod_names[i]) > -1){
+            result = result | 1 << i;
+        }
+    }
+
+    return result;
+}
+
+export const ModsShortTextToInt = (mods: string[]) => {
+	if (mods.includes('No Mods')){
+		return 0;
+	}
+
+    let result = 0;
+
+    for ( let i = 0; i < mod_names_short.length; i++ ){
+        if (mods.indexOf(mod_names_short[i]) > -1){
+            result = result | 1 << i;
+        }
+    }
+
+    return result;
+}

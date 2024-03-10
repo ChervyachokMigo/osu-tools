@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModsIntToText = exports.ModsIntToShortText = exports.mod_names_short_to_long = exports.mod_names_short = exports.mod_names = void 0;
+exports.ModsShortTextToInt = exports.ModsTextToInt = exports.ModsIntToText = exports.ModsIntToShortText = exports.mod_names_short_to_long = exports.mod_names_short = exports.mod_names = void 0;
 const bitwise = __importStar(require("bitwise"));
 exports.mod_names = [
     'NoFail', 'Easy',
@@ -112,3 +112,29 @@ function ModsIntToText(modsBits) {
     return result_mods;
 }
 exports.ModsIntToText = ModsIntToText;
+const ModsTextToInt = (mods) => {
+    if (mods.includes('No Mods')) {
+        return 0;
+    }
+    let result = 0;
+    for (let i = 0; i < exports.mod_names.length; i++) {
+        if (mods.indexOf(exports.mod_names[i]) > -1) {
+            result = result | 1 << i;
+        }
+    }
+    return result;
+};
+exports.ModsTextToInt = ModsTextToInt;
+const ModsShortTextToInt = (mods) => {
+    if (mods.includes('No Mods')) {
+        return 0;
+    }
+    let result = 0;
+    for (let i = 0; i < exports.mod_names_short.length; i++) {
+        if (mods.indexOf(exports.mod_names_short[i]) > -1) {
+            result = result | 1 << i;
+        }
+    }
+    return result;
+};
+exports.ModsShortTextToInt = ModsShortTextToInt;

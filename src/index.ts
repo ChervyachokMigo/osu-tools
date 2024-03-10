@@ -4,7 +4,8 @@ export { color } from "./consts/color";
 
 export { mod_names, ModsIntToText,
          mod_names_short, ModsIntToShortText,
-		 mod_names_short_to_long } from "./consts/modes";
+		 mod_names_short_to_long, 
+		 ModsTextToInt, ModsShortTextToInt } from "./consts/modes";
 
 export { IntDoublePair, StarRating, TimingPoint, 
     UserPermissions, Gamemode, RankedStatus,
