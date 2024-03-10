@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModsIntToText = exports.ModsIntToShortText = exports.mod_names_short = exports.mod_names = void 0;
+exports.ModsIntToText = exports.ModsIntToShortText = exports.mod_names_short_to_long = exports.mod_names_short = exports.mod_names = void 0;
 const bitwise = __importStar(require("bitwise"));
 exports.mod_names = [
     'NoFail', 'Easy',
@@ -51,6 +51,39 @@ exports.mod_names_short = [
     'K1', 'K3', 'K2',
     'V2', 'MI'
 ];
+exports.mod_names_short_to_long = {
+    'NF': 'NoFail',
+    'EZ': 'Easy',
+    'TD': 'TouchDevice',
+    'HD': 'Hidden',
+    'HR': 'HardRock',
+    'SD': 'SuddenDeath',
+    'DT': 'DoubleTime',
+    'RX': 'Relax',
+    'HT': 'HalfTime',
+    'NC': 'Nightcore',
+    'FL': 'Flashlight',
+    'AP': 'Autoplay',
+    'SP': 'SpunOut',
+    'RX2': 'Relax2',
+    'PF': 'Perfect',
+    'K4': 'Key4',
+    'K5': 'Key5',
+    'K6': 'Key6',
+    'K7': 'Key7',
+    'K8': 'Key8',
+    'FI': 'FadeIn',
+    'RD': 'Random',
+    'CI': 'Cinema',
+    'TA': 'Target',
+    'K9': 'Key9',
+    'KC': 'KeyCoop',
+    'K1': 'Key1',
+    'K3': 'Key3',
+    'K2': 'Key2',
+    'V2': 'ScoreV2',
+    'MI': 'Mirror'
+};
 function ModsIntToShortText(modsBits) {
     if (modsBits == 0) {
         return ['No Mods'];

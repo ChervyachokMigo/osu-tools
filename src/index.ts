@@ -3,7 +3,8 @@ export { beatmap_results } from './consts/beatmap_results';
 export { color } from "./consts/color";
 
 export { mod_names, ModsIntToText,
-         mod_names_short, ModsIntToShortText } from "./consts/modes";
+         mod_names_short, ModsIntToShortText,
+		 mod_names_short_to_long } from "./consts/modes";
 
 export { IntDoublePair, StarRating, TimingPoint, 
     UserPermissions, Gamemode, RankedStatus,

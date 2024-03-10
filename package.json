@@ -1,6 +1,6 @@
 {
   "name": "osu-tools",
-  "version": "0.1.34",
+  "version": "0.1.35",
   "description": "osu parser for db/osr files and some stuff ",
   "main": "built/index.js",
   "scripts": {

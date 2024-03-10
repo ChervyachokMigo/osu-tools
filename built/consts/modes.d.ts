@@ -1,5 +1,38 @@
 export declare const mod_names: string[];
 export declare const mod_names_short: string[];
+export declare const mod_names_short_to_long: {
+    NF: string;
+    EZ: string;
+    TD: string;
+    HD: string;
+    HR: string;
+    SD: string;
+    DT: string;
+    RX: string;
+    HT: string;
+    NC: string;
+    FL: string;
+    AP: string;
+    SP: string;
+    RX2: string;
+    PF: string;
+    K4: string;
+    K5: string;
+    K6: string;
+    K7: string;
+    K8: string;
+    FI: string;
+    RD: string;
+    CI: string;
+    TA: string;
+    K9: string;
+    KC: string;
+    K1: string;
+    K3: string;
+    K2: string;
+    V2: string;
+    MI: string;
+};
 export declare function ModsIntToShortText(modsBits: number): string[];
 export declare function ModsIntToText(modsBits: number): string[];
 //# sourceMappingURL=modes.d.ts.map

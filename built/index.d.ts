@@ -1,6 +1,6 @@
 export { beatmap_results } from './consts/beatmap_results';
 export { color } from "./consts/color";
-export { mod_names, ModsIntToText, mod_names_short, ModsIntToShortText } from "./consts/modes";
+export { mod_names, ModsIntToText, mod_names_short, ModsIntToShortText, mod_names_short_to_long } from "./consts/modes";
 export { IntDoublePair, StarRating, TimingPoint, UserPermissions, Gamemode, RankedStatus, HP_Bar, ReplayFrame, ReplayData, KeysPressed } from "./consts/variable_types";
 export { UTC1970Years, buffer_parse } from './tools/buffer_parse';
 export { get_collections_detailed, get_scores_detailed, get_score_detailed } from './tools/union';
