@@ -29,6 +29,12 @@ class buffer_saver {
         buf.writeBigInt64LE(val);
         this.buffer_write(buf);
     }
+    addWindowTickrateFromDate(val) {
+        const tickrate = (BigInt(val.getTime()) + exports.UTC1970Years) * BigInt(10000);
+        let buf = Buffer.alloc(8);
+        buf.writeBigInt64LE(tickrate);
+        this.buffer_write(buf);
+    }
     addULEB128(number) {
         let out = [], a = number;
         do {

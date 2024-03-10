@@ -6,6 +6,7 @@ export declare class buffer_saver {
     getBuffer(): Buffer;
     buffer_write(val: Buffer): void;
     addWindowTickrate(val: bigint): void;
+    addWindowTickrateFromDate(val: Date): void;
     addULEB128(number: number): void;
     addString(val: string | Buffer): void;
     addBool(val: boolean): void;
