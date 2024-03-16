@@ -1,39 +1,31 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buffer_saver = exports.UTC1970Years = void 0;
+const buffer_1 = __importDefault(require("buffer"));
 exports.UTC1970Years = BigInt(62135596800000);
-/*
-import fs from 'fs';
-import util from 'util';
-import path from 'path';
-
-var log_file = fs.createWriteStream(path.join(path.dirname(process.argv[1]),'debug.log'), {flags : 'w'});
-var log_stdout = process.stdout;
-
-console.log = function(d) { //
-    log_file.write(util.format(d) + '\n');
-    log_stdout.write(util.format(d) + '\n');
-};*/
 class buffer_saver {
     constructor() {
-        this.file_buffer = Buffer.alloc(0);
+        this.file_buffer = Buffer.alloc(buffer_1.default.constants.MAX_LENGTH);
+        this.cursor = 0;
+        this.last_bytes = 0;
     }
     getBuffer() {
-        return this.file_buffer;
+        return this.file_buffer.subarray(0, this.cursor);
     }
     buffer_write(val) {
-        this.file_buffer = Buffer.concat([this.file_buffer, val], val.length + this.file_buffer.length);
+        this.file_buffer.set(val, this.cursor);
+        this.last_bytes = val.length;
+        this.cursor += this.last_bytes;
     }
     addWindowTickrate(val) {
-        let buf = Buffer.alloc(8);
-        buf.writeBigInt64LE(val);
-        this.buffer_write(buf);
+        this.addLong(val);
     }
     addWindowTickrateFromDate(val) {
         const tickrate = (BigInt(val.getTime()) + exports.UTC1970Years) * BigInt(10000);
-        let buf = Buffer.alloc(8);
-        buf.writeBigInt64LE(tickrate);
-        this.buffer_write(buf);
+        this.addLong(tickrate);
     }
     addULEB128(number) {
         let out = [], a = number;
@@ -50,10 +42,10 @@ class buffer_saver {
     }
     addString(val) {
         if (val && val.length > 0) {
-            const val_buf = Buffer.from(val);
+            const res = Buffer.from(val);
             this.addByte(0x0b);
-            this.addULEB128(val_buf.length);
-            this.buffer_write(val_buf);
+            this.addULEB128(res.length);
+            this.buffer_write(res);
         }
         else {
             this.addByte(0x0b);
@@ -61,34 +53,52 @@ class buffer_saver {
         }
     }
     addBool(val) {
-        let buf = Buffer.alloc(1);
-        buf.writeUInt8(Number(val));
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
+        this.last_bytes = 1;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
     addByte(val) {
-        let buf = Buffer.alloc(1);
-        buf.writeUInt8(val);
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
+        this.last_bytes = 1;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
     addShort(val) {
-        let buf = Buffer.alloc(2);
-        buf.writeUInt16LE(val);
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
+        this.last_bytes = 2;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
     addInt(val) {
-        let buf = Buffer.alloc(4);
-        buf.writeUInt32LE(val);
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
     addLong(val) {
-        let buf = Buffer.alloc(8);
-        buf.writeBigInt64LE(val);
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
+        this.last_bytes = 8;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
     addDouble(val) {
-        let buf = Buffer.alloc(8);
-        buf.writeDoubleLE(val);
-        this.buffer_write(buf);
+        const writed_bytes = this.file_buffer.writeDoubleLE(val, this.cursor) - this.cursor;
+        this.last_bytes = 8;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
     }
 }
 exports.buffer_saver = buffer_saver;

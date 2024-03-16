@@ -33,7 +33,7 @@ export const scores_db_save = ( scores: scores_db_results, file_path: string = '
                 buffer.addDouble(score.target_practice_accuracy as number);
             } 
         }
+		
     }
-
     writeFileSync(file_path, buffer.getBuffer(), { encoding: 'binary'});
 }

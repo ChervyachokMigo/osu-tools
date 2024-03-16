@@ -2,6 +2,8 @@
 export declare const UTC1970Years: bigint;
 export declare class buffer_saver {
     file_buffer: Buffer;
+    cursor: number;
+    last_bytes: number;
     constructor();
     getBuffer(): Buffer;
     buffer_write(val: Buffer): void;

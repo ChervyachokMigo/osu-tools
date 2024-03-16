@@ -4,19 +4,6 @@ import { decompressLZMASync } from '../lib/decompressLZMASync';
 import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
-/*
-import fs from 'fs';
-import util from 'util';
-import path from 'path';
-
-var log_file = fs.createWriteStream(path.join(path.dirname(process.argv[1]),'debug.log'), {flags : 'w'});
-var log_stdout = process.stdout;
-
-console.log = function(d) { //
-    log_file.write(util.format(d) + '\n');
-    log_stdout.write(util.format(d) + '\n');
-};*/
-
 
 export class buffer_parse {
     file_handle: number;
@@ -30,12 +17,7 @@ export class buffer_parse {
     }
 
     bufferRead(length: number): Buffer {
-        //console.log(this.file_buffer.length)
-        //console.log(this.cursor_offset, length)
-
         let buf = this.file_buffer.subarray(this.cursor_offset, this.cursor_offset + length)
-
-        //fs.readSync(this.file_handle, buf, 0, length, this.cursor_offset);
         this.cursor_offset += length;
         return buf;
     }
