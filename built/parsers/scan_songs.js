@@ -32,7 +32,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
         var one_percent_value = Math.trunc(files.length / 100);
         var start_time = new Date().valueOf();
         var avg_times = [];
-        const is_display_complete_time = options.is_display_complete_time || true;
+        const is_display_complete_time = typeof options.is_display_complete_time ? true : options.is_display_complete_time;
         for (const beatmap_folder of files) {
             if (count % 1000 == 0) {
                 console.log(count, '/', files.length);
@@ -75,7 +75,7 @@ function get_beatmaps_from_beatmap_folder(osufolder, folder_path, osu_file_beatm
     const songs = options.songs_folder || 'Songs';
     const osu_songs = path_1.default.join(osufolder, songs);
     var beatmaps = [];
-    const is_check_osb = options.is_check_osb || true;
+    const is_check_osb = typeof options.is_check_osb === 'undefined' ? true : options.is_check_osb;
     try {
         const current_folder = path_1.default.join(osu_songs, folder_path);
         const beatmapset_files = (0, glob_1.globSync)(current_folder + '/**/*', {
