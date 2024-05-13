@@ -65,7 +65,7 @@ export function songs_get_all_beatmaps (
         var start_time = new Date().valueOf();
         var avg_times = [];
 
-		const is_display_complete_time = typeof options.is_display_complete_time ? true : options.is_display_complete_time;
+		const is_display_complete_time = typeof options.is_display_complete_time === 'undefined' ? true : options.is_display_complete_time;
 
         for (const beatmap_folder of files) {
 

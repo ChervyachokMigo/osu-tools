@@ -32,7 +32,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
         var one_percent_value = Math.trunc(files.length / 100);
         var start_time = new Date().valueOf();
         var avg_times = [];
-        const is_display_complete_time = typeof options.is_display_complete_time ? true : options.is_display_complete_time;
+        const is_display_complete_time = typeof options.is_display_complete_time === 'undefined' ? true : options.is_display_complete_time;
         for (const beatmap_folder of files) {
             if (count % 1000 == 0) {
                 console.log(count, '/', files.length);
