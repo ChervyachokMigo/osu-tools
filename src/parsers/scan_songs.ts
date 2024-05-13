@@ -22,27 +22,32 @@ import { all_difficulty_properties, all_editor_properties,
 
 import { event_string_parse } from "../tools/beatmap_events";
 import { beatmap_event } from "../consts/beatmap_events/beatmap_event";
-import { assert } from "console";
 
 import { globSync, glob, Path } from "glob";
 
 export type scanner_options = {
     is_read_only: boolean,
-    is_hit_objects_only_count: boolean
+    is_hit_objects_only_count: boolean,
+	songs_folder: string,
+	is_display_complete_time: boolean,
+	is_check_osb: boolean
 }
 
-export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], 
+export function songs_get_all_beatmaps ( 
+	osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], 
     options: scanner_options, callback: Function): beatmap_data[] {
 
     console.assert(
         options.is_hit_objects_only_count == true && 
         osu_file_beatmap_properties.includes(osu_file_beatmap_property.hit_objects_count),
-         'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!')
+        'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!')
 
     console.log('scan starting..');
 
+	const songs = options.songs_folder || 'Songs';
+
     try{
-        const osu_songs = path.join(osufolder, "Songs");
+        const osu_songs = path.join(osufolder, songs);
         
         const files = globSync( osu_songs + '/*/' , {
             absolute: false,
@@ -59,7 +64,7 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
         var one_percent_value = Math.trunc(files.length/100);
         var start_time = new Date().valueOf();
         var avg_times = [];
-
+		const is_display_complete_time = options.is_display_complete_time || true;
         for (const beatmap_folder of files) {
 
             if (count % 1000 == 0){
@@ -86,11 +91,13 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
             //display progress
             if ( count % one_percent_value == 0 ){
                 console.log(  ( ( count / files.length * 10000)/100).toFixed(1),'% complete');
-                let endtime = (new Date().valueOf()-start_time)*0.001;
-                console.log('end for', endtime.toFixed(3) );
-                start_time = new Date().valueOf();
-                avg_times.push(endtime);
-                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+				if (is_display_complete_time){
+					let endtime = (new Date().valueOf()-start_time)*0.001;
+					console.log('end for', endtime.toFixed(3) );
+					start_time = new Date().valueOf();
+					avg_times.push(endtime);
+					console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+				}
             }
             
             count ++;
@@ -108,8 +115,12 @@ export function songs_get_all_beatmaps (osufolder: string, osu_file_beatmap_prop
 export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: string, 
     osu_file_beatmap_properties: osu_file_beatmap_property[], options: scanner_options): beatmap_data[] {
 
-    const osu_songs = path.join(osufolder, "Songs");
+	const songs = options.songs_folder || 'Songs';
+    const osu_songs = path.join(osufolder, songs);
+
     var beatmaps: beatmap_data[] = [];
+
+	const is_check_osb = options.is_check_osb || true;
 
     try {
         const current_folder = path.join(osu_songs, folder_path);
@@ -128,7 +139,7 @@ export function get_beatmaps_from_beatmap_folder(osufolder:string, folder_path: 
                 }
 
                 if (beatmapset_file.toLowerCase().endsWith(".osu") || 
-                    beatmapset_file.toLowerCase().endsWith(".osb")) {
+                    (is_check_osb && beatmapset_file.toLowerCase().endsWith(".osb")) ) {
                         
                     const osu_file_path = path.join(osu_songs, folder_path, beatmapset_file);
 
