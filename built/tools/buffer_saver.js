@@ -117,7 +117,7 @@ class buffer_saver {
         }
     }
     addStarRatings(arr) {
-        this.addInt(arr.length);
+        this.addUInt(arr.length);
         if (arr.length > 0) {
             for (let val of arr) {
                 this.addByte(val.mods_flag);
@@ -128,7 +128,7 @@ class buffer_saver {
         }
     }
     addTimingPoints(arr) {
-        this.addInt(arr.length);
+        this.addUInt(arr.length);
         if (arr.length > 0) {
             for (let val of arr) {
                 this.addDouble(val.bpm);

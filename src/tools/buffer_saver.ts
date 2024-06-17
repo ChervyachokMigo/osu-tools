@@ -133,7 +133,7 @@ export class buffer_saver {
     }
 
 	addStarRatings(arr: Array<StarRating>) {
-		this.addInt(arr.length);
+		this.addUInt(arr.length);
 		if (arr.length > 0) {
 			for (let val of arr) {
 				this.addByte(val.mods_flag as number);
@@ -145,7 +145,7 @@ export class buffer_saver {
 	}
 
 	addTimingPoints(arr: Array<TimingPoint>) {
-		this.addInt(arr.length);
+		this.addUInt(arr.length);
 		if (arr.length > 0) {
 			for (let val of arr) {
 				this.addDouble(val.bpm as number);
