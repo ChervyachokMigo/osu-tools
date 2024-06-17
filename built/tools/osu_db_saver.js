@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.osu_db_save = void 0;
 const fs_1 = require("fs");
 const buffer_saver_1 = require("./buffer_saver");
-const osu_db_save = (osu_db, file_path = 'osu!.db') => {
+const osu_db_save = (osu_db, file_path = 'osu!.db', options) => {
     let buffer = new buffer_saver_1.buffer_saver();
     buffer.addInt(osu_db.osu_version);
     buffer.addInt(osu_db.folder_count);
@@ -14,8 +14,22 @@ const osu_db_save = (osu_db, file_path = 'osu!.db') => {
         osu_db.number_beatmaps = osu_db.beatmaps.length;
         console.error('osu_db.number_beatmaps is not equals osu_db.beatmaps.length');
     }
+    //display variables
+    const one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
+    let start_time = new Date().valueOf();
+    let avg_times = [];
     buffer.addInt(osu_db.number_beatmaps);
-    for (let beatmap of osu_db.beatmaps) {
+    for (let i = 0; i < osu_db.number_beatmaps; i++) {
+        //display progress
+        if (options.print_progress && i % one_percent_value == 0) {
+            console.log(((i / osu_db.number_beatmaps * 10000) / 100).toFixed(1), '% complete');
+            let endtime = (new Date().valueOf() - start_time) * 0.001;
+            console.log('end for', endtime.toFixed(3));
+            start_time = new Date().valueOf();
+            avg_times.push(endtime);
+            console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
+        }
+        const beatmap = osu_db.beatmaps[i];
         if (osu_db.osu_version < 20191106) {
             buffer.addInt(beatmap.beatmap_size);
         }

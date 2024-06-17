@@ -125,19 +125,23 @@ export class buffer_saver {
 
 	addStarRatings(arr: Array<StarRating>) {
 		this.addInt(arr.length);
-        for (let val of arr) {
-            this.addInt(val.mods_int as number);
-            this.addDouble(val.stars as number);
-        }
+		if (arr.length > 0) {
+			for (let val of arr) {
+				this.addInt(val.mods_int as number);
+				this.addDouble(val.stars as number);
+			}
+		}
 	}
 
 	addTimingPoints(arr: Array<TimingPoint>) {
 		this.addInt(arr.length);
-        for (let val of arr) {
-            this.addDouble(val.bpm as number);
-            this.addDouble(val.offset as number);
-            this.addBool(val.is_inherit as boolean);
-        }
+		if (arr.length > 0) {
+			for (let val of arr) {
+				this.addDouble(val.bpm as number);
+				this.addDouble(val.offset as number);
+				this.addBool(val.is_inherit as boolean);
+			}
+		}
 	}
 
 }
