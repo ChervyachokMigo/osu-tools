@@ -42,8 +42,9 @@ export class osu_db extends osu_file {
 
         //display variables
         const one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
-        let start_time = new Date().valueOf();
-        let avg_times = [];
+		
+		let start_time = new Date().valueOf();
+		let avg_times = [];
 
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
 
@@ -56,11 +57,13 @@ export class osu_db extends osu_file {
             //display progress
             if ( options.print_progress && i % one_percent_value == 0){
                 console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
-                let endtime = (new Date().valueOf()-start_time)*0.001;
-                console.log('end for', endtime.toFixed(3) );
-                start_time = new Date().valueOf();
-                avg_times.push(endtime);
-                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+				if (options.print_progress_time) {
+					let endtime = (new Date().valueOf()-start_time)*0.001;
+					console.log('end for', endtime.toFixed(3) );
+					start_time = new Date().valueOf();
+					avg_times.push(endtime);
+					console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+				}
             }
         }
 
@@ -1012,7 +1015,7 @@ export class osu_db extends osu_file {
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
 export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>, 
-	options: osu_db_options = {print_progress: true}): osu_db_results {
+	options: osu_db_options = {print_progress: true, print_progress_time: false}): osu_db_results {
     var file_parse_result: osu_db_results = { beatmaps: [] };
     try{
         let osu_db_file = new osu_db(osu_db_path, parse_settings);

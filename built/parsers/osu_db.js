@@ -39,11 +39,13 @@ class osu_db extends osu_file_1.osu_file {
             //display progress
             if (options.print_progress && i % one_percent_value == 0) {
                 console.log(((i / osu_db.number_beatmaps * 10000) / 100).toFixed(1), '% complete');
-                let endtime = (new Date().valueOf() - start_time) * 0.001;
-                console.log('end for', endtime.toFixed(3));
-                start_time = new Date().valueOf();
-                avg_times.push(endtime);
-                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
+                if (options.print_progress_time) {
+                    let endtime = (new Date().valueOf() - start_time) * 0.001;
+                    console.log('end for', endtime.toFixed(3));
+                    start_time = new Date().valueOf();
+                    avg_times.push(endtime);
+                    console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
+                }
             }
         }
         osu_db.user_permissions_int = this.buff.getInt();
@@ -399,7 +401,7 @@ exports.osu_db = osu_db;
  * @param osu_db_path - absolute path to osu.db
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
-function osu_db_load(osu_db_path, parse_settings, options = { print_progress: true }) {
+function osu_db_load(osu_db_path, parse_settings, options = { print_progress: true, print_progress_time: false }) {
     var file_parse_result = { beatmaps: [] };
     try {
         let osu_db_file = new osu_db(osu_db_path, parse_settings);
