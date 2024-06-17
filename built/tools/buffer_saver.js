@@ -77,11 +77,17 @@ class buffer_saver {
         }
     }
     addInt(val) {
-        const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
-        this.last_bytes = 4;
-        this.cursor += this.last_bytes;
-        if (writed_bytes != this.last_bytes) {
-            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        try {
+            const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
+            this.last_bytes = 4;
+            this.cursor += this.last_bytes;
+            if (writed_bytes != this.last_bytes) {
+                console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+            }
+        }
+        catch (e) {
+            console.log('getted value', val);
+            throw e;
         }
     }
     addLong(val) {
