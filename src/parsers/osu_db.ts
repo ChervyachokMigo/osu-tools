@@ -412,7 +412,7 @@ export class osu_db extends osu_file {
     }
 
 	
-    public osu_db_verify( options: osu_db_options): osu_db_results {
+    /*public osu_db_verify( options: osu_db_options): osu_db_results {
         let osu_db: osu_db_results = {beatmaps: []};
         console.log('start parsing osu db..');
 
@@ -1002,7 +1002,7 @@ export class osu_db extends osu_file {
         });
 
         return beatmap;
-    }
+    }*/
 
 }
 
@@ -1012,17 +1012,14 @@ export class osu_db extends osu_file {
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
 export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>, 
-	options: osu_db_options = {print_progress: true, verify: false}): osu_db_results {
+	options: osu_db_options = {print_progress: true}): osu_db_results {
     var file_parse_result: osu_db_results = { beatmaps: [] };
     try{
         let osu_db_file = new osu_db(osu_db_path, parse_settings);
         switch (osu_db_file.get_type()){
             case osu_file_type.osu_db:
-				if (options.verify){
-					file_parse_result = osu_db_file.osu_db_verify(options);
-				} else {
-					file_parse_result = osu_db_file.osu_db_parse(options);
-				}
+				file_parse_result = osu_db_file.osu_db_parse(options);
+				//ile_parse_result = osu_db_file.osu_db_verify(options);
                 break;
                 default:
                     throw new Error('file type not osu file');

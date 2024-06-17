@@ -8,8 +8,6 @@ export declare class osu_db extends osu_file {
     constructor(file_path: string, property_settings?: beatmap_property[]);
     osu_db_parse(options: osu_db_options): osu_db_results;
     private beatmap_parse;
-    osu_db_verify(options: osu_db_options): osu_db_results;
-    private beatmap_verify;
 }
 /**
  * @returns osu_db_results with all beatmaps information
