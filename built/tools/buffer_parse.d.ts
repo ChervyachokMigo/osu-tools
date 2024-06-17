@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { TimingPoint, StarRating, HP_Bar, ReplayData, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
+export declare const verify_value: (obj: any) => void[];
 export declare class buffer_parse {
     file_handle: number;
     cursor_offset: number;

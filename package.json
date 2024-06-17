@@ -12,7 +12,8 @@
     "test_osu_db": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts",
     "test_osu_db_2": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_2.ts",
     "test_scan_songs": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_scan_songs.ts",
-    "test_random": "npx tsc && ts-node tests/test_random.ts"
+    "test_random": "npx tsc && ts-node tests/test_random.ts",
+    "test_osu_db_save": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_save.ts"
   },
   "keywords": [],
   "author": "ChervyachokMigo",

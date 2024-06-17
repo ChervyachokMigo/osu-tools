@@ -5,6 +5,8 @@ import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
 
+export const verify_value = (obj: any) => Object.entries(obj).map( ([key, val]) => console.log(key, typeof val, val) );
+
 export class buffer_parse {
     file_handle: number;
     cursor_offset: number;
@@ -23,7 +25,7 @@ export class buffer_parse {
     }
 
     getBool(): boolean {
-        return Boolean(this.bufferRead(1).readInt8());
+        return Boolean(this.bufferRead(1).readUInt8());
     }
 
     skipBool(): void {
@@ -31,7 +33,7 @@ export class buffer_parse {
     }
 
     getByte(): number {
-        return this.bufferRead(1).readInt8();
+        return this.bufferRead(1).readUInt8();
     }
 
     skipBytes(length: number): void {
@@ -43,7 +45,7 @@ export class buffer_parse {
     }
 
     getShort(): number {
-        return this.bufferRead(2).readInt16LE();
+        return this.bufferRead(2).readUInt16LE();
     }
 
     skipShort(): void {
@@ -51,7 +53,7 @@ export class buffer_parse {
     }
 
     getInt(): number {
-        return this.bufferRead(4).readInt32LE();
+        return this.bufferRead(4).readUInt32LE();
     }
 
     skipInt(): void {
@@ -59,7 +61,7 @@ export class buffer_parse {
     }
 
     getLong(): bigint {
-        return this.bufferRead(8).readBigInt64LE();
+        return this.bufferRead(8).readBigUInt64LE();
     }
 
     skipLong(): void {
@@ -83,7 +85,7 @@ export class buffer_parse {
     }
 
     getWindowsTickDate(): BigInt {
-        return this.bufferRead(8).readBigInt64LE();
+        return this.bufferRead(8).readBigUInt64LE();
     }
 
     getDateTime(): WindowsTickRate {
@@ -104,16 +106,21 @@ export class buffer_parse {
         let results: Array<StarRating> = [];
         let count = this.bufferRead(4).readInt32LE();
 
+		verify_value({
+			star_rating_count: count
+		})
+
         for (let i = 0; i < count; i++) {
-            
+
             let sr: StarRating = {};
-            
-            this.cursor_offset += 1;
-            sr.mods_int = this.bufferRead(4).readInt32LE();
-            this.cursor_offset += 1;
+        
+            sr.mods_int = this.bufferRead(4).readUInt32LE();
             sr.stars = this.bufferRead(8).readDoubleLE();
 
-            //sr.mods = ModsIntToText(sr.mods_int)
+			verify_value({
+				star_rating_mods:  sr.mods_int,
+				star_rating_stars: sr.stars,
+			})
 
             results.push(sr);
         }
@@ -121,13 +128,13 @@ export class buffer_parse {
     }
 
     skipStarRatings(): void {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 14 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {
         let results: Array<TimingPoint> = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
@@ -138,7 +145,7 @@ export class buffer_parse {
 
             TimingPoint.bpm = this.bufferRead(8).readDoubleLE();
             TimingPoint.offset = this.bufferRead(8).readDoubleLE();
-            TimingPoint.is_inherit = Boolean(this.bufferRead(1).readInt8());
+            TimingPoint.is_inherit = Boolean(this.bufferRead(1).readUInt8());
     
             results.push(TimingPoint);
         }
@@ -146,12 +153,12 @@ export class buffer_parse {
     }
 
     skipTimingPoints(): void {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 17 * count;
     }
 
     getString(): string {
-        let stringCode = this.bufferRead(1).readInt8();
+        let stringCode = this.bufferRead(1).readUInt8();
         let res = '';
 
         if ( stringCode === 0 ) {
@@ -172,7 +179,7 @@ export class buffer_parse {
     }
 
     getStringAsBuffer(): Buffer {
-        let stringCode = this.bufferRead(1).readInt8();
+        let stringCode = this.bufferRead(1).readUInt8();
         let res = Buffer.alloc(0);
 
         if ( stringCode === 0 ) {
@@ -193,7 +200,7 @@ export class buffer_parse {
     }
 
     skipString(): void  {
-        let stringCode = this.bufferRead(1).readInt8();
+        let stringCode = this.bufferRead(1).readUInt8();
         if (stringCode === 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
@@ -206,7 +213,7 @@ export class buffer_parse {
         let result: number = 0;
         let shift: number = 0;
         while (true) {
-            let byte: number = this.bufferRead(1).readInt8();
+            let byte: number = this.bufferRead(1).readUInt8();
             result |= (byte & 0x7f) << shift;
             if ((byte & 0x80) === 0)
                 break;
@@ -237,7 +244,7 @@ export class buffer_parse {
 
     getReplayData(): ReplayData {
         const result: ReplayData = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
-        const replay_data_size = this.bufferRead(4).readInt32LE();
+        const replay_data_size = this.bufferRead(4).readUInt32LE();
 
         if (replay_data_size === 0xffffffff || replay_data_size <= 0 ) {
             return result;
