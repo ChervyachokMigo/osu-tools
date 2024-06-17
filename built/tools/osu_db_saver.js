@@ -30,7 +30,9 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options) => {
             console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
         }
         const beatmap = osu_db.beatmaps[i];
-        console.log(beatmap);
+        if (options.is_look_last_beatmap) {
+            console.log(beatmap);
+        }
         if (osu_db.osu_version < 20191106) {
             buffer.addInt(beatmap.beatmap_size);
         }

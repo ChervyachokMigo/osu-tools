@@ -22,24 +22,6 @@ export class buffer_parse {
         return buf;
     }
 
-    getWindowsTickDate(): BigInt {
-        return this.bufferRead(8).readBigInt64LE();
-    }
-
-    getDateTime(): Date {
-        let windows_tick_date_value: any = this.getWindowsTickDate();
-        if (windows_tick_date_value > 0){
-            let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
-            return new Date( Number(date_value_without_ns - UTC1970Years ) );
-        } else {
-            return new Date(0);
-        }
-    }
-
-    skipDateTime(): void {
-        this.cursor_offset += 8;
-    }
-
     getBool(): boolean {
         return Boolean(this.bufferRead(1).readUInt8());
     }
@@ -61,11 +43,19 @@ export class buffer_parse {
     }
 
     getShort(): number {
-        return this.bufferRead(2).readInt16LE();
+        return this.bufferRead(2).readUInt16LE();
     }
 
     skipShort(): void {
         this.cursor_offset += 2;
+    }
+
+    getInt(): number {
+        return this.bufferRead(4).readInt32LE();
+    }
+
+    skipInt(): void {
+        this.cursor_offset += 4;
     }
 
     getLong(): bigint {
@@ -76,12 +66,38 @@ export class buffer_parse {
         this.cursor_offset += 8;
     }
 
-    getInt(): number {
-        return this.bufferRead(4).readInt32LE();
+    getSingle(): number {
+        return this.bufferRead(4).readFloatLE();
     }
 
-    skipInt(): void {
+    skipSingle(): void {
         this.cursor_offset += 4;
+    }
+
+    getDouble(): number {
+        return this.bufferRead(8).readDoubleLE();
+    }
+
+    skipDouble(): void {
+        this.cursor_offset += 8;
+    }
+
+    getWindowsTickDate(): BigInt {
+        return this.bufferRead(8).readBigInt64LE();
+    }
+
+    getDateTime(): Date {
+        let windows_tick_date_value: any = this.getWindowsTickDate();
+        if (windows_tick_date_value > 0){
+            let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
+            return new Date( Number(date_value_without_ns - UTC1970Years ) );
+        } else {
+            return new Date(0);
+        }
+    }
+
+    skipDateTime(): void {
+        this.cursor_offset += 8;
     }
 
     getStarRatings(): Array<StarRating> {
@@ -132,22 +148,6 @@ export class buffer_parse {
     skipTimingPoints(): void {
         let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 17 * count;
-    }
-
-    getSingle(): number {
-        return this.bufferRead(4).readFloatLE();
-    }
-
-    skipSingle(): void {
-        this.cursor_offset += 4;
-    }
-
-    getDouble(): number {
-        return this.bufferRead(8).readDoubleLE();
-    }
-
-    skipDouble(): void {
-        this.cursor_offset += 8;
     }
 
     getString(): string {

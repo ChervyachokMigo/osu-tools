@@ -18,22 +18,6 @@ class buffer_parse {
         this.cursor_offset += length;
         return buf;
     }
-    getWindowsTickDate() {
-        return this.bufferRead(8).readBigInt64LE();
-    }
-    getDateTime() {
-        let windows_tick_date_value = this.getWindowsTickDate();
-        if (windows_tick_date_value > 0) {
-            let date_value_without_ns = windows_tick_date_value / BigInt(10000);
-            return new Date(Number(date_value_without_ns - exports.UTC1970Years));
-        }
-        else {
-            return new Date(0);
-        }
-    }
-    skipDateTime() {
-        this.cursor_offset += 8;
-    }
     getBool() {
         return Boolean(this.bufferRead(1).readUInt8());
     }
@@ -50,10 +34,16 @@ class buffer_parse {
         this.cursor_offset += 1;
     }
     getShort() {
-        return this.bufferRead(2).readInt16LE();
+        return this.bufferRead(2).readUInt16LE();
     }
     skipShort() {
         this.cursor_offset += 2;
+    }
+    getInt() {
+        return this.bufferRead(4).readInt32LE();
+    }
+    skipInt() {
+        this.cursor_offset += 4;
     }
     getLong() {
         return this.bufferRead(8).readBigInt64LE();
@@ -61,11 +51,33 @@ class buffer_parse {
     skipLong() {
         this.cursor_offset += 8;
     }
-    getInt() {
-        return this.bufferRead(4).readInt32LE();
+    getSingle() {
+        return this.bufferRead(4).readFloatLE();
     }
-    skipInt() {
+    skipSingle() {
         this.cursor_offset += 4;
+    }
+    getDouble() {
+        return this.bufferRead(8).readDoubleLE();
+    }
+    skipDouble() {
+        this.cursor_offset += 8;
+    }
+    getWindowsTickDate() {
+        return this.bufferRead(8).readBigInt64LE();
+    }
+    getDateTime() {
+        let windows_tick_date_value = this.getWindowsTickDate();
+        if (windows_tick_date_value > 0) {
+            let date_value_without_ns = windows_tick_date_value / BigInt(10000);
+            return new Date(Number(date_value_without_ns - exports.UTC1970Years));
+        }
+        else {
+            return new Date(0);
+        }
+    }
+    skipDateTime() {
+        this.cursor_offset += 8;
     }
     getStarRatings() {
         let results = [];
@@ -104,18 +116,6 @@ class buffer_parse {
     skipTimingPoints() {
         let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 17 * count;
-    }
-    getSingle() {
-        return this.bufferRead(4).readFloatLE();
-    }
-    skipSingle() {
-        this.cursor_offset += 4;
-    }
-    getDouble() {
-        return this.bufferRead(8).readDoubleLE();
-    }
-    skipDouble() {
-        this.cursor_offset += 8;
     }
     getString() {
         let stringCode = this.bufferRead(1).readUInt8();

@@ -8,10 +8,6 @@ export declare class buffer_saver {
     constructor();
     getBuffer(): Buffer;
     buffer_write(val: Buffer): void;
-    addWindowTickrate(val: bigint): void;
-    addWindowTickrateFromDate(val: Date): void;
-    addULEB128(number: number): void;
-    addString(val: string | Buffer): void;
     addBool(val: boolean): void;
     addByte(val: number): void;
     addShort(val: number): void;
@@ -19,6 +15,10 @@ export declare class buffer_saver {
     addLong(val: bigint): void;
     addDouble(val: number): void;
     addSingle(val: number): void;
+    addWindowTickrate(val: bigint): void;
+    addWindowTickrateFromDate(val: Date): void;
+    addULEB128(number: number): void;
+    addString(val: string | Buffer): void;
     addStarRatings(arr: Array<StarRating>): void;
     addTimingPoints(arr: Array<TimingPoint>): void;
 }

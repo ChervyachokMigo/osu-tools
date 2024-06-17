@@ -25,6 +25,69 @@ export class buffer_saver {
 		this.cursor += this.last_bytes;
     }
 
+    addBool(val: boolean): void {
+		const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
+		this.last_bytes = 1;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+    addByte(val: number): void {
+		const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
+		this.last_bytes = 1;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+    addShort(val: number): void {
+		const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 2;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+    addInt(val: number): void {
+		const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 4;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+    addLong(val: bigint): void {
+		const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 8;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+    addDouble(val: number): void {
+		const writed_bytes = this.file_buffer.writeDoubleLE(val, this.cursor) - this.cursor;
+		this.last_bytes = 8;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
+    }
+
+	addSingle(val: number): void {
+		const writed_bytes = this.file_buffer.writeFloatLE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes!= this.last_bytes){
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+        }
+	}
+
     addWindowTickrate(val: bigint) {
 		this.addLong(val);
     }
@@ -59,75 +122,6 @@ export class buffer_saver {
             this.addByte(0);
         }
     }
-
-    addBool(val: boolean): void {
-		const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
-		this.last_bytes = 1;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-    }
-
-    addByte(val: number): void {
-		const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
-		this.last_bytes = 1;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-    }
-
-    addShort(val: number): void {
-		const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
-		this.last_bytes = 2;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-    }
-
-    addInt(val: number): void {
-		try {
-		const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
-		this.last_bytes = 4;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-		} catch (e) {
-			
-			console.log('getted value', val);
-			throw e
-		}
-    }
-
-    addLong(val: bigint): void {
-		const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
-		this.last_bytes = 8;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-    }
-
-    addDouble(val: number): void {
-		const writed_bytes = this.file_buffer.writeDoubleLE(val, this.cursor) - this.cursor;
-		this.last_bytes = 8;
-		this.cursor += this.last_bytes;
-		if (writed_bytes != this.last_bytes){
-			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-		}
-    }
-
-	addSingle(val: number): void {
-		const writed_bytes = this.file_buffer.writeFloatLE(val, this.cursor) - this.cursor;
-        this.last_bytes = 4;
-        this.cursor += this.last_bytes;
-        if (writed_bytes!= this.last_bytes){
-            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
-        }
-	}
 
 	addStarRatings(arr: Array<StarRating>) {
 		this.addInt(arr.length);

@@ -4,7 +4,8 @@ import { osu_db_results } from "../consts/osu_db_results";
 import { StarRating, TimingPoint } from "../consts/variable_types";
 
 
-export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.db', options: {print_progress: boolean} ) => {
+export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.db', 
+	options: {print_progress: boolean, is_look_last_beatmap: boolean} ) => {
     let buffer = new buffer_saver();
 
     buffer.addInt(osu_db.osu_version as number);
@@ -39,7 +40,9 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 
 		const beatmap = osu_db.beatmaps[i];
 
-		console.log(beatmap);
+		if (options.is_look_last_beatmap) {
+			console.log(beatmap);
+		}
 
 		if (osu_db.osu_version as number < 20191106) {
 			buffer.addInt(beatmap.beatmap_size as number);
