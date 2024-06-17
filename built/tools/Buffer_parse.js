@@ -42,13 +42,13 @@ class buffer_parse {
         this.cursor_offset += 2;
     }
     getInt() {
-        return this.bufferRead(4).readUInt32LE();
+        return this.bufferRead(4).readInt32LE();
     }
     skipInt() {
         this.cursor_offset += 4;
     }
     getLong() {
-        return this.bufferRead(8).readBigUInt64LE();
+        return this.bufferRead(8).readBigInt64LE();
     }
     skipLong() {
         this.cursor_offset += 8;
@@ -66,7 +66,7 @@ class buffer_parse {
         this.cursor_offset += 8;
     }
     getWindowsTickDate() {
-        return this.bufferRead(8).readBigUInt64LE();
+        return this.bufferRead(8).readBigInt64LE();
     }
     getDateTime() {
         let val = this.getWindowsTickDate();
@@ -83,7 +83,7 @@ class buffer_parse {
     }
     getStarRatings() {
         let results = [];
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
         for (let i = 0; i < count; i++) {
             let sr = {};
             sr.mods_int = this.bufferRead(4).readUInt32LE();
@@ -113,7 +113,7 @@ class buffer_parse {
         return results;
     }
     skipTimingPoints() {
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 17 * count;
     }
     getString() {
@@ -194,7 +194,7 @@ class buffer_parse {
     }
     getReplayData() {
         const result = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
-        const replay_data_size = this.bufferRead(4).readUInt32LE();
+        const replay_data_size = this.bufferRead(4).readInt32LE();
         if (replay_data_size === 0xffffffff || replay_data_size <= 0) {
             return result;
         }

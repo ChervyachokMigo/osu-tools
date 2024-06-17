@@ -45,6 +45,14 @@ class buffer_saver {
         }
     }
     addInt(val) {
+        const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
+    }
+    addUInt(val) {
         const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
         this.last_bytes = 4;
         this.cursor += this.last_bytes;
@@ -53,7 +61,7 @@ class buffer_saver {
         }
     }
     addLong(val) {
-        const writed_bytes = this.file_buffer.writeBigUInt64LE(val, this.cursor) - this.cursor;
+        const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
         this.last_bytes = 8;
         this.cursor += this.last_bytes;
         if (writed_bytes != this.last_bytes) {
@@ -112,7 +120,7 @@ class buffer_saver {
         this.addInt(arr.length);
         if (arr.length > 0) {
             for (let val of arr) {
-                this.addInt(val.mods_int);
+                this.addUInt(val.mods_int);
                 this.addDouble(val.stars);
             }
         }

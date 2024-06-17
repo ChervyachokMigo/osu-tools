@@ -12,6 +12,7 @@ export declare class buffer_saver {
     addByte(val: number): void;
     addShort(val: number): void;
     addInt(val: number): void;
+    addUInt(val: number): void;
     addLong(val: bigint): void;
     addDouble(val: number): void;
     addSingle(val: number): void;

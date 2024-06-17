@@ -53,7 +53,7 @@ export class buffer_parse {
     }
 
     getInt(): number {
-        return this.bufferRead(4).readUInt32LE();
+        return this.bufferRead(4).readInt32LE();
     }
 
     skipInt(): void {
@@ -61,7 +61,7 @@ export class buffer_parse {
     }
 
     getLong(): bigint {
-        return this.bufferRead(8).readBigUInt64LE();
+        return this.bufferRead(8).readBigInt64LE();
     }
 
     skipLong(): void {
@@ -85,7 +85,7 @@ export class buffer_parse {
     }
 
     getWindowsTickDate(): BigInt {
-        return this.bufferRead(8).readBigUInt64LE();
+        return this.bufferRead(8).readBigInt64LE();
     }
 
     getDateTime(): WindowsTickRate {
@@ -104,7 +104,7 @@ export class buffer_parse {
 
     getStarRatings(): Array<StarRating> {
         let results: Array<StarRating> = [];
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
 
         for (let i = 0; i < count; i++) {
 
@@ -144,7 +144,7 @@ export class buffer_parse {
     }
 
     skipTimingPoints(): void {
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 17 * count;
     }
 
@@ -235,7 +235,7 @@ export class buffer_parse {
 
     getReplayData(): ReplayData {
         const result: ReplayData = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
-        const replay_data_size = this.bufferRead(4).readUInt32LE();
+        const replay_data_size = this.bufferRead(4).readInt32LE();
 
         if (replay_data_size === 0xffffffff || replay_data_size <= 0 ) {
             return result;
