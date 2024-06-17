@@ -48,8 +48,9 @@ export declare enum beatmap_property {
     is_disable_storyboard = 46,
     is_disable_video = 47,
     is_visual_override = 48,
-    mod_time = 49,
-    mania_scroll = 50
+    unknown_value = 49,
+    mod_time = 50,
+    mania_scroll = 51
 }
 export declare const all_beatmap_properties: beatmap_property[];
 export declare const none_beatmap_properties: beatmap_property[];

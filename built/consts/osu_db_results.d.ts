@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { UserPermissions } from './variable_types';
 import { beatmap_results } from './beatmap_results';
 export type osu_db_results = {
@@ -7,7 +8,7 @@ export type osu_db_results = {
     folder_count?: number;
     is_account_unlocked?: boolean;
     account_unlocked_date?: Date;
-    playername?: string;
+    playername?: string | Buffer;
     user_permissions_int?: UserPermissions;
     user_permissions?: string;
 };

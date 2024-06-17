@@ -100,5 +100,28 @@ class buffer_saver {
             console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
         }
     }
+    addSingle(val) {
+        const writed_bytes = this.file_buffer.writeFloatLE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes != this.last_bytes) {
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor });
+        }
+    }
+    addStarRatings(arr) {
+        this.addInt(arr.length);
+        for (let val of arr) {
+            this.addInt(val.mods_int);
+            this.addDouble(val.stars);
+        }
+    }
+    addTimingPoints(arr) {
+        this.addInt(arr.length);
+        for (let val of arr) {
+            this.addDouble(val.bpm);
+            this.addDouble(val.offset);
+            this.addBool(val.is_inherit);
+        }
+    }
 }
 exports.buffer_saver = buffer_saver;

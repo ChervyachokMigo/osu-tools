@@ -386,8 +386,13 @@ export class osu_db extends osu_file {
             this.buff.skipBool();
         }
 
+		 //unknown_value
         if (osu_db_version < 20140609) {
-            this.buff.skipShort(); //unknown_value
+			if (this.property_settings.indexOf(beatmap_property.unknown_value) !== -1) {
+				beatmap.unknown_value = this.buff.getShort();
+			} else {
+				this.buff.skipShort();
+			}
         }
 
         if (this.property_settings.indexOf(beatmap_property.mod_time) !== -1) {

@@ -52,8 +52,9 @@ var beatmap_property;
     beatmap_property[beatmap_property["is_disable_storyboard"] = 46] = "is_disable_storyboard";
     beatmap_property[beatmap_property["is_disable_video"] = 47] = "is_disable_video";
     beatmap_property[beatmap_property["is_visual_override"] = 48] = "is_visual_override";
-    beatmap_property[beatmap_property["mod_time"] = 49] = "mod_time";
-    beatmap_property[beatmap_property["mania_scroll"] = 50] = "mania_scroll";
+    beatmap_property[beatmap_property["unknown_value"] = 49] = "unknown_value";
+    beatmap_property[beatmap_property["mod_time"] = 50] = "mod_time";
+    beatmap_property[beatmap_property["mania_scroll"] = 51] = "mania_scroll";
 })(beatmap_property = exports.beatmap_property || (exports.beatmap_property = {}));
 exports.all_beatmap_properties = [
     beatmap_property.beatmap_size,
@@ -105,6 +106,7 @@ exports.all_beatmap_properties = [
     beatmap_property.is_disable_storyboard,
     beatmap_property.is_disable_video,
     beatmap_property.is_visual_override,
+    beatmap_property.unknown_value,
     beatmap_property.mod_time,
     beatmap_property.mania_scroll
 ];

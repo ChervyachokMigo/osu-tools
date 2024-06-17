@@ -48,6 +48,7 @@ export enum beatmap_property {
     is_disable_storyboard,
     is_disable_video,
     is_visual_override,
+	unknown_value,
     mod_time,
     mania_scroll
 }
@@ -102,6 +103,7 @@ export const all_beatmap_properties = [
     beatmap_property.is_disable_storyboard,
     beatmap_property.is_disable_video,
     beatmap_property.is_visual_override,
+	beatmap_property.unknown_value,
     beatmap_property.mod_time,
     beatmap_property.mania_scroll
 ]; 

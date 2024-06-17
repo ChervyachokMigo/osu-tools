@@ -1,4 +1,5 @@
 import buffer from 'buffer'
+import { StarRating, TimingPoint } from '../consts/variable_types';
 
 export const UTC1970Years = BigInt(62135596800000);
 
@@ -112,5 +113,31 @@ export class buffer_saver {
 			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
 		}
     }
+
+	addSingle(val: number): void {
+		const writed_bytes = this.file_buffer.writeFloatLE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes!= this.last_bytes){
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+        }
+	}
+
+	addStarRatings(arr: Array<StarRating>) {
+		this.addInt(arr.length);
+        for (let val of arr) {
+            this.addInt(val.mods_int as number);
+            this.addDouble(val.stars as number);
+        }
+	}
+
+	addTimingPoints(arr: Array<TimingPoint>) {
+		this.addInt(arr.length);
+        for (let val of arr) {
+            this.addDouble(val.bpm as number);
+            this.addDouble(val.offset as number);
+            this.addBool(val.is_inherit as boolean);
+        }
+	}
 
 }

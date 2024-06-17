@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { StarRating, TimingPoint } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_saver {
     file_buffer: Buffer;
@@ -17,5 +18,8 @@ export declare class buffer_saver {
     addInt(val: number): void;
     addLong(val: bigint): void;
     addDouble(val: number): void;
+    addSingle(val: number): void;
+    addStarRatings(arr: Array<StarRating>): void;
+    addTimingPoints(arr: Array<TimingPoint>): void;
 }
 //# sourceMappingURL=buffer_saver.d.ts.map

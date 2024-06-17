@@ -9,7 +9,7 @@ export type osu_db_results = {
     folder_count?: number;
     is_account_unlocked?: boolean;
     account_unlocked_date?: Date;
-    playername?: string;
+    playername?: string | Buffer;
     user_permissions_int?: UserPermissions;
     user_permissions?: string;
 };

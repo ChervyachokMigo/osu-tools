@@ -54,6 +54,7 @@ export type beatmap_results = {
     is_disable_storyboard?: boolean;
     is_disable_video?: boolean;
     is_visual_override?: boolean;
+    unknown_value?: number;
     mod_time?: number;
     mania_scroll?: number;
 };

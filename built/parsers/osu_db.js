@@ -369,8 +369,14 @@ class osu_db extends osu_file_1.osu_file {
         else {
             this.buff.skipBool();
         }
+        //unknown_value
         if (osu_db_version < 20140609) {
-            this.buff.skipShort(); //unknown_value
+            if (this.property_settings.indexOf(property_settings_1.beatmap_property.unknown_value) !== -1) {
+                beatmap.unknown_value = this.buff.getShort();
+            }
+            else {
+                this.buff.skipShort();
+            }
         }
         if (this.property_settings.indexOf(property_settings_1.beatmap_property.mod_time) !== -1) {
             beatmap.mod_time = this.buff.getInt();
