@@ -106,21 +106,12 @@ export class buffer_parse {
         let results: Array<StarRating> = [];
         let count = this.bufferRead(4).readInt32LE();
 
-		verify_value({
-			star_rating_count: count
-		})
-
         for (let i = 0; i < count; i++) {
 
             let sr: StarRating = {};
         
             sr.mods_int = this.bufferRead(4).readUInt32LE();
             sr.stars = this.bufferRead(8).readDoubleLE();
-
-			verify_value({
-				star_rating_mods:  sr.mods_int,
-				star_rating_stars: sr.stars,
-			})
 
             results.push(sr);
         }
