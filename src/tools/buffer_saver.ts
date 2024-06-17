@@ -1,5 +1,5 @@
 import buffer from 'buffer'
-import { StarRating, TimingPoint } from '../consts/variable_types';
+import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 
 export const UTC1970Years = BigInt(62135596800000);
 
@@ -92,9 +92,9 @@ export class buffer_saver {
 		this.addLong(val);
     }
 
-	addWindowTickrateFromDate( val: Date ) {
-		const tickrate = ( BigInt( val.getTime() ) + UTC1970Years ) * BigInt(10000);
-		this.addLong(tickrate);
+	addWindowTickrateFromDate( val: WindowsTickRate ) {
+		//const tickrate = ( BigInt( val.getTime() ) + UTC1970Years ) * BigInt(10000);
+		this.addLong(val.int);
 	}
 
     addULEB128(number: number) {

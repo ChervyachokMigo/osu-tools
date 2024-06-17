@@ -80,8 +80,8 @@ class buffer_saver {
         this.addLong(val);
     }
     addWindowTickrateFromDate(val) {
-        const tickrate = (BigInt(val.getTime()) + exports.UTC1970Years) * BigInt(10000);
-        this.addLong(tickrate);
+        //const tickrate = ( BigInt( val.getTime() ) + UTC1970Years ) * BigInt(10000);
+        this.addLong(val.int);
     }
     addULEB128(number) {
         let out = [], a = number;

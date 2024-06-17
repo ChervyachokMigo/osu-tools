@@ -61,4 +61,8 @@ export type KeysPressed = {
     Key_4: boolean;
     Key_Smoke: boolean;
 };
+export type WindowsTickRate = {
+    int: bigint;
+    date: Date;
+};
 //# sourceMappingURL=variable_types.d.ts.map

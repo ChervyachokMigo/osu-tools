@@ -71,3 +71,8 @@ export type KeysPressed = {
     Key_Smoke: boolean
 }
 
+export type WindowsTickRate = {
+	int: bigint,
+	date: Date
+}
+

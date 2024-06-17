@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { UserPermissions } from './variable_types';
+import { UserPermissions, WindowsTickRate } from './variable_types';
 import { beatmap_results } from './beatmap_results';
 export type osu_db_results = {
     number_beatmaps?: number;
@@ -7,7 +7,7 @@ export type osu_db_results = {
     osu_version?: number;
     folder_count?: number;
     is_account_unlocked?: boolean;
-    account_unlocked_date?: Date;
+    account_unlocked_date?: WindowsTickRate;
     playername?: string | Buffer;
     user_permissions_int?: UserPermissions;
     user_permissions?: string;

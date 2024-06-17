@@ -1,4 +1,4 @@
-import { TimingPoint, RankedStatus, Gamemode, StarRating } from './variable_types';
+import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate } from './variable_types';
 export type beatmap_results = {
     beatmap_size?: number;
     artist?: string;
@@ -15,7 +15,7 @@ export type beatmap_results = {
     number_hitcircles?: number;
     number_sliders?: number;
     number_spinners?: number;
-    mod_date?: Date;
+    mod_date?: WindowsTickRate;
     AR?: number;
     CS?: number;
     HP?: number;
@@ -45,10 +45,10 @@ export type beatmap_results = {
     online_offset?: number;
     font_title?: string;
     is_unplayed?: boolean;
-    last_played?: Date;
+    last_played?: WindowsTickRate;
     is_OSZ2?: boolean;
     folder_name?: string;
-    last_checked_repository_time?: Date;
+    last_checked_repository_time?: WindowsTickRate;
     is_ignore_hit_sounds?: boolean;
     is_ignore_skin?: boolean;
     is_disable_storyboard?: boolean;

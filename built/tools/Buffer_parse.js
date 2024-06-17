@@ -67,13 +67,13 @@ class buffer_parse {
         return this.bufferRead(8).readBigInt64LE();
     }
     getDateTime() {
-        let windows_tick_date_value = this.getWindowsTickDate();
-        if (windows_tick_date_value > 0) {
-            let date_value_without_ns = windows_tick_date_value / BigInt(10000);
-            return new Date(Number(date_value_without_ns - exports.UTC1970Years));
+        let val = this.getWindowsTickDate();
+        if (val > 0) {
+            let date_value_without_ns = val / BigInt(10000);
+            return { int: val, date: new Date(Number(date_value_without_ns - exports.UTC1970Years)) };
         }
         else {
-            return new Date(0);
+            return { int: BigInt(0), date: new Date(0) };
         }
     }
     skipDateTime() {

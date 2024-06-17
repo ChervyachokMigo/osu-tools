@@ -1,4 +1,4 @@
-import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame } from '../consts/variable_types';
+import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame, WindowsTickRate } from '../consts/variable_types';
 
 import { decompressLZMASync } from '../lib/decompressLZMASync';
 import bitwise from 'bitwise';
@@ -86,13 +86,13 @@ export class buffer_parse {
         return this.bufferRead(8).readBigInt64LE();
     }
 
-    getDateTime(): Date {
-        let windows_tick_date_value: any = this.getWindowsTickDate();
-        if (windows_tick_date_value > 0){
-            let date_value_without_ns: bigint = windows_tick_date_value / BigInt(10000);
-            return new Date( Number(date_value_without_ns - UTC1970Years ) );
+    getDateTime(): WindowsTickRate {
+        let val: any = this.getWindowsTickDate();
+        if (val > 0){
+            let date_value_without_ns: bigint = val / BigInt(10000);
+            return {int: val, date: new Date( Number(date_value_without_ns - UTC1970Years ) )};
         } else {
-            return new Date(0);
+            return {int: BigInt(0), date: new Date(0)};
         }
     }
 
