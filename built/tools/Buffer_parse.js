@@ -19,13 +19,13 @@ class buffer_parse {
         return buf;
     }
     getBool() {
-        return Boolean(this.bufferRead(1).readUInt8());
+        return Boolean(this.bufferRead(1).readInt8());
     }
     skipBool() {
         this.cursor_offset += 1;
     }
     getByte() {
-        return this.bufferRead(1).readUInt8();
+        return this.bufferRead(1).readInt8();
     }
     skipBytes(length) {
         this.cursor_offset += length;
@@ -34,7 +34,7 @@ class buffer_parse {
         this.cursor_offset += 1;
     }
     getShort() {
-        return this.bufferRead(2).readUInt16LE();
+        return this.bufferRead(2).readInt16LE();
     }
     skipShort() {
         this.cursor_offset += 2;
@@ -108,7 +108,7 @@ class buffer_parse {
             };
             TimingPoint.bpm = this.bufferRead(8).readDoubleLE();
             TimingPoint.offset = this.bufferRead(8).readDoubleLE();
-            TimingPoint.is_inherit = Boolean(this.bufferRead(1).readUInt8());
+            TimingPoint.is_inherit = Boolean(this.bufferRead(1).readInt8());
             results.push(TimingPoint);
         }
         return results;
@@ -118,7 +118,7 @@ class buffer_parse {
         this.cursor_offset += 17 * count;
     }
     getString() {
-        let stringCode = this.bufferRead(1).readUInt8();
+        let stringCode = this.bufferRead(1).readInt8();
         let res = '';
         if (stringCode === 0) {
             return res;
@@ -137,7 +137,7 @@ class buffer_parse {
         }
     }
     getStringAsBuffer() {
-        let stringCode = this.bufferRead(1).readUInt8();
+        let stringCode = this.bufferRead(1).readInt8();
         let res = Buffer.alloc(0);
         if (stringCode === 0) {
             return res;
@@ -156,7 +156,7 @@ class buffer_parse {
         }
     }
     skipString() {
-        let stringCode = this.bufferRead(1).readUInt8();
+        let stringCode = this.bufferRead(1).readInt8();
         if (stringCode === 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
@@ -168,7 +168,7 @@ class buffer_parse {
         let result = 0;
         let shift = 0;
         while (true) {
-            let byte = this.bufferRead(1).readUInt8();
+            let byte = this.bufferRead(1).readInt8();
             result |= (byte & 0x7f) << shift;
             if ((byte & 0x80) === 0)
                 break;

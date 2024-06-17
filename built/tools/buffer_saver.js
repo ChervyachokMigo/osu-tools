@@ -21,7 +21,7 @@ class buffer_saver {
         this.cursor += this.last_bytes;
     }
     addBool(val) {
-        const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
+        const writed_bytes = this.file_buffer.writeInt8(Number(val), this.cursor) - this.cursor;
         this.last_bytes = 1;
         this.cursor += this.last_bytes;
         if (writed_bytes != this.last_bytes) {
@@ -29,7 +29,7 @@ class buffer_saver {
         }
     }
     addByte(val) {
-        const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
+        const writed_bytes = this.file_buffer.writeInt8(val, this.cursor) - this.cursor;
         this.last_bytes = 1;
         this.cursor += this.last_bytes;
         if (writed_bytes != this.last_bytes) {
@@ -37,7 +37,7 @@ class buffer_saver {
         }
     }
     addShort(val) {
-        const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
+        const writed_bytes = this.file_buffer.writeInt16LE(val, this.cursor) - this.cursor;
         this.last_bytes = 2;
         this.cursor += this.last_bytes;
         if (writed_bytes != this.last_bytes) {
