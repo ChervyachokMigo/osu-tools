@@ -136,7 +136,9 @@ export class buffer_saver {
 		this.addInt(arr.length);
 		if (arr.length > 0) {
 			for (let val of arr) {
+				this.addByte(val.mods_flag as number);
 				this.addUInt(val.mods_int as number);
+				this.addByte(val.stars_flag as number);
 				this.addDouble(val.stars as number);
 			}
 		}

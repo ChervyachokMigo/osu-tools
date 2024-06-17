@@ -86,22 +86,24 @@ class buffer_parse {
     }
     getStarRatings() {
         let results = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         for (let i = 0; i < count; i++) {
             let sr = {};
+            sr.mods_flag = this.bufferRead(1).readUInt8();
             sr.mods_int = this.bufferRead(4).readUInt32LE();
+            sr.stars_flag = this.bufferRead(1).readUInt8();
             sr.stars = this.bufferRead(8).readDoubleLE();
             results.push(sr);
         }
         return results;
     }
     skipStarRatings() {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 14 * count;
     }
     getTimingPoints() {
         let results = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         for (let i = 0; i < count; i++) {
             let TimingPoint = {
                 bpm: 0.0,
@@ -116,7 +118,7 @@ class buffer_parse {
         return results;
     }
     skipTimingPoints() {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 17 * count;
     }
     getString() {

@@ -3,7 +3,9 @@ export type IntDoublePair = {
     double: number;
 };
 export type StarRating = {
+    mods_flag?: number;
     mods_int?: number;
+    stars_flag?: number;
     stars?: number;
 };
 export type TimingPoint = {

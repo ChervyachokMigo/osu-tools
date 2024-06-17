@@ -109,13 +109,14 @@ export class buffer_parse {
 
     getStarRatings(): Array<StarRating> {
         let results: Array<StarRating> = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
 
         for (let i = 0; i < count; i++) {
 
             let sr: StarRating = {};
-        
+			sr.mods_flag = this.bufferRead(1).readUInt8();
             sr.mods_int = this.bufferRead(4).readUInt32LE();
+			sr.stars_flag = this.bufferRead(1).readUInt8();
             sr.stars = this.bufferRead(8).readDoubleLE();
 
             results.push(sr);
@@ -124,13 +125,13 @@ export class buffer_parse {
     }
 
     skipStarRatings(): void {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 14 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {
         let results: Array<TimingPoint> = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
@@ -149,7 +150,7 @@ export class buffer_parse {
     }
 
     skipTimingPoints(): void {
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 17 * count;
     }
 

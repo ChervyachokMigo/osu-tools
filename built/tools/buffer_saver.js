@@ -120,7 +120,9 @@ class buffer_saver {
         this.addInt(arr.length);
         if (arr.length > 0) {
             for (let val of arr) {
+                this.addByte(val.mods_flag);
                 this.addUInt(val.mods_int);
+                this.addByte(val.stars_flag);
                 this.addDouble(val.stars);
             }
         }
