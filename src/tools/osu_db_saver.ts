@@ -39,6 +39,8 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 
 		const beatmap = osu_db.beatmaps[i];
 
+		console.log(beatmap);
+
 		if (osu_db.osu_version as number < 20191106) {
 			buffer.addInt(beatmap.beatmap_size as number);
 		}
