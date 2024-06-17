@@ -78,7 +78,7 @@ class buffer_saver {
     }
     addInt(val) {
         try {
-            const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
+            const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
             this.last_bytes = 4;
             this.cursor += this.last_bytes;
             if (writed_bytes != this.last_bytes) {
