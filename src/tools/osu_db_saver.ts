@@ -2,10 +2,11 @@ import { writeFileSync } from "fs";
 import { buffer_saver } from "./buffer_saver";
 import { osu_db_results } from "../consts/osu_db_results";
 import { StarRating, TimingPoint, WindowsTickRate } from "../consts/variable_types";
+import { osu_db_options } from "../consts/options";
 
 
 export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.db', 
-	options: {print_progress: boolean, is_look_last_beatmap: boolean} ) => {
+	options: osu_db_options = {print_progress: true, print_progress_time: false} ) => {
 		
 	console.log('start saving osu!.db');
 
@@ -34,18 +35,16 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 		//display progress
 		if ( options.print_progress && i % one_percent_value == 0){
 			console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
-			let endtime = (new Date().valueOf()-start_time)*0.001;
-			console.log('end for', endtime.toFixed(3) );
-			start_time = new Date().valueOf();
-			avg_times.push(endtime);
-			console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+			if (options.print_progress_time) {
+				let endtime = (new Date().valueOf()-start_time)*0.001;
+				console.log('end for', endtime.toFixed(3) );
+				start_time = new Date().valueOf();
+				avg_times.push(endtime);
+				console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
+			}
 		}
 
 		const beatmap = osu_db.beatmaps[i];
-
-		if (options.is_look_last_beatmap) {
-			console.log(beatmap);
-		}
 
 		if (osu_db.osu_version as number < 20191106) {
 			buffer.addInt(beatmap.beatmap_size as number);
