@@ -104,7 +104,7 @@ export class buffer_parse {
 
     getStarRatings(): Array<StarRating> {
         let results: Array<StarRating> = [];
-        let count = this.bufferRead(4).readInt32LE();
+        let count = this.bufferRead(4).readUInt32LE();
 
         for (let i = 0; i < count; i++) {
 

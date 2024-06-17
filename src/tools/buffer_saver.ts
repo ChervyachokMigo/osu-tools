@@ -26,7 +26,7 @@ export class buffer_saver {
     }
 
     addBool(val: boolean): void {
-		const writed_bytes = this.file_buffer.writeInt8(Number(val), this.cursor) - this.cursor;
+		const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
 		this.last_bytes = 1;
 		this.cursor += this.last_bytes;
 		if (writed_bytes != this.last_bytes){
@@ -35,7 +35,7 @@ export class buffer_saver {
     }
 
     addByte(val: number): void {
-		const writed_bytes = this.file_buffer.writeInt8(val, this.cursor) - this.cursor;
+		const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
 		this.last_bytes = 1;
 		this.cursor += this.last_bytes;
 		if (writed_bytes != this.last_bytes){
@@ -44,7 +44,7 @@ export class buffer_saver {
     }
 
     addShort(val: number): void {
-		const writed_bytes = this.file_buffer.writeInt16LE(val, this.cursor) - this.cursor;
+		const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
 		this.last_bytes = 2;
 		this.cursor += this.last_bytes;
 		if (writed_bytes != this.last_bytes){
@@ -53,7 +53,7 @@ export class buffer_saver {
     }
 
     addInt(val: number): void {
-		const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
+		const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
 		this.last_bytes = 4;
 		this.cursor += this.last_bytes;
 		if (writed_bytes != this.last_bytes){
@@ -62,7 +62,7 @@ export class buffer_saver {
     }
 
     addLong(val: bigint): void {
-		const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
+		const writed_bytes = this.file_buffer.writeBigUInt64LE(val, this.cursor) - this.cursor;
 		this.last_bytes = 8;
 		this.cursor += this.last_bytes;
 		if (writed_bytes != this.last_bytes){
