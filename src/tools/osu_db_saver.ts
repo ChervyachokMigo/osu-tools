@@ -6,6 +6,9 @@ import { StarRating, TimingPoint, WindowsTickRate } from "../consts/variable_typ
 
 export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.db', 
 	options: {print_progress: boolean, is_look_last_beatmap: boolean} ) => {
+		
+	console.log('start saving osu!.db');
+
     let buffer = new buffer_saver();
 
     buffer.addInt(osu_db.osu_version as number);

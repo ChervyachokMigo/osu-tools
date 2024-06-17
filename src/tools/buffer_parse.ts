@@ -56,6 +56,11 @@ export class buffer_parse {
         return this.bufferRead(4).readInt32LE();
     }
 
+	getUInt(): number {
+        return this.bufferRead(4).readUInt32LE();
+    }
+
+
     skipInt(): void {
         this.cursor_offset += 4;
     }
@@ -119,13 +124,13 @@ export class buffer_parse {
     }
 
     skipStarRatings(): void {
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
         this.cursor_offset += 14 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {
         let results: Array<TimingPoint> = [];
-        let count = this.bufferRead(4).readUInt32LE();
+        let count = this.bufferRead(4).readInt32LE();
 
         for (let i = 0; i < count; i++) {
             let TimingPoint: TimingPoint = {
@@ -235,7 +240,7 @@ export class buffer_parse {
 
     getReplayData(): ReplayData {
         const result: ReplayData = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
-        const replay_data_size = this.bufferRead(4).readInt32LE();
+        const replay_data_size = this.bufferRead(4).readUInt32LE();
 
         if (replay_data_size === 0xffffffff || replay_data_size <= 0 ) {
             return result;

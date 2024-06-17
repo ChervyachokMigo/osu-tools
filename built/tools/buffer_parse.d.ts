@@ -16,6 +16,7 @@ export declare class buffer_parse {
     getShort(): number;
     skipShort(): void;
     getInt(): number;
+    getUInt(): number;
     skipInt(): void;
     getLong(): bigint;
     skipLong(): void;

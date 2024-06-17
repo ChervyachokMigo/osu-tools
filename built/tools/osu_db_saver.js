@@ -4,6 +4,7 @@ exports.osu_db_save = void 0;
 const fs_1 = require("fs");
 const buffer_saver_1 = require("./buffer_saver");
 const osu_db_save = (osu_db, file_path = 'osu!.db', options) => {
+    console.log('start saving osu!.db');
     let buffer = new buffer_saver_1.buffer_saver();
     buffer.addInt(osu_db.osu_version);
     buffer.addInt(osu_db.folder_count);
