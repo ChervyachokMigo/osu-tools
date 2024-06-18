@@ -1,18 +1,9 @@
-/// <reference types="node" />
-import { buffer_parse } from '../tools/buffer_parse';
 import { osu_file_type } from '../consts/osu_file_type';
-export declare class osu_file {
-    file_handle: number;
-    file_basename: string;
-    file_path: string;
+import { raw_file } from './raw_file';
+export declare class osu_file extends raw_file {
     file_type: osu_file_type;
     property_settings: Array<any>;
-    buff: buffer_parse;
-    file_buffer: Buffer;
-    file_size: number;
-    constructor(file_path: string, property_settings?: Array<any>);
-    free(): [number, number];
-    close(): void;
+    constructor(file_path: string, property_settings?: any[]);
     get_type(): osu_file_type;
     set_type(): boolean;
     set_property_settings(property_settings: Array<any>): void;

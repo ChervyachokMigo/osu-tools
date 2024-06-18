@@ -3,21 +3,17 @@ import * as path from 'path';
 import { buffer_parse } from '../tools/buffer_parse';
 import { osu_file_type } from '../consts/osu_file_type';
 import mmap from '@raygun-nickj/mmap-io';
+import { raw_file } from './raw_file';
 
-export class osu_file {
-    public file_handle: number;
-    public file_basename: string;
-    public file_path: string;
+export class osu_file extends raw_file {
+
     public file_type: osu_file_type;
     public property_settings: Array<any>;
-    public buff: buffer_parse;
-    public file_buffer: Buffer;
-    public file_size: number;
 
-    constructor(file_path: string, property_settings?: Array<any>) {
-        this.file_type = osu_file_type.none;
-        this.file_path = file_path;
-        this.file_basename = path.basename(file_path);
+	constructor(file_path: string, property_settings?: any[] ){
+		super(file_path);
+
+		this.file_type = osu_file_type.none;
 
         if (!this.set_type()) {
             throw new Error('wrong file type. It not osu file');
@@ -29,27 +25,6 @@ export class osu_file {
             this.property_settings = property_settings;
         }
 
-        try {
-
-            this.file_handle = fs.openSync(file_path, 'r');
-            let fstats = fs.fstatSync(this.file_handle);
-
-            this.file_size = fstats.size;
-            this.file_buffer = mmap.map(this.file_size, mmap.PROT_READ, mmap.MAP_PRIVATE, this.file_handle, 0, mmap.MADV_NORMAL);
-            this.buff = new buffer_parse(this.file_handle, this.file_buffer);
-
-        } catch (error) {
-            console.log(error);
-            throw new Error('can not open osu file');
-        }
-    }
-
-    free(): [number, number] {
-        return mmap.incore(this.file_buffer);
-    }
-
-    close(): void {
-        return fs.closeSync(this.file_handle);
     }
 
     get_type(): osu_file_type {
