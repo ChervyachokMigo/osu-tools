@@ -44,13 +44,17 @@ const osu_db_concat_sr = (db_1, db_2) => {
         if (!beatmap_2) {
             continue;
         }
+        let is_changed = false;
         for (let sr of sr_keys) {
             const beatmap_sr = beatmap[sr];
             const beatmap_2_sr = beatmap_2[sr];
-            if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0)
+            if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0) {
                 beatmap[sr] = beatmap_2_sr;
+                is_changed = true;
+            }
         }
-        result.beatmaps[i] = beatmap;
+        if (is_changed)
+            result.beatmaps[i] = beatmap;
     }
     return result;
 };

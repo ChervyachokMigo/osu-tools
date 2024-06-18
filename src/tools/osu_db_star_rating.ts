@@ -59,15 +59,20 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ): osu_db
 
 		type beatmap_key = keyof typeof beatmap;
 
+		let is_changed = false;
+
 		for (let sr of sr_keys) {
 			const beatmap_sr = beatmap[sr as beatmap_key] as Array<StarRating>;
 			const beatmap_2_sr = beatmap_2[sr as beatmap_key] as Array<StarRating>;
 
-			if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0)
-				(beatmap[sr as beatmap_key] as Array<StarRating>) = beatmap_2_sr;
+			if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0) {
+                (beatmap[sr as beatmap_key] as Array<StarRating>) = beatmap_2_sr;
+				is_changed = true;
+			}
 		}
-
-		result.beatmaps[i] = beatmap;
+		
+		if (is_changed)
+			result.beatmaps[i] = beatmap;
 	}
 
 	return result;
