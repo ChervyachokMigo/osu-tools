@@ -7,7 +7,6 @@ exports.osu_db_concat_sr = void 0;
 const path_1 = __importDefault(require("path"));
 const osu_db_1 = require("../parsers/osu_db");
 const property_settings_1 = require("../consts/property_settings");
-const osu_db_saver_1 = require("./osu_db_saver");
 const sr_keys = Object.keys({ star_rating_std: [], star_rating_taiko: [], star_rating_ctb: [], star_rating_mania: [] });
 const osu_db_concat_sr = (db_1, db_2) => {
     var _a, _b, _c;
@@ -51,7 +50,6 @@ const osu_db_concat_sr = (db_1, db_2) => {
             }
         }
     }
-    console.log('[ saving ]');
-    (0, osu_db_saver_1.osu_db_save)(result, 'osu!.db');
+    return result;
 };
 exports.osu_db_concat_sr = osu_db_concat_sr;

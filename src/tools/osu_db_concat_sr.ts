@@ -64,7 +64,6 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ) => {
 		}
 	}
 
-	console.log('[ saving ]');
-	osu_db_save(result, 'osu!.db');
+	return result;
 
 }
