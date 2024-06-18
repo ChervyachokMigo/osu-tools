@@ -27,7 +27,7 @@ const osu_db_concat_sr = (db_1, db_2) => {
     const result = (0, osu_db_1.osu_db_load)(path_1.default.join(db_1.folder_path, db_1.filename), property_settings_1.all_beatmap_properties, { print_progress: true });
     if (result.beatmaps.length == 0) {
         console.log('db 1 is empty');
-        return;
+        return result;
     }
     console.log('[ loading db 2 ]');
     const osu_db_2_result = (0, osu_db_1.osu_db_load)(path_1.default.join(db_2.folder_path, db_2.filename), sr_props, { print_progress: true });
@@ -46,7 +46,7 @@ const osu_db_concat_sr = (db_1, db_2) => {
         }
         for (let sr of sr_keys) {
             const beatmap_sr = beatmap[sr];
-            const beatmap_2_sr = beatmap[sr];
+            const beatmap_2_sr = beatmap_2[sr];
             if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0)
                 beatmap[sr] = beatmap_2_sr;
         }

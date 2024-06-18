@@ -5,6 +5,7 @@ import { osu_db_save } from "./osu_db_saver";
 import { db_filepath } from "../consts/db_filepath";
 import { beatmap_results } from "../consts/beatmap_results";
 import { StarRating } from "../consts/variable_types";
+import { osu_db_results } from "../consts/osu_db_results";
 
 const sr_keys: any[] = Object.keys({star_rating_std: [], star_rating_taiko: [], star_rating_ctb: [], star_rating_mania: []} as beatmap_results);
 
@@ -16,7 +17,7 @@ const sr_props = [
 	beatmap_property.star_rating_mania
 ];
 
-export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ) => {
+export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ): osu_db_results => {
 	if (!db_1.filename) {
 		db_1.filename = 'osu!.db';
 	}
@@ -30,7 +31,7 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ) => {
 
 	if (result.beatmaps.length == 0) {
 		console.log('db 1 is empty');
-        return;
+        return result;
 	}
 
 	console.log('[ loading db 2 ]');
@@ -60,7 +61,7 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ) => {
 
 		for (let sr of sr_keys) {
 			const beatmap_sr = beatmap[sr as beatmap_key] as Array<StarRating>;
-			const beatmap_2_sr = beatmap[sr as beatmap_key] as Array<StarRating>;
+			const beatmap_2_sr = beatmap_2[sr as beatmap_key] as Array<StarRating>;
 
 			if (beatmap_sr && beatmap_sr.length == 0 && beatmap_2_sr.length > 0)
 				(beatmap[sr as beatmap_key] as Array<StarRating>) = beatmap_2_sr;
