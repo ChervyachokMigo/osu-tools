@@ -32,6 +32,7 @@ export { collection_db_save } from './tools/collection_db_saver';
 
 export { osu_db_results } from "./consts/osu_db_results";
 export { osu_db, osu_db_load, osu_db_find_beatmaps } from './parsers/osu_db';
+export { osu_db_concat_sr } from './tools/osu_db_concat_sr'
 
 export { osu_db_save } from "./tools/osu_db_saver";
 
