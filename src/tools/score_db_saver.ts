@@ -21,7 +21,7 @@ export const scores_db_save = ( scores: scores_db_results, file_path: string = '
             buffer.addShort(score.count_geki as number);
             buffer.addShort(score.count_katu as number);
             buffer.addShort(score.count_miss as number);
-            buffer.addInt(score.scores as number);
+            buffer.addUInt(score.scores as number);
             buffer.addShort(score.combo as number);
             buffer.addBool(score.is_fc as boolean);
             buffer.addInt(score.mods_int as number);

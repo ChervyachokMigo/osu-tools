@@ -22,7 +22,7 @@ const scores_db_save = (scores, file_path = 'scores.db') => {
             buffer.addShort(score.count_geki);
             buffer.addShort(score.count_katu);
             buffer.addShort(score.count_miss);
-            buffer.addInt(score.scores);
+            buffer.addUInt(score.scores);
             buffer.addShort(score.combo);
             buffer.addBool(score.is_fc);
             buffer.addInt(score.mods_int);
