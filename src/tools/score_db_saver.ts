@@ -27,7 +27,7 @@ export const scores_db_save = ( scores: scores_db_results, file_path: string = '
             buffer.addInt(score.mods_int as number);
             buffer.addByte(0);
             buffer.addWindowTickrate(score.windows_tick_date as bigint);
-            buffer.addInt(0xffffffff);
+            buffer.addUInt(0xffffffff);
             buffer.addLong(score.online_id as bigint);
             if (score.mods && score.mods.indexOf('Target') > -1){
                 buffer.addDouble(score.target_practice_accuracy as number);
