@@ -1,6 +1,6 @@
 import { score_property } from '../consts/property_settings';
 import { Gamemode } from '../consts/variable_types';
-import { ModsIntToText } from '../consts/modes';
+import { ModsIntToShortText, ModsIntToText } from '../consts/modes';
 import { score } from '../consts/score';
 import { buffer_parse } from './buffer_parse';
 
@@ -93,11 +93,11 @@ export function score_parse(buffer: buffer_parse, property_settings: score_prope
     }
 
     const mods_int = buffer.getInt();
-    const mods = ModsIntToText(mods_int);
+    const mods = ModsIntToShortText(mods_int);
 
     if (property_settings.indexOf(score_property.is_fc) != -1) {
         score.mods_int = mods_int;
-        //score.mods = mods;
+        score.mods = mods;
     } // else nothing
 
     const hp_bar = buffer.getHpBar();

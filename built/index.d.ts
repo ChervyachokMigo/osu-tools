@@ -30,6 +30,8 @@ export { scores_beatmap, score_beatmap } from "./consts/scores_beatmap";
 export { scores_db_results, scores_db, scores_db_load } from './parsers/scores_db';
 export { scores_db_concat } from './tools/score_db_concat';
 export { scores_db_save } from './tools/score_db_saver';
+export { score_grade } from './consts/score_grade';
+export { get_score_grade } from './tools/score_grade';
 export { replay_osr, replay_load } from './parsers/replay_osr';
 export { compare_files } from './tools/compare';
 export { decompressLZMASync, compressLZMASync } from './lib/decompressLZMASync';

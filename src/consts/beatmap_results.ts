@@ -1,3 +1,4 @@
+import { score_grade } from './score_grade';
 import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate } from './variable_types';
 
 export type beatmap_results = {
@@ -33,10 +34,10 @@ export type beatmap_results = {
     beatmap_id?: number;
     beatmapset_id?: number;
     thread_id?: number;
-    grade_achieved_std?: number;
-    grade_achieved_taiko?: number;
-    grade_achieved_ctb?: number;
-    grade_achieved_mania?: number;
+    grade_achieved_std?: score_grade;
+    grade_achieved_taiko?: score_grade;
+    grade_achieved_ctb?: score_grade;
+    grade_achieved_mania?: score_grade;
     local_offset?: number;
     stack_laniecy?: number;
     gamemode_int?: Gamemode;
