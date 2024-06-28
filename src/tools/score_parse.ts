@@ -75,7 +75,7 @@ export function score_parse(buffer: buffer_parse, property_settings: score_prope
     }
 
     if (property_settings.indexOf(score_property.scores) != -1) {
-        score.scores = buffer.getInt();
+        score.scores = buffer.getUInt();
     } else {
         buffer.skipInt();
     }
