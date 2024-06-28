@@ -74,6 +74,6 @@ export type KeysPressed = {
 
 export type WindowsTickRate = {
 	int: bigint,
-	date: Date
+	date?: Date
 }
 
