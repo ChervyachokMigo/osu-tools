@@ -44,7 +44,8 @@ export { beatmap_data,
          beatmap_sample_set,             beatmap_countdown,      hit_sample_set, 
          beatmap_overlay_position,       timing_point_effect,    beatmap_color_type, 
          beatmap_data_hit_object_type,   beatmap_data_hit_sound, beatmap_data_hit_sample, 
-         beatmap_data_hit_object } from './consts/beatmap_data';
+         beatmap_data_hit_object,
+		 point, slider_edge_set, slider_type, slider_properties } from './consts/beatmap_data';
 
 export { beatmap_event } from "./consts/beatmap_events/beatmap_event";
 

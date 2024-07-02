@@ -5,8 +5,6 @@ import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
 
-export const verify_value = (obj: any) => Object.entries(obj).map( ([key, val]) => console.log(key, typeof val, val) );
-
 export class buffer_parse {
     file_handle: number;
     cursor_offset: number;

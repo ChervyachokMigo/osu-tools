@@ -15,10 +15,24 @@ const property_settings_1 = require("../consts/property_settings");
 const beatmap_events_1 = require("../tools/beatmap_events");
 const glob_1 = require("glob");
 function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options, callback) {
+    if (typeof options.is_read_only === 'undefined')
+        options.is_read_only = false;
+    if (typeof options.is_hit_objects_only_count === 'undefined')
+        options.is_hit_objects_only_count = true;
+    if (typeof options.songs_folder === 'undefined')
+        options.songs_folder = 'Songs';
+    if (typeof options.is_display_complete_time === 'undefined')
+        options.is_display_complete_time = false;
+    if (typeof options.is_check_osb === 'undefined')
+        options.is_check_osb = true;
+    if (typeof options.is_parse_sliders === 'undefined')
+        options.is_parse_sliders = false;
+    if (typeof options.is_print_progress === 'undefined')
+        options.is_print_progress = true;
     console.assert(options.is_hit_objects_only_count == true &&
         osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.hit_objects_count), 'WARNING: hit_objects count will be null, set on "hit_objects_count" propery!');
     console.log('scan starting..');
-    const songs = options.songs_folder || 'Songs';
+    const songs = options.songs_folder;
     try {
         const osu_songs = path_1.default.join(osufolder, songs);
         const files = (0, glob_1.globSync)(osu_songs + '/*/', {
@@ -26,15 +40,17 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
             cwd: osu_songs
         });
         var count = 0;
-        console.time('thousand');
         var beatmaps = [];
         //display variables
         var one_percent_value = Math.trunc(files.length / 100);
         var start_time = new Date().valueOf();
         var avg_times = [];
         const is_display_complete_time = typeof options.is_display_complete_time === 'undefined' ? true : options.is_display_complete_time;
+        if (is_display_complete_time) {
+            console.time('thousand');
+        }
         for (const beatmap_folder of files) {
-            if (count % 1000 == 0) {
+            if (is_display_complete_time && count % 1000 == 0) {
                 console.log(count, '/', files.length);
                 console.timeEnd('thousand');
                 console.time('thousand');
@@ -50,7 +66,7 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
                 }
             }
             //display progress
-            if (count % one_percent_value == 0) {
+            if (options.is_print_progress && count % one_percent_value == 0) {
                 console.log(((count / files.length * 10000) / 100).toFixed(1), '% complete');
                 if (is_display_complete_time) {
                     let endtime = (new Date().valueOf() - start_time) * 0.001;
@@ -512,8 +528,44 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                         else {
                             row_splitted.push(hit_sample_row);
                         }
+                        //console.log(hit_sample_row, hit_sample)
                     }
                     let is_new_combo = Boolean(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 2));
+                    let object_params = row_splitted.slice(5);
+                    let slider_properties = undefined;
+                    if (object_params && object_params.length > 0) {
+                        if (options.is_parse_sliders && type == beatmap_data_1.beatmap_data_hit_object_type.slider) {
+                            let curve_data = object_params[0].split('|');
+                            let edge_sounds = undefined;
+                            if (object_params[3]) {
+                                edge_sounds = object_params[3].split('|').map(x => Number(x));
+                            }
+                            let edge_sets = undefined;
+                            if (object_params[4]) {
+                                edge_sets = object_params[4].split('|').map(x => {
+                                    const params = x.split(':');
+                                    return {
+                                        normal_set: Number(params[0]),
+                                        addition_set: Number(params[1])
+                                    };
+                                });
+                            }
+                            slider_properties = {
+                                type: curve_data[0],
+                                anchors: curve_data.slice(1).map(x => {
+                                    const params = x.split(':');
+                                    return {
+                                        x: Number(params[0]),
+                                        y: Number(params[1])
+                                    };
+                                }),
+                                slides: Number(object_params[1]),
+                                length: Number(object_params[2]),
+                                edge_sounds,
+                                edge_sets,
+                            };
+                        }
+                    }
                     let hit_object = {
                         x: Number(row_splitted[0]),
                         y: Number(row_splitted[1]),
@@ -521,8 +573,9 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                         type: type,
                         is_new_combo: is_new_combo,
                         hit_sound: Number(row_splitted[4]),
-                        object_params: row_splitted.slice(5).join(','),
-                        hit_sample: hit_sample
+                        object_params,
+                        hit_sample,
+                        slider_properties
                     };
                     if (is_new_combo) {
                         let skip_colors_bits = [

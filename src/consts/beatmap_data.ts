@@ -732,7 +732,7 @@ export type beatmap_data_hit_object = {
      *
      * Extra parameters specific to the object's type.
      */
-    object_params?: string;
+    object_params?: string[];
 
     /** [Hit objects]
      *
@@ -746,4 +746,68 @@ export type beatmap_data_hit_object = {
      */
     hit_sample?: beatmap_data_hit_sample;
 
+    slider_properties?: slider_properties;
+};
+
+/**
+ * Point
+ * Position at x and y in osu! pixels of the object.
+ */
+export type point = {
+    x: number;
+    y: number;
+};
+
+/**
+ * (Pipe-separated list of strings): Sample sets used for the edgeSounds. 
+ *  Each set is in the format normalSet:additionSet, with the same meaning as in the hitsounds section.
+ */
+export type slider_edge_set = {
+    normal_set: number;
+    addition_set: number;
+};
+
+/**
+ *  (Character): Type of curve used to construct this slider 
+ *  (B = bézier, C = centripetal catmull-rom, L = linear, P = perfect circle)
+ */
+export declare enum slider_type {
+    BEZIER = "B",
+    CENTRIPETAL_SPLINE = "C",
+    LINEAR = "L",
+    CIRCLE = "P"
 }
+
+
+export type slider_properties = {
+	/**
+	 *  (Character): Type of curve used to construct this slider 
+	 *  (B = bézier, C = centripetal catmull-rom, L = linear, P = perfect circle)
+	 */
+    type: slider_type;
+	/**
+	 *  (Pipe-separated list of strings): Anchor points used to construct the slider. 
+	 *  Each point is in the format x:y.
+	 */
+    anchors: point[];
+	/**
+	 *  (Integer): Amount of times the player has to follow the slider's curve back-and-forth before the slider is complete. 
+	 *  It can also be interpreted as the repeat count plus one.
+	 */
+    slides: number;
+	/**
+	 * (Decimal): Visual length in osu! pixels of the slider.
+	 */
+    length: number;
+	/**
+	 *  (Pipe-separated list of integers): Hitsounds that play when hitting edges of the slider's curve. 
+	 *  The first sound is the one that plays when the slider is first clicked, 
+	 *  and the last sound is the one that plays when the slider's end is hit.
+	 */
+    edge_sounds?: number[];
+	/**
+	 *  (Pipe-separated list of strings): Sample sets used for the edgeSounds. 
+	 *  Each set is in the format normalSet:additionSet, with the same meaning as in the hitsounds section.
+	 */
+    edge_sets?: slider_edge_set[];
+};

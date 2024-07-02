@@ -3,12 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buffer_parse = exports.verify_value = exports.UTC1970Years = void 0;
+exports.buffer_parse = exports.UTC1970Years = void 0;
 const decompressLZMASync_1 = require("../lib/decompressLZMASync");
 const bitwise_1 = __importDefault(require("bitwise"));
 exports.UTC1970Years = BigInt(62135596800000);
-const verify_value = (obj) => Object.entries(obj).map(([key, val]) => console.log(key, typeof val, val));
-exports.verify_value = verify_value;
 class buffer_parse {
     constructor(file_handle, file_buffer) {
         this.file_buffer = file_buffer;

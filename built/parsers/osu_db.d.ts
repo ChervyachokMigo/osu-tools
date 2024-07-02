@@ -4,7 +4,6 @@ import { beatmap_results } from '../consts/beatmap_results';
 import { osu_db_results } from '../consts/osu_db_results';
 import { osu_db_options } from '../consts/options';
 export declare class osu_db extends osu_file {
-    property_settings_fast: boolean[];
     constructor(file_path: string, property_settings?: beatmap_property[]);
     osu_db_parse(options: osu_db_options): osu_db_results;
     private beatmap_parse;
