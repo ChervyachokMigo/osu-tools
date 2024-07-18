@@ -4,7 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buffer_parse = exports.UTC1970Years = void 0;
-const decompressLZMASync_1 = require("../lib/decompressLZMASync");
+//@ts-ignore
+const lzma_1 = __importDefault(require("lzma"));
 const bitwise_1 = __importDefault(require("bitwise"));
 exports.UTC1970Years = BigInt(62135596800000);
 class buffer_parse {
@@ -193,7 +194,7 @@ class buffer_parse {
         return hp_bar;
     }
     getLZMAString(encoded_buffer) {
-        return (0, decompressLZMASync_1.decompressLZMASync)(encoded_buffer);
+        return lzma_1.default.decompress(encoded_buffer);
     }
     getReplayData() {
         const result = { replay_seed: 0, replay_frames: [], replay_frames_raw: [] };
@@ -204,7 +205,9 @@ class buffer_parse {
         if (replay_data_size > 0) {
             let buffer = this.bufferRead(replay_data_size);
             let replay_data_array = this.getLZMAString(buffer).split(',')
+                //@ts-ignore
                 .map(value => value.split('|'))
+                //@ts-ignore
                 .filter(value => value.length === 4);
             result.replay_frames_raw = replay_data_array;
             if (replay_data_array.length > 0) {

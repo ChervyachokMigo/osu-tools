@@ -30,7 +30,7 @@ exports.raw_file = void 0;
 const fs_1 = require("fs");
 const path = __importStar(require("path"));
 const buffer_parse_1 = require("../tools/buffer_parse");
-const mmap_io_1 = __importDefault(require("@raygun-nickj/mmap-io"));
+const mmap_io_1 = __importDefault(require("mmap-io"));
 class raw_file {
     constructor(file_path) {
         this.file_path = file_path;

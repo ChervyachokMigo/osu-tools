@@ -1,6 +1,8 @@
 import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame, WindowsTickRate } from '../consts/variable_types';
 
-import { decompressLZMASync } from '../lib/decompressLZMASync';
+//@ts-ignore
+import my_lzma from "lzma";
+
 import bitwise from 'bitwise';
 
 export const UTC1970Years = BigInt(62135596800000);
@@ -234,7 +236,7 @@ export class buffer_parse {
     }
 
     private getLZMAString(encoded_buffer: Buffer){
-        return decompressLZMASync(encoded_buffer);
+		return my_lzma.decompress(encoded_buffer);
     }
 
     getReplayData(): ReplayData {
@@ -248,7 +250,9 @@ export class buffer_parse {
         if (replay_data_size > 0 ){
 			let buffer = this.bufferRead(replay_data_size);
             let replay_data_array = this.getLZMAString(buffer).split(',') 
+				//@ts-ignore
                 .map( value => value.split('|'))
+				//@ts-ignore
                 .filter ( value => value.length === 4 );
             result.replay_frames_raw = replay_data_array;
 
