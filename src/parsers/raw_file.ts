@@ -1,7 +1,7 @@
 import {openSync, fstatSync, closeSync} from 'fs';
 import * as path from 'path';
 import { buffer_parse } from '../tools/buffer_parse';
-import mmap from '@raygun-nickj/mmap-io';
+import mmap from 'mmap-io';
 
 export class raw_file {
     public file_handle: number;
