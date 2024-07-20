@@ -1,8 +1,5 @@
-import * as fs from 'fs';
 import * as path from 'path';
-import { buffer_parse } from '../tools/buffer_parse';
 import { osu_file_type } from '../consts/osu_file_type';
-import mmap from 'mmap-io';
 import { raw_file } from './raw_file';
 
 export class osu_file extends raw_file {
