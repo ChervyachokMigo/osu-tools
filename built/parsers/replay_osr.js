@@ -33,7 +33,6 @@ function replay_load(replay_osr_path, replay_properties) {
             default:
                 throw new Error('file type not osu replay file');
         }
-        replay_osr_file.close();
         return file_parse_result;
     }
     catch (e) {

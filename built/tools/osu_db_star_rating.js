@@ -132,7 +132,6 @@ const osu_db_import_sr = (input_raw, input_db, output_db) => {
         }
         result.push(beatmap);
     }
-    file.close();
     console.log('[ loading osu db ]');
     const osu_db = (0, osu_db_1.osu_db_load)(path_1.default.join(input_db.folder_path, input_db.filename), property_settings_1.all_beatmap_properties, { print_progress: true });
     if (osu_db.beatmaps.length == 0) {

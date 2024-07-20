@@ -58,8 +58,6 @@ const events_props: osu_file_beatmap_property[] = [
 
     });*/
 
-   // close(fd)
-
 //})
 
 

@@ -428,8 +428,6 @@ export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_
                 default:
                     throw new Error('file type not osu file');
         }
-        
-        osu_db_file.close();
 
         return file_parse_result;
     } catch (e){

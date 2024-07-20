@@ -18,6 +18,7 @@ export class raw_file {
             const fd = openSync(file_path, 'r');
             const fstats = fstatSync(fd);
 			closeSync(fd);
+			
             this.file_size = fstats.size;
             this.file_buffer = readFileSync(file_path);
             this.buff = new buffer_parse(this.file_buffer);
