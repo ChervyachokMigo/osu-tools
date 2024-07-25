@@ -181,6 +181,8 @@ export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, outp
 		result.push(beatmap);
 	}
 
+	file.close();
+
 	console.log('[ loading osu db ]');
     const osu_db = osu_db_load( path.join(input_db.folder_path, input_db.filename), all_beatmap_properties, { print_progress: true });
 

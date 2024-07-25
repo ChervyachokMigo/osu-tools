@@ -63,6 +63,8 @@ export function collection_db_load(collection_db_path: string): collection_db_re
                     throw new Error('file type not osu file');
         }
 
+		collection_db_file.close();
+
         return file_parse_result;
     } catch (e){
         console.log(e)

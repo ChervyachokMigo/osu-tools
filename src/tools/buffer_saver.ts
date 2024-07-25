@@ -1,69 +1,100 @@
+import buffer from 'buffer'
 import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 
 export const UTC1970Years = BigInt(62135596800000);
 
 export class buffer_saver {
 
-    file_buffer: Array<Buffer>;
+    file_buffer: Buffer;
+	cursor: number;
+	last_bytes: number;
 
     constructor( ) {
-        this.file_buffer = [];
+        this.file_buffer = Buffer.alloc(buffer.constants.MAX_LENGTH);
+		this.cursor = 0;
+		this.last_bytes = 0;
     }
 
     getBuffer(): Buffer {
-        return Buffer.concat(this.file_buffer);
+        return this.file_buffer.subarray( 0, this.cursor );
     }
 
-	buffer_write(buf: Buffer): void  {
-		this.file_buffer.push(buf);
+	buffer_write(val: Buffer): void  {
+		this.file_buffer.set(val, this.cursor);
+		this.last_bytes = val.length;
+		this.cursor += this.last_bytes;
     }
 
     addBool(val: boolean): void {
-		const buf = Buffer.allocUnsafe(1);
-		buf.writeUInt8(Number(val), 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeUInt8(Number(val), this.cursor) - this.cursor;
+		this.last_bytes = 1;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
     addByte(val: number): void {
-		const buf = Buffer.allocUnsafe(1);
-		buf.writeUInt8(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeUInt8(val, this.cursor) - this.cursor;
+		this.last_bytes = 1;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
     addShort(val: number): void {
-		const buf = Buffer.allocUnsafe(2);
-		buf.writeUInt16LE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeUInt16LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 2;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
     addInt(val: number): void {
-		const buf = Buffer.allocUnsafe(4);
-		buf.writeInt32LE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeInt32LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 4;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
 	addUInt(val: number): void {
-		const buf = Buffer.allocUnsafe(4);
-		buf.writeUInt32LE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeUInt32LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 4;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
     addLong(val: bigint): void {
-		const buf = Buffer.allocUnsafe(8);
-		buf.writeBigInt64LE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeBigInt64LE(val, this.cursor) - this.cursor;
+		this.last_bytes = 8;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
     addDouble(val: number): void {
-		const buf = Buffer.allocUnsafe(8);
-		buf.writeDoubleLE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeDoubleLE(val, this.cursor) - this.cursor;
+		this.last_bytes = 8;
+		this.cursor += this.last_bytes;
+		if (writed_bytes != this.last_bytes){
+			console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+		}
     }
 
 	addSingle(val: number): void {
-		const buf = Buffer.allocUnsafe(4);
-		buf.writeFloatLE(val, 0);
-		this.file_buffer.push(buf);
+		const writed_bytes = this.file_buffer.writeFloatLE(val, this.cursor) - this.cursor;
+        this.last_bytes = 4;
+        this.cursor += this.last_bytes;
+        if (writed_bytes!= this.last_bytes){
+            console.error('value not passed checking', { val, writed_bytes, last_bytes: this.last_bytes, cursor: this.cursor })
+        }
 	}
 
     addWindowTickrate(val: bigint) {

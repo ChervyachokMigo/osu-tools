@@ -9,8 +9,9 @@ const lzma_1 = __importDefault(require("lzma"));
 const bitwise_1 = __importDefault(require("bitwise"));
 exports.UTC1970Years = BigInt(62135596800000);
 class buffer_parse {
-    constructor(file_buffer) {
+    constructor(file_handle, file_buffer) {
         this.file_buffer = file_buffer;
+        this.file_handle = file_handle;
         this.cursor_offset = 0;
     }
     bufferRead(length) {

@@ -2,9 +2,10 @@
 import { TimingPoint, StarRating, HP_Bar, ReplayData, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_parse {
+    file_handle: number;
     cursor_offset: number;
     file_buffer: Buffer;
-    constructor(file_buffer: Buffer);
+    constructor(file_handle: number, file_buffer: Buffer);
     bufferRead(length: number): Buffer;
     getBool(): boolean;
     skipBool(): void;

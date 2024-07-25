@@ -51,6 +51,7 @@ function scores_db_load(scores_db_path, score_properties) {
             default:
                 throw new Error('file type not osu file');
         }
+        scores_db_file.close();
         return file_parse_result;
     }
     catch (e) {

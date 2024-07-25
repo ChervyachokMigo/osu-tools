@@ -37,6 +37,8 @@ export function replay_load(replay_osr_path: string, replay_properties: score_pr
                     throw new Error('file type not osu replay file');
         }
 
+		replay_osr_file.close();
+
         return file_parse_result;
     } catch (e){
         console.log(e)

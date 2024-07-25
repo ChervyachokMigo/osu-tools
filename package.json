@@ -31,7 +31,8 @@
 		"bitwise": "^2.1.0",
 		"glob": "^10.3.10",
 		"lzma": "^2.3.2",
-		"md5-file": "^5.0.0"
+		"md5-file": "^5.0.0",
+		"mmap-io": "github:ChervyachokMigo/mmap-io"
 	},
 	"bundleDependencies": [
 		"bitwise",

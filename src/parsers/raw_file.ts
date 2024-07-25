@@ -1,8 +1,10 @@
-import {openSync, fstatSync, closeSync, readFileSync} from 'fs';
+import {openSync, fstatSync, closeSync} from 'fs';
 import * as path from 'path';
 import { buffer_parse } from '../tools/buffer_parse';
+import mmap from 'mmap-io';
 
 export class raw_file {
+    public file_handle: number;
     public file_basename: string;
     public file_path: string;
 
@@ -15,19 +17,25 @@ export class raw_file {
         this.file_basename = path.basename(file_path);
 
         try {
-            const fd = openSync(file_path, 'r');
-            const fstats = fstatSync(fd);
-			closeSync(fd);
-			
+            this.file_handle = openSync(file_path, 'r');
+            let fstats = fstatSync(this.file_handle);
+
             this.file_size = fstats.size;
-            this.file_buffer = readFileSync(file_path);
-            this.buff = new buffer_parse(this.file_buffer);
+            this.file_buffer = mmap.map(this.file_size, mmap.PROT_READ, mmap.MAP_PRIVATE, this.file_handle, 0, mmap.MADV_NORMAL);
+            this.buff = new buffer_parse(this.file_handle, this.file_buffer);
 
         } catch (error) {
             console.log(error);
             throw new Error('can not open file');
-
         }
+    }
+
+    free(): [number, number] {
+        return mmap.incore(this.file_buffer);
+    }
+
+    close(): void {
+        return closeSync(this.file_handle);
     }
 
 }

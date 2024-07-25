@@ -2,10 +2,12 @@
 import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_saver {
-    file_buffer: Array<Buffer>;
+    file_buffer: Buffer;
+    cursor: number;
+    last_bytes: number;
     constructor();
     getBuffer(): Buffer;
-    buffer_write(buf: Buffer): void;
+    buffer_write(val: Buffer): void;
     addBool(val: boolean): void;
     addByte(val: number): void;
     addShort(val: number): void;

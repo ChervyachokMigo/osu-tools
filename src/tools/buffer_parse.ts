@@ -8,11 +8,13 @@ import bitwise from 'bitwise';
 export const UTC1970Years = BigInt(62135596800000);
 
 export class buffer_parse {
+    file_handle: number;
     cursor_offset: number;
     file_buffer: Buffer;
 
-    constructor( file_buffer: Buffer) {
+    constructor( file_handle: number, file_buffer: Buffer) {
         this.file_buffer = file_buffer;
+        this.file_handle = file_handle;
         this.cursor_offset = 0;
     }
 
