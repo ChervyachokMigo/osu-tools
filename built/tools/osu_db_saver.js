@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.osu_db_save = void 0;
 const fs_1 = require("fs");
 const buffer_saver_1 = require("./buffer_saver");
+const display_progress_1 = require("./display_progress");
 const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: true, print_progress_time: false }) => {
     console.log('start saving osu!.db');
     let buffer = new buffer_saver_1.buffer_saver();
@@ -17,20 +18,17 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: 
     }
     //display variables
     const one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
-    let start_time = new Date().valueOf();
-    let avg_times = [];
+    (0, display_progress_1.display_progress_reset)();
     buffer.addInt(osu_db.number_beatmaps);
     for (let i = 0; i < osu_db.number_beatmaps; i++) {
-        //display progress
         if (options.print_progress && i % one_percent_value == 0) {
-            console.log(((i / osu_db.number_beatmaps * 10000) / 100).toFixed(1), '% complete');
-            if (options.print_progress_time) {
-                let endtime = (new Date().valueOf() - start_time) * 0.001;
-                console.log('end for', endtime.toFixed(3));
-                start_time = new Date().valueOf();
-                avg_times.push(endtime);
-                console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
-            }
+            (0, display_progress_1.display_progress)({
+                counter: i,
+                one_percent: one_percent_value,
+                length: osu_db.number_beatmaps,
+                is_print_progress: options.print_progress,
+                is_display_time: options.print_progress_time
+            });
         }
         const beatmap = osu_db.beatmaps[i];
         if (osu_db.osu_version < 20191106) {
@@ -105,5 +103,7 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: 
     }
     buffer.addInt(osu_db.user_permissions_int);
     (0, fs_1.writeFileSync)(file_path, buffer.getBuffer(), { encoding: 'binary' });
+    console.log('');
+    console.log('end saving osu!.db');
 };
 exports.osu_db_save = osu_db_save;

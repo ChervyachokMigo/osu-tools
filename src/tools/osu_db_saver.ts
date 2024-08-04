@@ -3,6 +3,7 @@ import { buffer_saver } from "./buffer_saver";
 import { osu_db_results } from "../consts/osu_db_results";
 import { StarRating, TimingPoint, WindowsTickRate } from "../consts/variable_types";
 import { osu_db_options } from "../consts/options";
+import { display_progress, display_progress_reset } from "./display_progress";
 
 
 export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.db', 
@@ -25,23 +26,20 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 	
 	//display variables
 	const one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
-	let start_time = new Date().valueOf();
-	let avg_times = [];
+	display_progress_reset();
 
 	buffer.addInt(osu_db.number_beatmaps as number);
 
 	for ( let i = 0; i < osu_db.number_beatmaps; i++ ) {
 
-		//display progress
-		if ( options.print_progress && i % one_percent_value == 0){
-			console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
-			if (options.print_progress_time) {
-				let endtime = (new Date().valueOf()-start_time)*0.001;
-				console.log('end for', endtime.toFixed(3) );
-				start_time = new Date().valueOf();
-				avg_times.push(endtime);
-				console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
-			}
+		if ( options.print_progress && i % one_percent_value == 0 ){
+			display_progress({
+				counter: i, 
+				one_percent: one_percent_value, 
+				length: osu_db.number_beatmaps, 
+				is_print_progress: options.print_progress,
+				is_display_time: options.print_progress_time 
+			});
 		}
 
 		const beatmap = osu_db.beatmaps[i];
@@ -130,4 +128,7 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 	buffer.addInt(osu_db.user_permissions_int as number);
 
     writeFileSync(file_path, buffer.getBuffer(), { encoding: 'binary'});
+	
+	console.log('');
+	console.log('end saving osu!.db');
 }

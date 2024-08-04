@@ -1,16 +1,6 @@
 import * as osu_tools from '../src/index';
 
-import { beatmap_property, all_beatmap_properties, all_score_properties, score_property, 
-    osu_file_beatmap_property, all_osu_file_properties} from "../src/consts/property_settings";
-
-import { beatmap_data } from "../src/consts/beatmap_data";
-import { beatmap_event_layer } from '../src/consts/beatmap_events/beatmap_event_layer';
-import { open, close, appendFile } from 'fs';
-    
-
-console.time('complete');
-
-const osu_path = 'E:/osu!';
+import { osu_file_beatmap_property, all_osu_file_properties} from "../src/consts/property_settings";
 
 const needed_properties: osu_file_beatmap_property[] = [
     osu_file_beatmap_property.general_audio_filename,
@@ -32,7 +22,7 @@ const needed_properties: osu_file_beatmap_property[] = [
     osu_file_beatmap_property.metadata_source,
     osu_file_beatmap_property.metadata_tags,
     osu_file_beatmap_property.metadata_version,
-]
+];
 
 const events_props: osu_file_beatmap_property[] = [
     osu_file_beatmap_property.metadata_beatmap_md5,
@@ -41,28 +31,16 @@ const events_props: osu_file_beatmap_property[] = [
     osu_file_beatmap_property.metadata_title,
     osu_file_beatmap_property.metadata_artist,
     osu_file_beatmap_property.general_gamemode,
-]
+];
 
-//open('console.log', 'w', (err, fd)=>{
+console.time('complete');
 
-    /*osu_tools.songs_get_all_beatmaps(osu_path, events_props, (beatmaps: beatmap_data[])=>{
+const osu_path = 'D:/osu!';
 
-        beatmaps.map((beatmap)=>{
-            console.log(beatmap);
-        });
-
-        
-            
-            //appendFile(fd, JSON.stringify(beatmap) , ()=>{});
-    
-
-    });*/
-
-	// close(fd)
-
-//})
-
+osu_tools.songs_get_all_beatmaps(osu_path, needed_properties, {
+	is_print_progress: true, 
+	is_display_complete_time: true}, () => {});
 
 console.timeEnd('complete');
 
-//setTimeout( ()=>{ return true; }, 1000000 );
+setTimeout( ()=>{ return true; }, 1000000 );

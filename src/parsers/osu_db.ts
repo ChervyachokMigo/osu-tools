@@ -7,6 +7,7 @@ import { RankedStatus, Gamemode, UserPermissions } from '../consts/variable_type
 import { beatmap_results } from '../consts/beatmap_results';
 import { osu_db_results } from '../consts/osu_db_results';
 import { osu_db_options } from '../consts/options';
+import { display_progress, display_progress_reset } from '../tools/display_progress';
 
 export class osu_db extends osu_file {
 
@@ -38,8 +39,7 @@ export class osu_db extends osu_file {
         //display variables
         const one_percent_value = Math.trunc(osu_db.number_beatmaps/100);
 		
-		let start_time = new Date().valueOf();
-		let avg_times = [];
+		display_progress_reset();
 
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
 
@@ -49,22 +49,22 @@ export class osu_db extends osu_file {
                 osu_db.beatmaps.push(beatmap_data);
             }
 
-            //display progress
-            if ( options.print_progress && i % one_percent_value == 0){
-                console.log(  ( ( i / osu_db.number_beatmaps * 10000)/100).toFixed(1),'% complete');
-				if (options.print_progress_time) {
-					let endtime = (new Date().valueOf()-start_time)*0.001;
-					console.log('end for', endtime.toFixed(3) );
-					start_time = new Date().valueOf();
-					avg_times.push(endtime);
-					console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
-				}
-            }
+			
+			if ( options.print_progress && i % one_percent_value == 0 ){
+				display_progress({
+					counter: i, 
+					one_percent: one_percent_value, 
+					length: osu_db.number_beatmaps, 
+					is_print_progress: options.print_progress,
+					is_display_time: options.print_progress_time 
+				});
+			}
         }
 
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = UserPermissions[osu_db.user_permissions_int];
 
+		console.log('');
         console.log('end parsing osu db');
 
         return osu_db;

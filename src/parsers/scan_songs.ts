@@ -24,6 +24,7 @@ import { event_string_parse } from "../tools/beatmap_events";
 import { beatmap_event } from "../consts/beatmap_events/beatmap_event";
 
 import { globSync, glob, Path } from "glob";
+import { display_progress, display_progress_reset } from "../tools/display_progress";
 
 export type scanner_options = {
     is_read_only?: boolean,
@@ -65,30 +66,17 @@ export function songs_get_all_beatmaps (
             cwd: osu_songs
         }) as string[];
 
-        var count = 0;
+        let count = 0;
         
-        var beatmaps: beatmap_data[] = [];
-        
+        let beatmaps: beatmap_data[] = [];
 
         //display variables
-        var one_percent_value = Math.trunc(files.length/100);
-        var start_time = new Date().valueOf();
-        var avg_times = [];
+        const one_percent_value = Math.trunc(files.length/100);
+        display_progress_reset();
 
 		const is_display_complete_time = typeof options.is_display_complete_time === 'undefined' ? true : options.is_display_complete_time;
 
-		if (is_display_complete_time) {
-			console.time('thousand')
-		}
-
         for (const beatmap_folder of files) {
-
-            if (is_display_complete_time && count % 1000 == 0){
-                console.log(count, '/', files.length);
-                console.timeEnd('thousand')
-
-                console.time('thousand')
-            }
 
             if ( existsSync(path.join(osu_songs, beatmap_folder)) && lstatSync(path.join(osu_songs, beatmap_folder)).isDirectory() ){
 
@@ -104,22 +92,22 @@ export function songs_get_all_beatmaps (
 
             }
 
-            //display progress
-            if ( options.is_print_progress && count % one_percent_value == 0 ){
-                console.log(  ( ( count / files.length * 10000)/100).toFixed(1),'% complete');
-				if (is_display_complete_time){
-					let endtime = (new Date().valueOf()-start_time)*0.001;
-					console.log('end for', endtime.toFixed(3) );
-					start_time = new Date().valueOf();
-					avg_times.push(endtime);
-					console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3) );
-				}
-            }
+			if (  options.is_print_progress && count % one_percent_value == 0 ){
+				display_progress({
+					counter: count, 
+					one_percent: one_percent_value, 
+					length: files.length, 
+					is_print_progress: options.is_print_progress,
+					is_display_time: is_display_complete_time });
+			}
             
             count ++;
 
         }
-        console.log('scan complete');
+
+		console.log('');
+		console.log('scan complete');
+		
         return beatmaps;
     } catch (error) {
         console.log(error);

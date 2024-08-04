@@ -76,3 +76,6 @@ export { compare_files } from './tools/compare';
 
 export { extract_all } from './tools/extract_all';
 
+//utils
+export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
+

@@ -14,6 +14,7 @@ const bitwise_1 = __importDefault(require("bitwise"));
 const property_settings_1 = require("../consts/property_settings");
 const beatmap_events_1 = require("../tools/beatmap_events");
 const glob_1 = require("glob");
+const display_progress_1 = require("../tools/display_progress");
 function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options, callback) {
     if (typeof options.is_read_only === 'undefined')
         options.is_read_only = false;
@@ -39,22 +40,13 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
             absolute: false,
             cwd: osu_songs
         });
-        var count = 0;
-        var beatmaps = [];
+        let count = 0;
+        let beatmaps = [];
         //display variables
-        var one_percent_value = Math.trunc(files.length / 100);
-        var start_time = new Date().valueOf();
-        var avg_times = [];
+        const one_percent_value = Math.trunc(files.length / 100);
+        (0, display_progress_1.display_progress_reset)();
         const is_display_complete_time = typeof options.is_display_complete_time === 'undefined' ? true : options.is_display_complete_time;
-        if (is_display_complete_time) {
-            console.time('thousand');
-        }
         for (const beatmap_folder of files) {
-            if (is_display_complete_time && count % 1000 == 0) {
-                console.log(count, '/', files.length);
-                console.timeEnd('thousand');
-                console.time('thousand');
-            }
             if ((0, fs_1.existsSync)(path_1.default.join(osu_songs, beatmap_folder)) && (0, fs_1.lstatSync)(path_1.default.join(osu_songs, beatmap_folder)).isDirectory()) {
                 let current_beatmaps = get_beatmaps_from_beatmap_folder(osufolder, beatmap_folder, osu_file_beatmap_properties, options);
                 callback(current_beatmaps, beatmap_folder);
@@ -65,19 +57,18 @@ function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options,
                     current_beatmaps = [];
                 }
             }
-            //display progress
             if (options.is_print_progress && count % one_percent_value == 0) {
-                console.log(((count / files.length * 10000) / 100).toFixed(1), '% complete');
-                if (is_display_complete_time) {
-                    let endtime = (new Date().valueOf() - start_time) * 0.001;
-                    console.log('end for', endtime.toFixed(3));
-                    start_time = new Date().valueOf();
-                    avg_times.push(endtime);
-                    console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
-                }
+                (0, display_progress_1.display_progress)({
+                    counter: count,
+                    one_percent: one_percent_value,
+                    length: files.length,
+                    is_print_progress: options.is_print_progress,
+                    is_display_time: is_display_complete_time
+                });
             }
             count++;
         }
+        console.log('');
         console.log('scan complete');
         return beatmaps;
     }

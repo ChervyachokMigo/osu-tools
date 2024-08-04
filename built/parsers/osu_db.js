@@ -5,6 +5,7 @@ const property_settings_1 = require("../consts/property_settings");
 const osu_file_1 = require("./osu_file");
 const osu_file_type_1 = require("../consts/osu_file_type");
 const variable_types_1 = require("../consts/variable_types");
+const display_progress_1 = require("../tools/display_progress");
 class osu_db extends osu_file_1.osu_file {
     constructor(file_path, property_settings) {
         super(file_path, property_settings);
@@ -26,28 +27,26 @@ class osu_db extends osu_file_1.osu_file {
         osu_db.number_beatmaps = this.buff.getInt();
         //display variables
         const one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);
-        let start_time = new Date().valueOf();
-        let avg_times = [];
+        (0, display_progress_1.display_progress_reset)();
         for (let i = 0; i < osu_db.number_beatmaps; i++) {
             //beatmap parsing
             let beatmap_data = this.beatmap_parse(osu_db.osu_version);
             if (Object.keys(beatmap_data).length > 0) {
                 osu_db.beatmaps.push(beatmap_data);
             }
-            //display progress
             if (options.print_progress && i % one_percent_value == 0) {
-                console.log(((i / osu_db.number_beatmaps * 10000) / 100).toFixed(1), '% complete');
-                if (options.print_progress_time) {
-                    let endtime = (new Date().valueOf() - start_time) * 0.001;
-                    console.log('end for', endtime.toFixed(3));
-                    start_time = new Date().valueOf();
-                    avg_times.push(endtime);
-                    console.log('avg_time', (avg_times.reduce((a, b) => a + b) / avg_times.length).toFixed(3));
-                }
+                (0, display_progress_1.display_progress)({
+                    counter: i,
+                    one_percent: one_percent_value,
+                    length: osu_db.number_beatmaps,
+                    is_print_progress: options.print_progress,
+                    is_display_time: options.print_progress_time
+                });
             }
         }
         osu_db.user_permissions_int = this.buff.getInt();
         osu_db.user_permissions = variable_types_1.UserPermissions[osu_db.user_permissions_int];
+        console.log('');
         console.log('end parsing osu db');
         return osu_db;
     }

@@ -7,7 +7,7 @@ import { beatmap_results } from "../consts/beatmap_results";
 import { StarRating } from "../consts/variable_types";
 import { osu_db_results } from "../consts/osu_db_results";
 import { buffer_saver } from "./buffer_saver";
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { raw_file } from "../parsers/raw_file";
 
 const sr_keys: any[] = Object.keys({star_rating_std: [], star_rating_taiko: [], star_rating_ctb: [], star_rating_mania: []} as beatmap_results);
