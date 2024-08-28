@@ -35,4 +35,5 @@ export { get_score_grade } from './tools/score_grade';
 export { replay_osr, replay_load } from './parsers/replay_osr';
 export { compare_files } from './tools/compare';
 export { extract_all } from './tools/extract_all';
+export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
 //# sourceMappingURL=index.d.ts.map

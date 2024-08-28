@@ -9,6 +9,7 @@ import { osu_db_results } from "../consts/osu_db_results";
 import { buffer_saver } from "./buffer_saver";
 import { writeFileSync } from "fs";
 import { raw_file } from "../parsers/raw_file";
+import { display_progress, display_progress_reset } from "./display_progress";
 
 const sr_keys: any[] = Object.keys({star_rating_std: [], star_rating_taiko: [], star_rating_ctb: [], star_rating_mania: []} as beatmap_results);
 
@@ -53,11 +54,19 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ): osu_db
 	const osu_db_2_result = osu_db_load( path.join(db_2.folder_path, db_2.filename), sr_props, { print_progress: true });
 
 	console.log('[ comparing ]');
+	display_progress_reset();
+	const one_percent_value = Math.trunc(result.beatmaps.length/100);
 
 	for (let i = 0; i < result.beatmaps.length; i++){
 		let beatmap = result.beatmaps[i];
 
-		if (i % 1000 == 0) {
+		if ( i % one_percent_value == 0 ){
+			display_progress({ 
+				counter: i, 
+				length: result.beatmaps.length, 
+				one_percent: one_percent_value,
+				is_display_time: false,
+				is_print_progress: true });
 			console.log('compare', i, '/', result.beatmaps.length, `${(i/result.beatmaps.length*100).toFixed(2)}` ,'maps');
 		}
 

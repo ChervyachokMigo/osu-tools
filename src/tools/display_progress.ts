@@ -1,5 +1,10 @@
-export type display_progress_args = 
-{ counter: number, one_percent: number, length: number, is_display_time: boolean | undefined, is_print_progress: boolean | undefined}
+export type display_progress_args = {
+	counter: number, 
+	one_percent: number, 
+	length: number, 
+	is_display_time: boolean | undefined, 
+	is_print_progress: boolean | undefined
+}
 
 let start_time: number = new Date().valueOf();
 let avg_times: number[] = [];
