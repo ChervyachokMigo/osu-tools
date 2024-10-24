@@ -223,6 +223,28 @@ class osu_db extends osu_file_1.osu_file {
         else {
             this.buff.skipTimingPoints();
         }
+        if (this.property_settings.indexOf(property_settings_1.beatmap_property.timing_points) !== -1 &&
+            this.property_settings.indexOf(property_settings_1.beatmap_property.total_time) !== -1 &&
+            this.property_settings.indexOf(property_settings_1.beatmap_property.bpm) !== -1) {
+            beatmap.BPM = [];
+            if (beatmap.timing_points && beatmap.timing_points.length > 0) {
+                const inherit_points = beatmap.timing_points.filter(v => v.is_inherit === true);
+                for (let i = 0; i < inherit_points.length; i++) {
+                    let next_offset = 0;
+                    if (inherit_points[i + 1]) {
+                        next_offset = inherit_points[i + 1].offset;
+                    }
+                    else {
+                        next_offset = beatmap.total_time;
+                    }
+                    const bpm = {
+                        value: Math.floor(60000 / inherit_points[i].bpm),
+                        percent: (next_offset - inherit_points[i].offset) / beatmap.total_time
+                    };
+                    beatmap.BPM.push(bpm);
+                }
+            }
+        }
         if (this.property_settings.indexOf(property_settings_1.beatmap_property.beatmap_id) !== -1) {
             beatmap.beatmap_id = this.buff.getInt();
         }

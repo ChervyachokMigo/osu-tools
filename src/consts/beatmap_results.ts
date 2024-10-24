@@ -1,5 +1,5 @@
 import { score_grade } from './score_grade';
-import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate } from './variable_types';
+import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate, BPM } from './variable_types';
 
 export type beatmap_results = {
     beatmap_size?: number;
@@ -31,6 +31,7 @@ export type beatmap_results = {
     total_time?: number;
     preview_time?: number;
     timing_points?: TimingPoint[];
+	BPM?: BPM[];
     beatmap_id?: number;
     beatmapset_id?: number;
     thread_id?: number;

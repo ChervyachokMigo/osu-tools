@@ -24,6 +24,10 @@ export enum beatmap_property {
     total_time,
     preview_time,
     timing_points,
+	/**
+	 * beats per minute: need total_time and timing_points for calculate
+	 * */
+	bpm,
     beatmap_id,
     beatmapset_id,
     thread_id,
@@ -79,6 +83,7 @@ export const all_beatmap_properties = [
     beatmap_property.total_time,
     beatmap_property.preview_time,
     beatmap_property.timing_points,
+	beatmap_property.bpm,
     beatmap_property.beatmap_id,
     beatmap_property.beatmapset_id,
     beatmap_property.thread_id,

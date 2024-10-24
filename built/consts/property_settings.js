@@ -28,33 +28,37 @@ var beatmap_property;
     beatmap_property[beatmap_property["total_time"] = 22] = "total_time";
     beatmap_property[beatmap_property["preview_time"] = 23] = "preview_time";
     beatmap_property[beatmap_property["timing_points"] = 24] = "timing_points";
-    beatmap_property[beatmap_property["beatmap_id"] = 25] = "beatmap_id";
-    beatmap_property[beatmap_property["beatmapset_id"] = 26] = "beatmapset_id";
-    beatmap_property[beatmap_property["thread_id"] = 27] = "thread_id";
-    beatmap_property[beatmap_property["grade_achieved_std"] = 28] = "grade_achieved_std";
-    beatmap_property[beatmap_property["grade_achieved_taiko"] = 29] = "grade_achieved_taiko";
-    beatmap_property[beatmap_property["grade_achieved_ctb"] = 30] = "grade_achieved_ctb";
-    beatmap_property[beatmap_property["grade_achieved_mania"] = 31] = "grade_achieved_mania";
-    beatmap_property[beatmap_property["local_offset"] = 32] = "local_offset";
-    beatmap_property[beatmap_property["stack_laniecy"] = 33] = "stack_laniecy";
-    beatmap_property[beatmap_property["gamemode"] = 34] = "gamemode";
-    beatmap_property[beatmap_property["source"] = 35] = "source";
-    beatmap_property[beatmap_property["tags"] = 36] = "tags";
-    beatmap_property[beatmap_property["online_offset"] = 37] = "online_offset";
-    beatmap_property[beatmap_property["font_title"] = 38] = "font_title";
-    beatmap_property[beatmap_property["is_unplayed"] = 39] = "is_unplayed";
-    beatmap_property[beatmap_property["last_played"] = 40] = "last_played";
-    beatmap_property[beatmap_property["is_OSZ2"] = 41] = "is_OSZ2";
-    beatmap_property[beatmap_property["folder_name"] = 42] = "folder_name";
-    beatmap_property[beatmap_property["last_checked_repository_time"] = 43] = "last_checked_repository_time";
-    beatmap_property[beatmap_property["is_ignore_hit_sounds"] = 44] = "is_ignore_hit_sounds";
-    beatmap_property[beatmap_property["is_ignore_skin"] = 45] = "is_ignore_skin";
-    beatmap_property[beatmap_property["is_disable_storyboard"] = 46] = "is_disable_storyboard";
-    beatmap_property[beatmap_property["is_disable_video"] = 47] = "is_disable_video";
-    beatmap_property[beatmap_property["is_visual_override"] = 48] = "is_visual_override";
-    beatmap_property[beatmap_property["unknown_value"] = 49] = "unknown_value";
-    beatmap_property[beatmap_property["mod_time"] = 50] = "mod_time";
-    beatmap_property[beatmap_property["mania_scroll"] = 51] = "mania_scroll";
+    /**
+     * beats per minute: need total_time and timing_points for calculate
+     * */
+    beatmap_property[beatmap_property["bpm"] = 25] = "bpm";
+    beatmap_property[beatmap_property["beatmap_id"] = 26] = "beatmap_id";
+    beatmap_property[beatmap_property["beatmapset_id"] = 27] = "beatmapset_id";
+    beatmap_property[beatmap_property["thread_id"] = 28] = "thread_id";
+    beatmap_property[beatmap_property["grade_achieved_std"] = 29] = "grade_achieved_std";
+    beatmap_property[beatmap_property["grade_achieved_taiko"] = 30] = "grade_achieved_taiko";
+    beatmap_property[beatmap_property["grade_achieved_ctb"] = 31] = "grade_achieved_ctb";
+    beatmap_property[beatmap_property["grade_achieved_mania"] = 32] = "grade_achieved_mania";
+    beatmap_property[beatmap_property["local_offset"] = 33] = "local_offset";
+    beatmap_property[beatmap_property["stack_laniecy"] = 34] = "stack_laniecy";
+    beatmap_property[beatmap_property["gamemode"] = 35] = "gamemode";
+    beatmap_property[beatmap_property["source"] = 36] = "source";
+    beatmap_property[beatmap_property["tags"] = 37] = "tags";
+    beatmap_property[beatmap_property["online_offset"] = 38] = "online_offset";
+    beatmap_property[beatmap_property["font_title"] = 39] = "font_title";
+    beatmap_property[beatmap_property["is_unplayed"] = 40] = "is_unplayed";
+    beatmap_property[beatmap_property["last_played"] = 41] = "last_played";
+    beatmap_property[beatmap_property["is_OSZ2"] = 42] = "is_OSZ2";
+    beatmap_property[beatmap_property["folder_name"] = 43] = "folder_name";
+    beatmap_property[beatmap_property["last_checked_repository_time"] = 44] = "last_checked_repository_time";
+    beatmap_property[beatmap_property["is_ignore_hit_sounds"] = 45] = "is_ignore_hit_sounds";
+    beatmap_property[beatmap_property["is_ignore_skin"] = 46] = "is_ignore_skin";
+    beatmap_property[beatmap_property["is_disable_storyboard"] = 47] = "is_disable_storyboard";
+    beatmap_property[beatmap_property["is_disable_video"] = 48] = "is_disable_video";
+    beatmap_property[beatmap_property["is_visual_override"] = 49] = "is_visual_override";
+    beatmap_property[beatmap_property["unknown_value"] = 50] = "unknown_value";
+    beatmap_property[beatmap_property["mod_time"] = 51] = "mod_time";
+    beatmap_property[beatmap_property["mania_scroll"] = 52] = "mania_scroll";
 })(beatmap_property = exports.beatmap_property || (exports.beatmap_property = {}));
 exports.all_beatmap_properties = [
     beatmap_property.beatmap_size,
@@ -82,6 +86,7 @@ exports.all_beatmap_properties = [
     beatmap_property.total_time,
     beatmap_property.preview_time,
     beatmap_property.timing_points,
+    beatmap_property.bpm,
     beatmap_property.beatmap_id,
     beatmap_property.beatmapset_id,
     beatmap_property.thread_id,

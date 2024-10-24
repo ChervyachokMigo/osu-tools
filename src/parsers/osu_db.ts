@@ -3,7 +3,7 @@ import { beatmap_property } from '../consts/property_settings';
 import { osu_file } from './osu_file';
 import { osu_file_type } from '../consts/osu_file_type';
 
-import { RankedStatus, Gamemode, UserPermissions } from '../consts/variable_types';
+import { RankedStatus, Gamemode, UserPermissions, TimingPoint, BPM } from '../consts/variable_types';
 import { beatmap_results } from '../consts/beatmap_results';
 import { osu_db_results } from '../consts/osu_db_results';
 import { osu_db_options } from '../consts/options';
@@ -238,6 +238,29 @@ export class osu_db extends osu_file {
             beatmap.timing_points = this.buff.getTimingPoints();
         } else {
             this.buff.skipTimingPoints();
+        }
+
+		if (this.property_settings.indexOf(beatmap_property.timing_points) !== -1 &&
+			this.property_settings.indexOf(beatmap_property.total_time) !== -1 &&
+			this.property_settings.indexOf(beatmap_property.bpm) !== -1) {
+            beatmap.BPM = [];
+			if (beatmap.timing_points && beatmap.timing_points.length > 0) {
+				const inherit_points = beatmap.timing_points.filter( v => v.is_inherit === true );
+				for (let i = 0; i < inherit_points.length; i++) {
+					let next_offset = 0;
+					if (inherit_points[i + 1]) {
+						next_offset = inherit_points[i + 1].offset;
+					} else {
+						next_offset = beatmap.total_time as number;
+					}
+					const bpm: BPM = {
+						value: Math.floor(60000 / inherit_points[i].bpm),
+						percent: (next_offset - inherit_points[i].offset) / (beatmap.total_time as number)
+					}
+					beatmap.BPM.push(bpm);
+					
+				}
+			}
         }
 
         if (this.property_settings.indexOf(beatmap_property.beatmap_id) !== -1) {
