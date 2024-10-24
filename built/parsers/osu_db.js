@@ -234,21 +234,24 @@ class osu_db extends osu_file_1.osu_file {
             };
             if (beatmap.timing_points && beatmap.timing_points.length > 0) {
                 const inherit_points = beatmap.timing_points.filter(v => v.is_inherit === true);
-                for (let i = 0; i < inherit_points.length; i++) {
-                    let next_offset = 0;
-                    if (inherit_points[i + 1]) {
-                        next_offset = inherit_points[i + 1].offset;
+                if (inherit_points) {
+                    for (let i = 0; i < inherit_points.length; i++) {
+                        let next_offset = 0;
+                        if (inherit_points[i + 1]) {
+                            next_offset = inherit_points[i + 1].offset;
+                        }
+                        else {
+                            next_offset = beatmap.total_time;
+                        }
+                        const value = {
+                            value: Math.floor(60000 / inherit_points[i].bpm),
+                            percent: (next_offset - inherit_points[i].offset) / beatmap.total_time
+                        };
+                        beatmap.BPM.values.push(value);
                     }
-                    else {
-                        next_offset = beatmap.total_time;
-                    }
-                    const value = {
-                        value: Math.floor(60000 / inherit_points[i].bpm),
-                        percent: (next_offset - inherit_points[i].offset) / beatmap.total_time
-                    };
-                    beatmap.BPM.values.push(value);
-                    beatmap.BPM.min = Math.min(...beatmap.BPM.values.map(v => v.value));
-                    beatmap.BPM.max = Math.max(...beatmap.BPM.values.map(v => v.value));
+                    const values = beatmap.BPM.values.map(v => v.value);
+                    beatmap.BPM.min = Math.min(...values);
+                    beatmap.BPM.max = Math.max(...values);
                     beatmap.BPM.average = beatmap.BPM.values.reduce((a, b) => a.percent > b.percent ? a : b).value;
                 }
             }

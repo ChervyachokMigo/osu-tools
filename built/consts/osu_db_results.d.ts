@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { UserPermissions, WindowsTickRate } from './variable_types';
 import { beatmap_results } from './beatmap_results';
 export type osu_db_results = {

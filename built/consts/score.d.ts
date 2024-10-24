@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { Gamemode, HP_Bar, ReplayData } from './variable_types';
 export type score = {
     gamemode_int?: Gamemode;

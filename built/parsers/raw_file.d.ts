@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { buffer_parse } from '../tools/buffer_parse';
 export declare class raw_file {
     file_handle: number;

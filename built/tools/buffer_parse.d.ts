@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { TimingPoint, StarRating, HP_Bar, ReplayData, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_parse {

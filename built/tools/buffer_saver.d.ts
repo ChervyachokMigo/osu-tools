@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="node" />
 import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_saver {
