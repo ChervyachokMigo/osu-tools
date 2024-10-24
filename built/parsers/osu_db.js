@@ -226,7 +226,12 @@ class osu_db extends osu_file_1.osu_file {
         if (this.property_settings.indexOf(property_settings_1.beatmap_property.timing_points) !== -1 &&
             this.property_settings.indexOf(property_settings_1.beatmap_property.total_time) !== -1 &&
             this.property_settings.indexOf(property_settings_1.beatmap_property.bpm) !== -1) {
-            beatmap.BPM = [];
+            beatmap.BPM = {
+                values: [],
+                min: 0,
+                max: 0,
+                average: 0,
+            };
             if (beatmap.timing_points && beatmap.timing_points.length > 0) {
                 const inherit_points = beatmap.timing_points.filter(v => v.is_inherit === true);
                 for (let i = 0; i < inherit_points.length; i++) {
@@ -237,11 +242,14 @@ class osu_db extends osu_file_1.osu_file {
                     else {
                         next_offset = beatmap.total_time;
                     }
-                    const bpm = {
+                    const value = {
                         value: Math.floor(60000 / inherit_points[i].bpm),
                         percent: (next_offset - inherit_points[i].offset) / beatmap.total_time
                     };
-                    beatmap.BPM.push(bpm);
+                    beatmap.BPM.values.push(value);
+                    beatmap.BPM.min = Math.min(...beatmap.BPM.values.map(v => v.value));
+                    beatmap.BPM.max = Math.max(...beatmap.BPM.values.map(v => v.value));
+                    beatmap.BPM.average = beatmap.BPM.values.reduce((a, b) => a.percent > b.percent ? a : b).value;
                 }
             }
         }

@@ -13,9 +13,15 @@ export type TimingPoint = {
     offset: number;
     is_inherit: boolean;
 };
-export type BPM = {
+export type bpm_value = {
     value: number;
     percent: number;
+};
+export type BPM = {
+    values: bpm_value[];
+    min: number;
+    max: number;
+    average: number;
 };
 export declare enum UserPermissions {
     None = 0,

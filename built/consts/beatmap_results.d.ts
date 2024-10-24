@@ -30,7 +30,7 @@ export type beatmap_results = {
     total_time?: number;
     preview_time?: number;
     timing_points?: TimingPoint[];
-    BPM?: BPM[];
+    BPM?: BPM;
     beatmap_id?: number;
     beatmapset_id?: number;
     thread_id?: number;
