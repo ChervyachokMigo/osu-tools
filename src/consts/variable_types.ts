@@ -16,9 +16,16 @@ export type TimingPoint = {
     is_inherit: boolean
 }
 
-export type BPM = {
+export type bpm_value = {
 	value: number,
 	percent: number
+}
+
+export type BPM = {
+	values: bpm_value[],
+	min: number,
+	max: number,
+	average: number
 }
 
 export enum UserPermissions {
