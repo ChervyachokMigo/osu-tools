@@ -13,7 +13,7 @@ export { collection_db, collection_db_load } from './parsers/collection_db';
 export { collection_db_save } from './tools/collection_db_saver';
 export { osu_db_results } from "./consts/osu_db_results";
 export { osu_db, osu_db_load, osu_db_find_beatmaps } from './parsers/osu_db';
-export { osu_db_concat_sr, osu_db_export_sr, osu_db_import_sr } from './tools/osu_db_star_rating';
+export { osu_db_concat_sr, osu_db_export_sr, osu_db_import_sr, load_sr, save_sr } from './tools/osu_db_star_rating';
 export { osu_db_save } from "./tools/osu_db_saver";
 export { beatmap_data, beatmap_data_general, beatmap_data_editor, beatmap_metadata, beatmap_data_difficulty, beatmap_timing_point, beatmap_data_color, beatmap_hit_objects, beatmap_sample_set, beatmap_countdown, hit_sample_set, beatmap_overlay_position, timing_point_effect, beatmap_color_type, beatmap_data_hit_object_type, beatmap_data_hit_sound, beatmap_data_hit_sample, beatmap_data_hit_object, point, slider_edge_set, slider_type, slider_properties } from './consts/beatmap_data';
 export { beatmap_event } from "./consts/beatmap_events/beatmap_event";

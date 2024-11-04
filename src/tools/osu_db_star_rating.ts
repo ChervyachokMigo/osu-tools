@@ -102,7 +102,7 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ): osu_db
 
 }
 
-const save_sr_data_raw = (data: beatmap_star_ratings[], output: string) => {
+export const save_sr = (data: beatmap_star_ratings[], output: string) => {
 	let buffer = new buffer_saver();
 	buffer.addInt(data.length);
 	for (let beatmap of data) {
@@ -157,23 +157,15 @@ export const osu_db_export_sr = ( input_db: db_filepath, output_raw: string ) =>
 		export_data.push({ beatmap_md5: beatmap.beatmap_md5, star_ratings: save_srs });
 	}
 
-	save_sr_data_raw(export_data, output_raw);
+	save_sr(export_data, output_raw);
 
 }
 
-export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, output_db: db_filepath ) => {
-	const result: beatmap_star_ratings[] = [];
-	
-	if (!input_db.filename) {
-        input_db.filename = 'osu!.db';
-    }
-
-	if (!output_db.filename) {
-        output_db.filename = 'osu!.db';
-    }
+export const load_sr = ( raw_path: string ) => {
+	const results: beatmap_star_ratings[] = [];
 
 	console.log('[ loading raw data ]');
-	const file = new raw_file(input_raw);
+	const file = new raw_file(raw_path);
 
 	const beatmaps_length = file.buff.getInt();
 	for (let i = 0; i < beatmaps_length; i++) {
@@ -187,10 +179,25 @@ export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, outp
             const star_ratings = file.buff.getStarRatings();
             beatmap.star_ratings[star_rating_key as keyof star_ratings] = star_ratings;
         }
-		result.push(beatmap);
+		results.push(beatmap);
 	}
 
 	file.close();
+
+	return results;
+}
+
+export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, output_db: db_filepath ) => {
+	
+	if (!input_db.filename) {
+        input_db.filename = 'osu!.db';
+    }
+
+	if (!output_db.filename) {
+        output_db.filename = 'osu!.db';
+    }
+
+	const result = load_sr( input_raw );
 
 	console.log('[ loading osu db ]');
     const osu_db = osu_db_load( path.join(input_db.folder_path, input_db.filename), all_beatmap_properties, { print_progress: true });
