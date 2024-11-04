@@ -1,6 +1,6 @@
 /// <reference types="node" />
 /// <reference types="node" />
-import { TimingPoint, StarRating, HP_Bar, ReplayData, WindowsTickRate } from '../consts/variable_types';
+import { TimingPoint, StarRating, HP_Bar, ReplayData, WindowsTickRate, StringBuffer } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_parse {
     file_handle: number;
@@ -32,7 +32,7 @@ export declare class buffer_parse {
     getTimingPoints(): Array<TimingPoint>;
     skipTimingPoints(): void;
     getString(): string;
-    getStringAsBuffer(): Buffer;
+    getStringAsBuffer(): StringBuffer;
     skipString(): void;
     getULEB128(): number;
     getHpBar(): HP_Bar[];

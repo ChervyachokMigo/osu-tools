@@ -1,5 +1,5 @@
 import buffer from 'buffer'
-import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
+import { StarRating, StringBuffer, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 
 export const UTC1970Years = BigInt(62135596800000);
 
@@ -131,6 +131,21 @@ export class buffer_saver {
             this.addByte(0);
         }
     }
+
+	addBufferString(val: StringBuffer) {
+		if (val.buffer.length > 0) {
+			this.addByte(val.string_code);
+			this.addULEB128(val.buffer.length);
+			this.buffer_write(val.buffer);
+		} else {
+			if (val.string_code === 11){
+				this.addByte(val.string_code);
+				this.addByte(0);
+			} else {
+				this.addByte(val.string_code);
+			}
+		}
+	}
 
 	addStarRatings(arr: Array<StarRating>) {
 		this.addUInt(arr.length);

@@ -35,9 +35,9 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: 
             buffer.addInt(beatmap.beatmap_size);
         }
         buffer.addString(beatmap.artist);
-        buffer.addString(beatmap.artist_unicode);
+        buffer.addBufferString(beatmap.artist_unicode);
         buffer.addString(beatmap.title);
-        buffer.addString(beatmap.title_unicode);
+        buffer.addBufferString(beatmap.title_unicode);
         buffer.addString(beatmap.creator);
         buffer.addString(beatmap.difficulty);
         buffer.addString(beatmap.audio_filename);

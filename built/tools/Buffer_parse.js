@@ -143,19 +143,27 @@ class buffer_parse {
         let stringCode = this.bufferRead(1).readUInt8();
         let res = Buffer.alloc(0);
         if (stringCode === 0) {
-            return res;
+            return {
+                string_code: stringCode,
+                buffer: res
+            };
         }
         if (stringCode === 11) {
             let stringLength = this.getULEB128();
             if (stringLength > 0) {
                 res = this.bufferRead(stringLength);
             }
-            return res;
+            return {
+                string_code: stringCode,
+                buffer: res
+            };
         }
         else {
-            console.log('stringCode', stringCode);
-            console.log('error read string');
-            return res;
+            console.log('error read string. ', 'unknown stringCode', stringCode);
+            return {
+                string_code: stringCode,
+                buffer: res
+            };
         }
     }
     skipString() {

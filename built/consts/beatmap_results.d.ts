@@ -1,11 +1,11 @@
 import { score_grade } from './score_grade';
-import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate, BPM } from './variable_types';
+import { TimingPoint, RankedStatus, Gamemode, StarRating, WindowsTickRate, BPM, StringBuffer } from './variable_types';
 export type beatmap_results = {
     beatmap_size?: number;
     artist?: string;
-    artist_unicode?: string;
+    artist_unicode?: StringBuffer;
     title?: string;
-    title_unicode?: string;
+    title_unicode?: StringBuffer;
     creator?: string;
     difficulty?: string;
     audio_filename?: string;

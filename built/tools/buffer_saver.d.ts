@@ -1,6 +1,6 @@
 /// <reference types="node" />
 /// <reference types="node" />
-import { StarRating, TimingPoint, WindowsTickRate } from '../consts/variable_types';
+import { StarRating, StringBuffer, TimingPoint, WindowsTickRate } from '../consts/variable_types';
 export declare const UTC1970Years: bigint;
 export declare class buffer_saver {
     file_buffer: Buffer;
@@ -21,6 +21,7 @@ export declare class buffer_saver {
     addWindowTickrateFromDate(val: WindowsTickRate): void;
     addULEB128(number: number): void;
     addString(val: string | Buffer): void;
+    addBufferString(val: StringBuffer): void;
     addStarRatings(arr: Array<StarRating>): void;
     addTimingPoints(arr: Array<TimingPoint>): void;
 }

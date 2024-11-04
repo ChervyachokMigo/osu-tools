@@ -67,7 +67,7 @@ class osu_db extends osu_file_1.osu_file {
             this.buff.skipString();
         }
         if (this.property_settings.indexOf(property_settings_1.beatmap_property.artist_unicode) !== -1) {
-            beatmap.artist_unicode = this.buff.getString();
+            beatmap.artist_unicode = this.buff.getStringAsBuffer();
         }
         else {
             this.buff.skipString();
@@ -79,7 +79,7 @@ class osu_db extends osu_file_1.osu_file {
             this.buff.skipString();
         }
         if (this.property_settings.indexOf(property_settings_1.beatmap_property.title_unicode) !== -1) {
-            beatmap.title_unicode = this.buff.getString();
+            beatmap.title_unicode = this.buff.getStringAsBuffer();
         }
         else {
             this.buff.skipString();

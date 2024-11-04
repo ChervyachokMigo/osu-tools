@@ -1,3 +1,8 @@
+export type StringBuffer = {
+	string_code: number,
+	buffer: Buffer
+}
+
 export type IntDoublePair = {
     int: number,
     double: number

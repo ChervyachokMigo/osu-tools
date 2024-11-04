@@ -116,6 +116,22 @@ class buffer_saver {
             this.addByte(0);
         }
     }
+    addBufferString(val) {
+        if (val.buffer.length > 0) {
+            this.addByte(val.string_code);
+            this.addULEB128(val.buffer.length);
+            this.buffer_write(val.buffer);
+        }
+        else {
+            if (val.string_code === 11) {
+                this.addByte(val.string_code);
+                this.addByte(0);
+            }
+            else {
+                this.addByte(val.string_code);
+            }
+        }
+    }
     addStarRatings(arr) {
         this.addUInt(arr.length);
         if (arr.length > 0) {

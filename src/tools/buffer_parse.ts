@@ -1,4 +1,4 @@
-import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame, WindowsTickRate } from '../consts/variable_types';
+import { TimingPoint, IntDoublePair, StarRating, HP_Bar, ReplayData, ReplayFrame, WindowsTickRate, StringBuffer } from '../consts/variable_types';
 
 //@ts-ignore
 import my_lzma from "lzma";
@@ -175,12 +175,15 @@ export class buffer_parse {
         }
     }
 
-    getStringAsBuffer(): Buffer {
+    getStringAsBuffer(): StringBuffer {
         let stringCode = this.bufferRead(1).readUInt8();
         let res = Buffer.alloc(0);
 
         if ( stringCode === 0 ) {
-            return res;
+            return {
+				string_code: stringCode,
+				buffer: res
+			}
         }
 
         if (stringCode === 11) {
@@ -188,11 +191,16 @@ export class buffer_parse {
             if (stringLength > 0) {
                 res = this.bufferRead(stringLength)                
             }
-            return res;
+            return {
+				string_code: stringCode,
+				buffer: res
+			};
         } else {
-            console.log('stringCode',stringCode)
-            console.log('error read string');
-            return res;
+            console.log('error read string. ', 'unknown stringCode', stringCode);
+            return {
+				string_code: stringCode,
+				buffer: res
+			};
         }
     }
 

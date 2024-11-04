@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { buffer_saver } from "./buffer_saver";
 import { osu_db_results } from "../consts/osu_db_results";
-import { StarRating, TimingPoint, WindowsTickRate } from "../consts/variable_types";
+import { StarRating, StringBuffer, TimingPoint, WindowsTickRate } from "../consts/variable_types";
 import { osu_db_options } from "../consts/options";
 import { display_progress, display_progress_reset } from "./display_progress";
 
@@ -49,9 +49,9 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 		}
 
 		buffer.addString(beatmap.artist as string);
-		buffer.addString(beatmap.artist_unicode as string);
+		buffer.addBufferString(beatmap.artist_unicode as StringBuffer);
 		buffer.addString(beatmap.title as string);
-		buffer.addString(beatmap.title_unicode as string);
+		buffer.addBufferString(beatmap.title_unicode as StringBuffer);
 		buffer.addString(beatmap.creator as string);
 		buffer.addString(beatmap.difficulty as string);
 		buffer.addString(beatmap.audio_filename as string);
