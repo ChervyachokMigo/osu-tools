@@ -1,12 +1,10 @@
-/// <reference types="node" />
-/// <reference types="node" />
-import { Gamemode, HP_Bar, ReplayData } from './variable_types';
+import { Gamemode, HP_Bar, ReplayData, StringBuffer } from './variable_types';
 export type score = {
     gamemode_int?: Gamemode;
     gamemode?: string;
     score_version?: number;
     beatmap_md5?: string;
-    playername?: Buffer;
+    playername?: StringBuffer;
     replay_md5?: string;
     count_300?: number;
     count_100?: number;

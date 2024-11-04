@@ -17,7 +17,7 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
     buffer.addInt(osu_db.folder_count as number);
 	buffer.addBool(osu_db.is_account_unlocked as boolean);
 	buffer.addWindowTickrateFromDate(osu_db.account_unlocked_date as WindowsTickRate);
-	buffer.addString(osu_db.playername as Buffer);
+	buffer.addBufferString(osu_db.playername as StringBuffer);
 
 	if(osu_db.number_beatmaps !== osu_db.beatmaps.length ){
 		osu_db.number_beatmaps = osu_db.beatmaps.length;

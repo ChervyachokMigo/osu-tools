@@ -23,7 +23,7 @@ class osu_db extends osu_file_1.osu_file {
         osu_db.folder_count = this.buff.getInt();
         osu_db.is_account_unlocked = this.buff.getBool();
         osu_db.account_unlocked_date = this.buff.getDateTime();
-        osu_db.playername = this.buff.getString();
+        osu_db.playername = this.buff.getStringAsBuffer();
         osu_db.number_beatmaps = this.buff.getInt();
         //display variables
         const one_percent_value = Math.trunc(osu_db.number_beatmaps / 100);

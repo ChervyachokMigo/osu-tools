@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
 import { buffer_saver } from "./buffer_saver";
 import { scores_db_results } from "../parsers/scores_db";
+import { StringBuffer } from "../consts/variable_types";
 
 export const scores_db_save = ( scores: scores_db_results, file_path: string = 'scores.db' ) => {
     let buffer = new buffer_saver();
@@ -13,7 +14,7 @@ export const scores_db_save = ( scores: scores_db_results, file_path: string = '
             buffer.addByte(score.gamemode_int as number)
             buffer.addInt(score.score_version as number)
             buffer.addString(score.beatmap_md5 as string);
-            buffer.addString(score.playername as Buffer);
+            buffer.addBufferString(score.playername as StringBuffer);
             buffer.addString(score.replay_md5 as string);
             buffer.addShort(score.count_300 as number);
             buffer.addShort(score.count_100 as number);

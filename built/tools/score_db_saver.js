@@ -14,7 +14,7 @@ const scores_db_save = (scores, file_path = 'scores.db') => {
             buffer.addByte(score.gamemode_int);
             buffer.addInt(score.score_version);
             buffer.addString(score.beatmap_md5);
-            buffer.addString(score.playername);
+            buffer.addBufferString(score.playername);
             buffer.addString(score.replay_md5);
             buffer.addShort(score.count_300);
             buffer.addShort(score.count_100);

@@ -11,7 +11,7 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: 
     buffer.addInt(osu_db.folder_count);
     buffer.addBool(osu_db.is_account_unlocked);
     buffer.addWindowTickrateFromDate(osu_db.account_unlocked_date);
-    buffer.addString(osu_db.playername);
+    buffer.addBufferString(osu_db.playername);
     if (osu_db.number_beatmaps !== osu_db.beatmaps.length) {
         osu_db.number_beatmaps = osu_db.beatmaps.length;
         console.error('osu_db.number_beatmaps is not equals osu_db.beatmaps.length');

@@ -1,4 +1,4 @@
-import { UserPermissions, WindowsTickRate } from './variable_types';
+import { StringBuffer, UserPermissions, WindowsTickRate } from './variable_types';
 import { beatmap_results } from './beatmap_results';
 
 
@@ -9,7 +9,7 @@ export type osu_db_results = {
     folder_count?: number;
     is_account_unlocked?: boolean;
     account_unlocked_date?: WindowsTickRate;
-    playername?: string | Buffer;
+    playername?: StringBuffer;
     user_permissions_int?: UserPermissions;
     user_permissions?: string;
 };
