@@ -73,8 +73,9 @@ const osu_db_concat_sr = (db_1, db_2) => {
     return result;
 };
 exports.osu_db_concat_sr = osu_db_concat_sr;
-const save_sr = (data, output) => {
+const save_sr = (version, data, output) => {
     let buffer = new buffer_saver_1.buffer_saver();
+    buffer.addInt(version);
     buffer.addInt(data.length);
     for (let beatmap of data) {
         buffer.addString(beatmap.beatmap_md5);
@@ -92,14 +93,14 @@ const osu_db_export_sr = (input_db, output_raw) => {
         input_db.filename = 'osu!.db';
     }
     console.log('[ loading db 1 ]');
-    const result = (0, osu_db_1.osu_db_load)(path_1.default.join(input_db.folder_path, input_db.filename), sr_props, { print_progress: true });
-    if (result.beatmaps.length == 0) {
+    const osu_db = (0, osu_db_1.osu_db_load)(path_1.default.join(input_db.folder_path, input_db.filename), sr_props, { print_progress: true });
+    if (osu_db.beatmaps.length == 0) {
         console.log('db 1 is empty');
         return;
     }
     console.log('[ exporting ]');
-    const export_data = [];
-    for (let beatmap of result.beatmaps) {
+    const srs = [];
+    for (let beatmap of osu_db.beatmaps) {
         if (!beatmap.beatmap_md5 || beatmap.beatmap_md5.length !== 32) {
             continue;
         }
@@ -113,15 +114,16 @@ const osu_db_export_sr = (input_db, output_raw) => {
         if (Object.keys(save_srs).length == 0) {
             continue;
         }
-        export_data.push({ beatmap_md5: beatmap.beatmap_md5, star_ratings: save_srs });
+        srs.push({ beatmap_md5: beatmap.beatmap_md5, star_ratings: save_srs });
     }
-    (0, exports.save_sr)(export_data, output_raw);
+    (0, exports.save_sr)(osu_db.osu_version, srs, output_raw);
 };
 exports.osu_db_export_sr = osu_db_export_sr;
 const load_sr = (raw_path) => {
     const results = [];
     console.log('[ loading raw data ]');
     const file = new raw_file_1.raw_file(raw_path);
+    const version = file.buff.getInt();
     const beatmaps_length = file.buff.getInt();
     for (let i = 0; i < beatmaps_length; i++) {
         const beatmap = {
@@ -137,7 +139,7 @@ const load_sr = (raw_path) => {
         results.push(beatmap);
     }
     file.close();
-    return results;
+    return { version, beatmaps: results };
 };
 exports.load_sr = load_sr;
 const osu_db_import_sr = (input_raw, input_db, output_db) => {
@@ -155,6 +157,7 @@ const osu_db_import_sr = (input_raw, input_db, output_db) => {
         console.log('db is empty');
         return;
     }
+    osu_db.osu_version = result.version;
     console.log('[ comparing ]');
     for (let i = 0; i < osu_db.beatmaps.length; i++) {
         let beatmap = osu_db.beatmaps[i];
@@ -164,7 +167,7 @@ const osu_db_import_sr = (input_raw, input_db, output_db) => {
         if (!beatmap.beatmap_md5 || ((_a = beatmap.beatmap_md5) === null || _a === void 0 ? void 0 : _a.length) !== 32) {
             continue;
         }
-        const beatmap_raw = result.find(v => v.beatmap_md5 === beatmap.beatmap_md5);
+        const beatmap_raw = result.beatmaps.find(v => v.beatmap_md5 === beatmap.beatmap_md5);
         if (!beatmap_raw) {
             continue;
         }

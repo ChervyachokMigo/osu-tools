@@ -10,20 +10,10 @@ import { buffer_saver } from "./buffer_saver";
 import { writeFileSync } from "fs";
 import { raw_file } from "../parsers/raw_file";
 import { display_progress, display_progress_reset } from "./display_progress";
+import { beatmap_star_ratings, sr_raw_result, star_ratings } from "../consts/star_ratings";
 
 const sr_keys: any[] = Object.keys({star_rating_std: [], star_rating_taiko: [], star_rating_ctb: [], star_rating_mania: []} as beatmap_results);
 
-type star_ratings = {
-	star_rating_std?: StarRating[],
-	star_rating_taiko?: StarRating[],
-	star_rating_ctb?: StarRating[],
-	star_rating_mania?: StarRating[]
-}
-
-type beatmap_star_ratings = {
-	beatmap_md5: string,
-	star_ratings: star_ratings
-}
 
 const sr_props = [ 
 	beatmap_property.beatmap_md5,
@@ -102,8 +92,9 @@ export const osu_db_concat_sr = ( db_1: db_filepath, db_2: db_filepath ): osu_db
 
 }
 
-export const save_sr = (data: beatmap_star_ratings[], output: string) => {
+export const save_sr = (version: number, data: beatmap_star_ratings[], output: string) => {
 	let buffer = new buffer_saver();
+	buffer.addInt(version);
 	buffer.addInt(data.length);
 	for (let beatmap of data) {
 		buffer.addString(beatmap.beatmap_md5);
@@ -123,18 +114,18 @@ export const osu_db_export_sr = ( input_db: db_filepath, output_raw: string ) =>
     }
 
     console.log('[ loading db 1 ]');
-    const result = osu_db_load( path.join(input_db.folder_path, input_db.filename), sr_props, { print_progress: true });
+    const osu_db = osu_db_load( path.join(input_db.folder_path, input_db.filename), sr_props, { print_progress: true });
 
-    if (result.beatmaps.length == 0) {
+    if (osu_db.beatmaps.length == 0) {
         console.log('db 1 is empty');
         return;
     }
 
     console.log('[ exporting ]');
 
-	const export_data: beatmap_star_ratings[] = [];
+	const srs: beatmap_star_ratings[] = [];
 
-	for(let beatmap of result.beatmaps){
+	for(let beatmap of osu_db.beatmaps){
 		if (!beatmap.beatmap_md5 || beatmap.beatmap_md5.length !== 32 ){
 			continue;
 		}
@@ -154,19 +145,19 @@ export const osu_db_export_sr = ( input_db: db_filepath, output_raw: string ) =>
             continue;
         }
 
-		export_data.push({ beatmap_md5: beatmap.beatmap_md5, star_ratings: save_srs });
+		srs.push({ beatmap_md5: beatmap.beatmap_md5, star_ratings: save_srs });
 	}
 
-	save_sr(export_data, output_raw);
-
+	save_sr(osu_db.osu_version as number, srs, output_raw);
 }
 
-export const load_sr = ( raw_path: string ) => {
+export const load_sr = ( raw_path: string ): sr_raw_result => {
 	const results: beatmap_star_ratings[] = [];
 
 	console.log('[ loading raw data ]');
 	const file = new raw_file(raw_path);
 
+	const version = file.buff.getInt();
 	const beatmaps_length = file.buff.getInt();
 	for (let i = 0; i < beatmaps_length; i++) {
 		const beatmap: beatmap_star_ratings = {
@@ -184,7 +175,7 @@ export const load_sr = ( raw_path: string ) => {
 
 	file.close();
 
-	return results;
+	return { version, beatmaps: results };
 }
 
 export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, output_db: db_filepath ) => {
@@ -207,6 +198,8 @@ export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, outp
         return;
     }
 
+	osu_db.osu_version = result.version;
+
 	console.log('[ comparing ]');
 
 	for (let i = 0; i < osu_db.beatmaps.length; i++){
@@ -223,7 +216,7 @@ export const osu_db_import_sr = ( input_raw: string, input_db: db_filepath, outp
 
 		type beatmap_key = keyof typeof beatmap;
 
-		const beatmap_raw = result.find( v => v.beatmap_md5 === beatmap.beatmap_md5 );
+		const beatmap_raw = result.beatmaps.find( v => v.beatmap_md5 === beatmap.beatmap_md5 );
 
 		if (!beatmap_raw) {
 			continue;
