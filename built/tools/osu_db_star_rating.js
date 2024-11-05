@@ -169,7 +169,7 @@ const osu_db_import_sr = (input_raw, osu_db, output_db) => {
         }
         const idx = input_raw.beatmaps.findIndex(v => v.beatmap_md5 === osu_db.beatmaps[i].beatmap_md5);
         for (let sr of sr_keys) {
-            osu_db.beatmaps[i][sr] = input_raw.beatmaps[idx];
+            osu_db.beatmaps[i][sr] = input_raw.beatmaps[idx].star_ratings[sr];
         }
     }
     console.log('[ saving ]');

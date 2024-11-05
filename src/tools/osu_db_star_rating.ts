@@ -215,8 +215,8 @@ export const osu_db_import_sr = ( input_raw: sr_raw_result, osu_db: osu_db_resul
 
 		type beatmap_key = keyof typeof osu_db.beatmaps[typeof i];
 
-		for (let sr of sr_keys) {
-            (osu_db.beatmaps[i][sr as beatmap_key] as any) = input_raw.beatmaps[idx] as any;
+		for (let sr of sr_keys as beatmap_key[]) {
+            (osu_db.beatmaps[i][sr] as StarRating[]) = input_raw.beatmaps[idx].star_ratings[sr as keyof star_ratings] as StarRating[];
 		}
 
 	}
