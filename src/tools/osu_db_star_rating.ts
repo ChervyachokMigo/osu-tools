@@ -196,43 +196,31 @@ export const osu_db_import_sr = ( input_raw: sr_raw_result, osu_db: osu_db_resul
 
 	console.log('[ comparing ]');
 
+	const sr_set = new Set(input_raw.beatmaps.map( x => x.beatmap_md5 ));
+
 	for (let i = 0; i < osu_db.beatmaps.length; i++){
-
-		let beatmap = osu_db.beatmaps[i];
-
 		if (i % 1000 == 0) {
 			process.stdout.write(`compare ${i}/${osu_db.beatmaps.length} (${(i/osu_db.beatmaps.length*100).toFixed(2)}%)\r`);
 		}
 
-		if ( !beatmap.beatmap_md5 || beatmap.beatmap_md5?.length !== 32) {
+		if (!sr_set.has( osu_db.beatmaps[i].beatmap_md5 as string )) {
 			continue;
 		}
 
-		type beatmap_key = keyof typeof beatmap;
-
-		const beatmap_raw = input_raw.beatmaps.find( v => v.beatmap_md5 === beatmap.beatmap_md5 );
-
-		if (!beatmap_raw) {
+		if ( !osu_db.beatmaps[i].beatmap_md5 || osu_db.beatmaps[i].beatmap_md5?.length !== 32) {
 			continue;
 		}
 
-		let is_changed = false;
+		const idx = input_raw.beatmaps.findIndex( v => v.beatmap_md5 === osu_db.beatmaps[i].beatmap_md5 );
+
+		type beatmap_key = keyof typeof osu_db.beatmaps[typeof i];
 
 		for (let sr of sr_keys) {
-			const beatmap_sr = beatmap[sr as beatmap_key] as Array<StarRating>;
-			const beatmap_raw_sr = beatmap_raw.star_ratings[sr as keyof star_ratings] as Array<StarRating>;
-
-			if (beatmap_sr && beatmap_sr.length == 0 && beatmap_raw_sr && beatmap_raw_sr.length > 0) {
-                (beatmap[sr as beatmap_key] as Array<StarRating>) = beatmap_raw_sr;
-				is_changed = true;
-			}
+            (osu_db.beatmaps[i][sr as beatmap_key] as any) = input_raw.beatmaps[idx] as any;
 		}
-
-		if (is_changed)
-			osu_db.beatmaps[i] = beatmap;
 
 	}
 
 	console.log('[ saving ]');
-	osu_db_save(osu_db, path.join(output_db.folder_path, output_db.filename));
+	osu_db_save(osu_db, path.join(output_db.folder_path, output_db.filename), {print_progress: true});
 }
