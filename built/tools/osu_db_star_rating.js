@@ -127,7 +127,7 @@ const load_sr = (raw_path) => {
     const beatmaps_length = file.buff.getInt();
     for (let i = 0; i < beatmaps_length; i++) {
         if (i % 1000 == 0) {
-            process.stdout.write(`compare ${i}/${beatmaps_length} (${(i / beatmaps_length * 100).toFixed(2)}%)\r`);
+            process.stdout.write(`loading ${i}/${beatmaps_length} (${(i / beatmaps_length * 100).toFixed(2)}%)\r`);
         }
         const beatmap = {
             beatmap_md5: file.buff.getString(),
