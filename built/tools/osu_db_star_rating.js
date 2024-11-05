@@ -126,6 +126,9 @@ const load_sr = (raw_path) => {
     const version = file.buff.getInt();
     const beatmaps_length = file.buff.getInt();
     for (let i = 0; i < beatmaps_length; i++) {
+        if (i % 1000 == 0) {
+            process.stdout.write(`compare ${i}/${beatmaps_length} (${(i / beatmaps_length * 100).toFixed(2)}%)\r`);
+        }
         const beatmap = {
             beatmap_md5: file.buff.getString(),
             star_ratings: {}
@@ -156,7 +159,7 @@ const osu_db_import_sr = (input_raw, osu_db, output_db) => {
     for (let i = 0; i < osu_db.beatmaps.length; i++) {
         let beatmap = osu_db.beatmaps[i];
         if (i % 1000 == 0) {
-            console.log('compare', i, '/', osu_db.beatmaps.length, `${(i / osu_db.beatmaps.length * 100).toFixed(2)}`, 'maps');
+            process.stdout.write(`compare ${i}/${osu_db.beatmaps.length} (${(i / osu_db.beatmaps.length * 100).toFixed(2)}%)\r`);
         }
         if (!beatmap.beatmap_md5 || ((_a = beatmap.beatmap_md5) === null || _a === void 0 ? void 0 : _a.length) !== 32) {
             continue;
