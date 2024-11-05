@@ -198,6 +198,8 @@ export const osu_db_import_sr = ( input_raw: sr_raw_result, osu_db: osu_db_resul
 
 	const sr_set = new Set(input_raw.beatmaps.map( x => x.beatmap_md5 ));
 
+	type beatmap_keys = (keyof beatmap_results)[];
+
 	for (let i = 0; i < osu_db.beatmaps.length; i++){
 		if (i % 1000 == 0) {
 			process.stdout.write(`compare ${i}/${osu_db.beatmaps.length} (${(i/osu_db.beatmaps.length*100).toFixed(2)}%)\r`);
@@ -213,9 +215,10 @@ export const osu_db_import_sr = ( input_raw: sr_raw_result, osu_db: osu_db_resul
 
 		const idx = input_raw.beatmaps.findIndex( v => v.beatmap_md5 === osu_db.beatmaps[i].beatmap_md5 );
 
-		type beatmap_key = keyof typeof osu_db.beatmaps[typeof i];
-
-		for (let sr of sr_keys as beatmap_key[]) {
+		for (let sr of sr_keys as beatmap_keys) {
+			if (!input_raw.beatmaps[idx].star_ratings[sr as keyof star_ratings] ) {
+                continue;
+            }
             (osu_db.beatmaps[i][sr] as StarRating[]) = input_raw.beatmaps[idx].star_ratings[sr as keyof star_ratings] as StarRating[];
 		}
 
