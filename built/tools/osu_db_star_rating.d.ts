@@ -5,5 +5,5 @@ export declare const osu_db_concat_sr: (db_1: db_filepath, db_2: db_filepath) =>
 export declare const save_sr: (version: number, data: beatmap_star_ratings[], output: string) => void;
 export declare const osu_db_export_sr: (input_db: db_filepath, output_raw: string) => void;
 export declare const load_sr: (raw_path: string) => sr_raw_result;
-export declare const osu_db_import_sr: (input_raw: string, input_db: db_filepath, output_db: db_filepath) => void;
+export declare const osu_db_import_sr: (input_raw: sr_raw_result, osu_db: osu_db_results, output_db: db_filepath) => void;
 //# sourceMappingURL=osu_db_star_rating.d.ts.map
