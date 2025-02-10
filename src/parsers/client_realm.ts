@@ -29,7 +29,7 @@ export const close_realm = () => {
 
 export const set_laser_files_path = (files_path: string) => {
 	const files_path_parsed = path.parse(files_path)
-	let storage_path = null;
+	let storage_path: string | null = null;
 	if (files_path_parsed.name === 'files') {
 		storage_path = files_path;
 	} else {
