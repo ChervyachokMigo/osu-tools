@@ -1,5 +1,4 @@
-import { open_realm, get_realm_objects } from '../built/index.js';
-import { close_realm } from '../built/parsers/client_realm.js';
+import { open_realm, get_realm_objects, close_realm, get_beatmap_file, set_laser_files_path } from '../built/parsers/client_realm.js';
 
 console.time('complete');
 
@@ -11,6 +10,12 @@ const beatmaps = get_realm_objects(realm, 'Beatmap');
 
 //console.log(realm.schema);
 console.log(beatmaps);
+
+//console.log(get_beatmap_file())
+set_laser_files_path('D:\\osu!laser')
+const res = get_beatmap_file('b456470b239a6537215eca18366c577c760d3e14e6735cabab7c311de5d55b3a', false);
+
+console.log(res);
 
 close_realm();
 

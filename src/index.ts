@@ -1,4 +1,3 @@
-
 export { beatmap_results } from './consts/beatmap_results';
 
 export { color } from "./consts/color";
@@ -61,7 +60,8 @@ export { event_string_parse } from './tools/beatmap_events';
 
 
 export { scanner_options, 
-    songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file } from './parsers/scan_songs';
+    songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file,
+	default_scanner_options } from './parsers/scan_songs';
 
 export { score } from "./consts/score";
 export { score_parse } from './tools/score_parse';
@@ -81,5 +81,5 @@ export { extract_all } from './tools/extract_all';
 //utils
 export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
 
-export { open_realm, get_realm_objects, close_realm } from './parsers/client_realm';
+export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_beatmap_file } from './parsers/client_realm';
 export { RealmResults } from './consts/laser/RealmResults';

@@ -36,6 +36,16 @@ export type scanner_options = {
 	is_print_progress?: boolean
 }
 
+export const default_scanner_options: scanner_options = {
+	is_read_only: false,
+    is_hit_objects_only_count: true,
+    songs_folder: 'Songs',
+    is_display_complete_time: false,
+    is_check_osb: true,
+    is_parse_sliders: false,
+    is_print_progress: true
+}
+
 export function songs_get_all_beatmaps ( 
 	osufolder: string, osu_file_beatmap_properties: osu_file_beatmap_property[], 
     options: scanner_options, callback: Function): beatmap_data[] {

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parse_osu_file = exports.get_beatmaps_from_beatmap_folder = exports.songs_get_all_beatmaps = void 0;
+exports.parse_osu_file = exports.get_beatmaps_from_beatmap_folder = exports.songs_get_all_beatmaps = exports.default_scanner_options = void 0;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const beatmap_data_1 = require("../consts/beatmap_data");
@@ -15,6 +15,15 @@ const property_settings_1 = require("../consts/property_settings");
 const beatmap_events_1 = require("../tools/beatmap_events");
 const glob_1 = require("glob");
 const display_progress_1 = require("../tools/display_progress");
+exports.default_scanner_options = {
+    is_read_only: false,
+    is_hit_objects_only_count: true,
+    songs_folder: 'Songs',
+    is_display_complete_time: false,
+    is_check_osb: true,
+    is_parse_sliders: false,
+    is_print_progress: true
+};
 function songs_get_all_beatmaps(osufolder, osu_file_beatmap_properties, options, callback) {
     if (typeof options.is_read_only === 'undefined')
         options.is_read_only = false;

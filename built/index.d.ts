@@ -24,7 +24,7 @@ export { beatmap_event_loop_type } from "./consts/beatmap_events/beatmap_event_l
 export { beatmap_event_origin } from "./consts/beatmap_events/beatmap_event_origin";
 export { beatmap_event_type } from "./consts/beatmap_events/beatmap_event_type";
 export { event_string_parse } from './tools/beatmap_events';
-export { scanner_options, songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file } from './parsers/scan_songs';
+export { scanner_options, songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file, default_scanner_options } from './parsers/scan_songs';
 export { score } from "./consts/score";
 export { score_parse } from './tools/score_parse';
 export { scores_beatmap, score_beatmap } from "./consts/scores_beatmap";
@@ -37,6 +37,6 @@ export { replay_osr, replay_load } from './parsers/replay_osr';
 export { compare_files } from './tools/compare';
 export { extract_all } from './tools/extract_all';
 export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
-export { open_realm, get_realm_objects, close_realm } from './parsers/client_realm';
+export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_beatmap_file } from './parsers/client_realm';
 export { RealmResults } from './consts/laser/RealmResults';
 //# sourceMappingURL=index.d.ts.map
