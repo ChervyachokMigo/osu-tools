@@ -1,6 +1,6 @@
 {
 	"name": "osu-tools",
-	"version": "0.1.55",
+	"version": "0.1.56",
 	"description": "osu parser for db/osr files and some stuff ",
 	"main": "built/index.js",
 	"scripts": {
@@ -17,7 +17,8 @@
 		"test_osu_db_concat": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_concat.ts",
 		"test_osu_db_export_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_export_sr.ts",
 		"test_osu_db_import_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_import_sr.ts",
-		"test_grade": "ts-node tests/test_grade.ts"
+		"test_grade": "ts-node tests/test_grade.ts",
+		"test_laser_realm": "ts-node tests/test_laser_realm.ts"
 	},
 	"keywords": [],
 	"author": "ChervyachokMigo",
@@ -32,7 +33,8 @@
 		"glob": "^10.3.10",
 		"lzma": "^2.3.2",
 		"md5-file": "^5.0.0",
-		"mmap-io": "github:ChervyachokMigo/mmap-io"
+		"mmap-io": "github:ChervyachokMigo/mmap-io",
+		"realm": "^12.14.1"
 	},
 	"bundleDependencies": [
 		"bitwise",

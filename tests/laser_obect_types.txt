@@ -1,0 +1,62 @@
+{
+    ID: new UUID("a1aca479-387e-43cf-9790-5affcb63fa8d"),
+    DifficultyName: "Gaia's Insane",
+    Ruleset: Ruleset {
+      ShortName: 'osu',
+      OnlineID: 0,
+      Name: 'osu!',
+      InstantiationInfo: 'osu.Game.Rulesets.Osu.OsuRuleset, osu.Game.Rulesets.Osu',
+      LastAppliedDifficultyVersion: 20241007,
+      Available: true
+    },
+    Difficulty: BeatmapDifficulty {
+      DrainRate: 5.5,
+      CircleSize: 4,
+      OverallDifficulty: 7.5,
+      ApproachRate: 9,
+      SliderMultiplier: 1.4,
+      SliderTickRate: 1
+    },
+    Metadata: BeatmapMetadata {
+      Title: 'MIIRO',
+      TitleUnicode: '海色',
+      Artist: 'Roselia',
+      ArtistUnicode: 'Roselia',
+      Author: [RealmUser],
+      Source: 'バンドリ！ ガールズバンドパーティ！',
+      Tags: 'Gaia Haruto Haruto_Aizawa Meg iMage-- BanG Dream! Girls Band Party bandori garupa ガルパ ロゼリア kantai collection kancolle 艦隊これくしょん -艦これ- AKINO from with bless4 みいろ cover opening game size minato yukina 湊友希那 aiba aina 相羽あいな hikawa sayo 氷川紗夜 kudou haruka 工藤晴香 imai lisa 今井リサ nakashima yuki 中島由貴 udagawa ako 宇田川あこ sakuragawa megu 櫻川めぐ shirokane rinko 白金燐子 shizaki kanon 志崎 樺音 anime video game japanese tatoe',
+      PreviewTime: 54576,
+      AudioFile: 'audio.mp3',
+      BackgroundFile: 'lisa.jpg'
+    },
+    UserSettings: BeatmapUserSettings { Offset: 0 },
+    BeatmapSet: BeatmapSet {
+      ID: new UUID("7a0dd62b-b602-413c-b121-49d654c016c5"),
+      OnlineID: 1000852,
+      DateAdded: 2022-06-16T11:42:21.373Z,
+      DateSubmitted: 2019-07-10T03:11:29.000Z,
+      DateRanked: 2019-07-27T07:40:02.000Z,
+      Beatmaps: [Realm.List],
+      Files: [Realm.List],
+      Status: 1,
+      DeletePending: false,
+      Hash: 'd3dbf1902077f73d874e42a83961405e55c0be5266abdbb6f7ec9c74a41e244e',
+      Protected: false
+    },
+    Status: 1,
+    OnlineID: 2094974,
+    Length: 89384,
+    BPM: 195.000195000195,
+    Hash: 'b456470b239a6537215eca18366c577c760d3e14e6735cabab7c311de5d55b3a',
+    StarRating: 4.312170319837133,
+    MD5Hash: '88b65a11d8b350e84cf268cb450c4d30',
+    OnlineMD5Hash: '88b65a11d8b350e84cf268cb450c4d30',
+    LastLocalUpdate: null,
+    LastOnlineUpdate: 2019-07-22T04:24:40.000Z,
+    Hidden: false,
+    EndTimeObjectCount: 162,
+    TotalObjectCount: 275,
+    LastPlayed: null,
+    BeatDivisor: 4,
+    EditorTimestamp: null
+}

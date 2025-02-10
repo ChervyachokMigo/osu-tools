@@ -1,3 +1,4 @@
+
 export { beatmap_results } from './consts/beatmap_results';
 
 export { color } from "./consts/color";
@@ -80,3 +81,5 @@ export { extract_all } from './tools/extract_all';
 //utils
 export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
 
+export { open_realm, get_realm_objects, close_realm } from './parsers/client_realm';
+export { RealmResults } from './consts/laser/RealmResults';
