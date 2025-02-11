@@ -37,6 +37,6 @@ export { replay_osr, replay_load } from './parsers/replay_osr';
 export { compare_files } from './tools/compare';
 export { extract_all } from './tools/extract_all';
 export { display_progress, display_progress_reset, display_progress_args } from './tools/display_progress';
-export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_beatmap_file } from './parsers/client_realm';
+export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_laser_beatmap_file, get_laser_beatmap_file_path } from './parsers/client_realm';
 export { RealmResults } from './consts/laser/RealmResults';
 //# sourceMappingURL=index.d.ts.map

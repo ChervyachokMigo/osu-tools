@@ -1,8 +1,8 @@
 import Realm from "realm";
-import path from "path";
+import path from "node:path";
 
 import { RealmObjectType } from '../consts/laser/RealmObjectType';
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import { default_scanner_options, parse_osu_file, scanner_options } from "./scan_songs";
 import { all_osu_file_properties, osu_file_beatmap_property } from "../consts/property_settings";
 
@@ -43,7 +43,7 @@ export const set_laser_files_path = (files_path: string) => {
 	laser_files_path = storage_path;
 }
 
-export const get_beatmap_file = ( 
+export const get_laser_beatmap_file = ( 
 	hash: string, 
 	raw = true, 
 	osu_file_beatmap_properties: osu_file_beatmap_property[] = all_osu_file_properties,
@@ -59,4 +59,14 @@ export const get_beatmap_file = (
 	} else {
 		return parse_osu_file(file_path, osu_file_beatmap_properties, options);
 	}
+}
+
+export const get_laser_beatmap_file_path = ( hash: string ) => {
+	const second = hash.slice(0, 2);
+	const first = second.slice(0, 1);
+	const file_path = path.join(laser_files_path as string, first, second, hash );
+	if (!existsSync(file_path)) {
+        throw new Error(`Beatmap file ${file_path} not exists.`);
+    }
+	return file_path;
 }

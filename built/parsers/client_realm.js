@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
+exports.get_laser_beatmap_file_path = exports.get_laser_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
 const realm_1 = __importDefault(require("realm"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = require("fs");
+const node_path_1 = __importDefault(require("node:path"));
+const node_fs_1 = require("node:fs");
 const scan_songs_1 = require("./scan_songs");
 const property_settings_1 = require("../consts/property_settings");
 let realm = null;
@@ -28,14 +28,14 @@ const close_realm = () => {
 };
 exports.close_realm = close_realm;
 const set_laser_files_path = (files_path) => {
-    const files_path_parsed = path_1.default.parse(files_path);
+    const files_path_parsed = node_path_1.default.parse(files_path);
     let storage_path = null;
     if (files_path_parsed.name === 'files') {
         storage_path = files_path;
     }
     else {
-        const path_with_files = path_1.default.join(files_path, 'files');
-        if ((0, fs_1.existsSync)(path_with_files)) {
+        const path_with_files = node_path_1.default.join(files_path, 'files');
+        if ((0, node_fs_1.existsSync)(path_with_files)) {
             storage_path = path_with_files;
         }
         else {
@@ -45,19 +45,29 @@ const set_laser_files_path = (files_path) => {
     laser_files_path = storage_path;
 };
 exports.set_laser_files_path = set_laser_files_path;
-const get_beatmap_file = (hash, raw = true, osu_file_beatmap_properties = property_settings_1.all_osu_file_properties, options = scan_songs_1.default_scanner_options) => {
+const get_laser_beatmap_file = (hash, raw = true, osu_file_beatmap_properties = property_settings_1.all_osu_file_properties, options = scan_songs_1.default_scanner_options) => {
     const second = hash.slice(0, 2);
     const first = second.slice(0, 1);
-    const file_path = path_1.default.join(laser_files_path, first, second, hash);
-    if (!(0, fs_1.existsSync)(file_path)) {
+    const file_path = node_path_1.default.join(laser_files_path, first, second, hash);
+    if (!(0, node_fs_1.existsSync)(file_path)) {
         throw new Error(`Beatmap file ${file_path} not exists.`);
     }
     if (raw) {
-        return (0, fs_1.readFileSync)(file_path, { encoding: 'utf-8' });
+        return (0, node_fs_1.readFileSync)(file_path, { encoding: 'utf-8' });
         ;
     }
     else {
         return (0, scan_songs_1.parse_osu_file)(file_path, osu_file_beatmap_properties, options);
     }
 };
-exports.get_beatmap_file = get_beatmap_file;
+exports.get_laser_beatmap_file = get_laser_beatmap_file;
+const get_laser_beatmap_file_path = (hash) => {
+    const second = hash.slice(0, 2);
+    const first = second.slice(0, 1);
+    const file_path = node_path_1.default.join(laser_files_path, first, second, hash);
+    if (!(0, node_fs_1.existsSync)(file_path)) {
+        throw new Error(`Beatmap file ${file_path} not exists.`);
+    }
+    return file_path;
+};
+exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
