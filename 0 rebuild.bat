@@ -1,0 +1,1 @@
+npm up && rd built /S /Q && npx tsc && pause

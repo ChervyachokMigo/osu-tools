@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_laser_beatmap_file_path = exports.get_laser_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
+exports.export_beatmapset = exports.get_laser_beatmap_file_path = exports.get_laser_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
 const realm_1 = __importDefault(require("realm"));
 const node_path_1 = __importDefault(require("node:path"));
 const node_fs_1 = require("node:fs");
@@ -71,3 +71,38 @@ const get_laser_beatmap_file_path = (hash) => {
     return file_path;
 };
 exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
+const export_beatmapset = (beatmapsets, ID, export_path, out_result = false) => {
+    if (ID < 1) {
+        throw new Error('Beatmapset ID must be greater than 0.');
+    }
+    const beatmapset = beatmapsets.find(v => v.OnlineID == ID);
+    if (!beatmapset) {
+        throw new Error(`Beatmapset with ID ${ID} not found.`);
+    }
+    const beatmap = beatmapset.Beatmaps.find(v => v.Hash == beatmapset.Hash);
+    if (!beatmap) {
+        throw new Error(`Beatmap with hash ${beatmapset.Hash} not found.`);
+    }
+    const foldername = `${beatmapset.OnlineID} ${beatmap.Metadata.Artist} - ${beatmap.Metadata.Title}`;
+    const beatmap_files = beatmapset.Files.map((v) => {
+        return {
+            filename: v.Filename,
+            filehash: v.File.Hash,
+            filepath: (0, exports.get_laser_beatmap_file_path)(v.File.Hash),
+        };
+    });
+    for (let file of beatmap_files) {
+        const dest_path = node_path_1.default.join(export_path, foldername, file.filename);
+        if (!(0, node_fs_1.existsSync)(node_path_1.default.dirname(dest_path))) {
+            (0, node_fs_1.mkdirSync)(node_path_1.default.dirname(dest_path), { recursive: true });
+        }
+        (0, node_fs_1.copyFileSync)(file.filepath, dest_path);
+        //console.log(`Exported ${file.filename} to ${dest_path}`);
+    }
+    ;
+    if (out_result) {
+        console.log(`Exported beatmapset ${foldername}`);
+    }
+    return { foldername, exported_path: node_path_1.default.join(export_path, foldername), files: beatmap_files };
+};
+exports.export_beatmapset = export_beatmapset;
