@@ -27,8 +27,10 @@ export declare class buffer_parse {
     getWindowsTickDate(): BigInt;
     getDateTime(): WindowsTickRate;
     skipDateTime(): void;
-    getStarRatings(): Array<StarRating>;
-    skipStarRatings(): void;
+    getStarRatings_double(): Array<StarRating>;
+    skipStarRatings_double(): void;
+    getStarRatings_float(): Array<StarRating>;
+    skipStarRatings_float(): void;
     getTimingPoints(): Array<TimingPoint>;
     skipTimingPoints(): void;
     getString(): string;

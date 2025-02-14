@@ -194,26 +194,49 @@ export class osu_db extends osu_file {
         }
 
         if (osu_db_version >= 20140609) {
-            if (this.property_settings.indexOf(beatmap_property.star_rating_std) !== -1) {
-                beatmap.star_rating_std = this.buff.getStarRatings();
-            } else {
-                this.buff.skipStarRatings();
-            }
-            if (this.property_settings.indexOf(beatmap_property.star_rating_taiko) !== -1) {
-                beatmap.star_rating_taiko = this.buff.getStarRatings();
-            } else {
-                this.buff.skipStarRatings();
-            }
-            if (this.property_settings.indexOf(beatmap_property.star_rating_ctb) !== -1) {
-                beatmap.star_rating_ctb = this.buff.getStarRatings();
-            } else {
-                this.buff.skipStarRatings();
-            }
-            if (this.property_settings.indexOf(beatmap_property.star_rating_mania) !== -1) {
-                beatmap.star_rating_mania = this.buff.getStarRatings();
-            } else {
-                this.buff.skipStarRatings();
-            }
+			if (osu_db_version < 20250107) {
+				if (this.property_settings.indexOf(beatmap_property.star_rating_std) !== -1) {
+					beatmap.star_rating_std = this.buff.getStarRatings_double();
+				} else {
+					this.buff.skipStarRatings_double();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_taiko) !== -1) {
+					beatmap.star_rating_taiko = this.buff.getStarRatings_double();
+				} else {
+					this.buff.skipStarRatings_double();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_ctb) !== -1) {
+					beatmap.star_rating_ctb = this.buff.getStarRatings_double();
+				} else {
+					this.buff.skipStarRatings_double();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_mania) !== -1) {
+					beatmap.star_rating_mania = this.buff.getStarRatings_double();
+				} else {
+					this.buff.skipStarRatings_double();
+				}
+			} else {
+				if (this.property_settings.indexOf(beatmap_property.star_rating_std) !== -1) {
+					beatmap.star_rating_std = this.buff.getStarRatings_float();
+				} else {
+					this.buff.skipStarRatings_float();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_taiko) !== -1) {
+					beatmap.star_rating_taiko = this.buff.getStarRatings_float();
+				} else {
+					this.buff.skipStarRatings_float();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_ctb) !== -1) {
+					beatmap.star_rating_ctb = this.buff.getStarRatings_float();
+				} else {
+					this.buff.skipStarRatings_float();
+				}
+				if (this.property_settings.indexOf(beatmap_property.star_rating_mania) !== -1) {
+					beatmap.star_rating_mania = this.buff.getStarRatings_float();
+				} else {
+					this.buff.skipStarRatings_float();
+				}
+			}
         }
 
         if (this.property_settings.indexOf(beatmap_property.drain_time) !== -1) {

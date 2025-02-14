@@ -78,10 +78,17 @@ export const osu_db_save = ( osu_db: osu_db_results, file_path: string = 'osu!.d
 		buffer.addDouble(beatmap.slider_velocity as number);
 
 		if (osu_db.osu_version as number >= 20140609) {
-			buffer.addStarRatings(beatmap.star_rating_std as StarRating[]);
-			buffer.addStarRatings(beatmap.star_rating_taiko as StarRating[]);
-			buffer.addStarRatings(beatmap.star_rating_ctb as StarRating[]);
-			buffer.addStarRatings(beatmap.star_rating_mania as StarRating[]);
+			if (osu_db.osu_version as number < 20250107) {
+				buffer.addStarRatings_double(beatmap.star_rating_std as StarRating[]);
+				buffer.addStarRatings_double(beatmap.star_rating_taiko as StarRating[]);
+				buffer.addStarRatings_double(beatmap.star_rating_ctb as StarRating[]);
+				buffer.addStarRatings_double(beatmap.star_rating_mania as StarRating[]);
+			} else {
+				buffer.addStarRatings_float(beatmap.star_rating_std as StarRating[]);
+				buffer.addStarRatings_float(beatmap.star_rating_taiko as StarRating[]);
+				buffer.addStarRatings_float(beatmap.star_rating_ctb as StarRating[]);
+				buffer.addStarRatings_float(beatmap.star_rating_mania as StarRating[]);
+			}
 		}
 
 		buffer.addInt(beatmap.drain_time as number);

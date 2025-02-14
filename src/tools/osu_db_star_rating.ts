@@ -101,7 +101,11 @@ export const save_sr = (version: number, data: beatmap_star_ratings[], output: s
         buffer.addByte(Object.keys(beatmap.star_ratings).length);
 		for (let x of Object.entries(beatmap.star_ratings)){
 			buffer.addByte(sr_keys.indexOf(x[0]));
-			buffer.addStarRatings(x[1]);
+			if (version as number < 20250107) {
+				buffer.addStarRatings_double(x[1]);
+			} else {
+				buffer.addStarRatings_float(x[1]);
+			}
 		}
 	}
 
@@ -170,8 +174,14 @@ export const load_sr = ( raw_path: string ): sr_raw_result => {
         const star_ratings_length = file.buff.getByte();
 		for (let j = 0; j < star_ratings_length; j++) {
 			const star_rating_key = sr_keys[file.buff.getByte()];
-            const star_ratings = file.buff.getStarRatings();
-            beatmap.star_ratings[star_rating_key as keyof star_ratings] = star_ratings;
+			if (version as number < 20250107) {
+				const star_ratings = file.buff.getStarRatings_double();
+				beatmap.star_ratings[star_rating_key as keyof star_ratings] = star_ratings;
+			} else {
+				const star_ratings = file.buff.getStarRatings_float();
+				beatmap.star_ratings[star_rating_key as keyof star_ratings] = star_ratings;
+			}
+            
         }
 		results.push(beatmap);
 	}

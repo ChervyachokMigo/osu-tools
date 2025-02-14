@@ -147,7 +147,7 @@ export class buffer_saver {
 		}
 	}
 
-	addStarRatings(arr: Array<StarRating>) {
+	addStarRatings_double(arr: Array<StarRating>) {
 		this.addUInt(arr.length);
 		if (arr.length > 0) {
 			for (let val of arr) {
@@ -155,6 +155,18 @@ export class buffer_saver {
 				this.addUInt(val.mods_int as number);
 				this.addByte(val.stars_flag as number);
 				this.addDouble(val.stars as number);
+			}
+		}
+	}
+
+	addStarRatings_float(arr: Array<StarRating>) {
+		this.addUInt(arr.length);
+		if (arr.length > 0) {
+			for (let val of arr) {
+				this.addByte(val.mods_flag as number);
+				this.addUInt(val.mods_int as number);
+				this.addByte(val.stars_flag as number);
+				this.addSingle(val.stars as number);
 			}
 		}
 	}

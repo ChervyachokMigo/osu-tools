@@ -107,7 +107,7 @@ export class buffer_parse {
         this.cursor_offset += 8;
     }
 
-    getStarRatings(): Array<StarRating> {
+    getStarRatings_double(): Array<StarRating> {
         let results: Array<StarRating> = [];
         let count = this.bufferRead(4).readUInt32LE();
 
@@ -124,9 +124,31 @@ export class buffer_parse {
         return results;
     }
 
-    skipStarRatings(): void {
+    skipStarRatings_double(): void {
         let count = this.bufferRead(4).readUInt32LE();
         this.cursor_offset += 14 * count;
+    }
+
+	getStarRatings_float(): Array<StarRating> {
+        let results: Array<StarRating> = [];
+        let count = this.bufferRead(4).readUInt32LE();
+
+        for (let i = 0; i < count; i++) {
+
+            let sr: StarRating = {};
+			sr.mods_flag = this.bufferRead(1).readUInt8();
+            sr.mods_int = this.bufferRead(4).readUInt32LE();
+			sr.stars_flag = this.bufferRead(1).readUInt8();
+            sr.stars = this.bufferRead(4).readFloatLE();
+
+            results.push(sr);
+        }
+        return results;
+    }
+
+	skipStarRatings_float(): void {
+        let count = this.bufferRead(4).readUInt32LE();
+        this.cursor_offset += 10 * count;
     }
 
     getTimingPoints(): Array<TimingPoint> {

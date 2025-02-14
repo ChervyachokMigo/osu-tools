@@ -22,7 +22,8 @@ export declare class buffer_saver {
     addULEB128(number: number): void;
     addString(val: string | Buffer): void;
     addBufferString(val: StringBuffer): void;
-    addStarRatings(arr: Array<StarRating>): void;
+    addStarRatings_double(arr: Array<StarRating>): void;
+    addStarRatings_float(arr: Array<StarRating>): void;
     addTimingPoints(arr: Array<TimingPoint>): void;
 }
 //# sourceMappingURL=buffer_saver.d.ts.map

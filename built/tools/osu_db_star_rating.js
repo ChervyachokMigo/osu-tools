@@ -82,7 +82,12 @@ const save_sr = (version, data, output) => {
         buffer.addByte(Object.keys(beatmap.star_ratings).length);
         for (let x of Object.entries(beatmap.star_ratings)) {
             buffer.addByte(sr_keys.indexOf(x[0]));
-            buffer.addStarRatings(x[1]);
+            if (version < 20250107) {
+                buffer.addStarRatings_double(x[1]);
+            }
+            else {
+                buffer.addStarRatings_float(x[1]);
+            }
         }
     }
     (0, fs_1.writeFileSync)(output, buffer.getBuffer(), { encoding: 'binary' });
@@ -136,8 +141,14 @@ const load_sr = (raw_path) => {
         const star_ratings_length = file.buff.getByte();
         for (let j = 0; j < star_ratings_length; j++) {
             const star_rating_key = sr_keys[file.buff.getByte()];
-            const star_ratings = file.buff.getStarRatings();
-            beatmap.star_ratings[star_rating_key] = star_ratings;
+            if (version < 20250107) {
+                const star_ratings = file.buff.getStarRatings_double();
+                beatmap.star_ratings[star_rating_key] = star_ratings;
+            }
+            else {
+                const star_ratings = file.buff.getStarRatings_float();
+                beatmap.star_ratings[star_rating_key] = star_ratings;
+            }
         }
         results.push(beatmap);
     }

@@ -132,7 +132,7 @@ class buffer_saver {
             }
         }
     }
-    addStarRatings(arr) {
+    addStarRatings_double(arr) {
         this.addUInt(arr.length);
         if (arr.length > 0) {
             for (let val of arr) {
@@ -140,6 +140,17 @@ class buffer_saver {
                 this.addUInt(val.mods_int);
                 this.addByte(val.stars_flag);
                 this.addDouble(val.stars);
+            }
+        }
+    }
+    addStarRatings_float(arr) {
+        this.addUInt(arr.length);
+        if (arr.length > 0) {
+            for (let val of arr) {
+                this.addByte(val.mods_flag);
+                this.addUInt(val.mods_int);
+                this.addByte(val.stars_flag);
+                this.addSingle(val.stars);
             }
         }
     }

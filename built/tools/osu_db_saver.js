@@ -62,10 +62,18 @@ const osu_db_save = (osu_db, file_path = 'osu!.db', options = { print_progress: 
         }
         buffer.addDouble(beatmap.slider_velocity);
         if (osu_db.osu_version >= 20140609) {
-            buffer.addStarRatings(beatmap.star_rating_std);
-            buffer.addStarRatings(beatmap.star_rating_taiko);
-            buffer.addStarRatings(beatmap.star_rating_ctb);
-            buffer.addStarRatings(beatmap.star_rating_mania);
+            if (osu_db.osu_version < 20250107) {
+                buffer.addStarRatings_double(beatmap.star_rating_std);
+                buffer.addStarRatings_double(beatmap.star_rating_taiko);
+                buffer.addStarRatings_double(beatmap.star_rating_ctb);
+                buffer.addStarRatings_double(beatmap.star_rating_mania);
+            }
+            else {
+                buffer.addStarRatings_float(beatmap.star_rating_std);
+                buffer.addStarRatings_float(beatmap.star_rating_taiko);
+                buffer.addStarRatings_float(beatmap.star_rating_ctb);
+                buffer.addStarRatings_float(beatmap.star_rating_mania);
+            }
         }
         buffer.addInt(beatmap.drain_time);
         buffer.addInt(beatmap.total_time);
