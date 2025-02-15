@@ -84,7 +84,7 @@ export { display_progress, display_progress_reset, display_progress_args } from 
 export { RealmResults } from './consts/laser/RealmResults';
 export { RealmObjectType } from './consts/laser/RealmObjectType';
 
-export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_laser_beatmap_file, get_laser_beatmap_file_path,
+export { open_realm, get_realm_objects, close_realm, set_laser_files_path, get_laser_beatmap_file, get_laser_beatmap_file_path, get_beatmapset_files,
 		export_beatmapset, laser_file } from './parsers/client_realm';
 export { realm_beatmap, realm_beatmap_difficulty, realm_beatmap_metadata, realm_beatmap_ruleset, realm_beatmap_user_settings } from './consts/laser/realm_beatmap';
 export { realm_file, realm_file_props } from './consts/laser/realm_file';
