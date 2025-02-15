@@ -47,7 +47,7 @@ export const set_laser_files_path = (files_path: string) => {
 	laser_files_path = storage_path;
 }
 
-export const get_laser_beatmap_file = ( 
+export const get_laser_beatmap_file = (
 	hash: string, 
 	raw = true, 
 	osu_file_beatmap_properties: osu_file_beatmap_property[] = all_osu_file_properties,
@@ -81,7 +81,7 @@ export type laser_file = {
 	filepath: string;
 }
 
-export const export_beatmapset = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number, export_path: string, out_result = false) => {
+export const get_beatmapset_files = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number) => {
 	if (ID < 1) {
 		throw new Error('Beatmapset ID must be greater than 0.');
 	}
@@ -108,8 +108,15 @@ export const export_beatmapset = (beatmapsets: Results<RealmObject<DefaultObject
 		}
 	});
 
-	for (let file of beatmap_files) {
-        const dest_path = path.join(export_path, foldername, file.filename);
+	return { foldername, files: beatmap_files };
+}
+
+export const export_beatmapset = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number, export_path: string, out_result = false) => {
+	
+	const beatmapset_files = get_beatmapset_files(beatmapsets, ID);
+
+	for (let file of beatmapset_files.files) {
+        const dest_path = path.join(export_path, beatmapset_files.foldername, file.filename);
         if (!existsSync(path.dirname(dest_path))) {
             mkdirSync(path.dirname(dest_path), { recursive: true });
         }
@@ -118,8 +125,8 @@ export const export_beatmapset = (beatmapsets: Results<RealmObject<DefaultObject
     };
 
 	if (out_result){
-		console.log(`Exported beatmapset ${foldername}`);
+		console.log(`Exported beatmapset ${beatmapset_files.foldername}`);
 	}
 
-	return { foldername, exported_path: path.join(export_path, foldername), files: beatmap_files };
+	return {...beatmapset_files, exported_path: path.join(export_path, beatmapset_files.foldername)};
 }
