@@ -81,39 +81,51 @@ export type laser_file = {
 	filepath: string;
 }
 
-export const get_beatmapset_files = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number) => {
+export const find_beatmapset_files = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number) => {
 	if (ID < 1) {
-		throw new Error('Beatmapset ID must be greater than 0.');
+		console.error('Beatmapset ID must be greater than 0.');
+		return { foldername: '', files: [] };
 	}
 
 	const beatmapset = beatmapsets.find(v => v.OnlineID == ID );
 
 	if (!beatmapset) {
-		throw new Error(`Beatmapset with ID ${ID} not found.`);
+		console.error(`Beatmapset with ID ${ID} not found.`);
+		return { foldername: '', files: [] };
 	}
 
-	const beatmap = (beatmapset.Beatmaps as Array<realm_beatmap>).find( v => v.Hash == beatmapset.Hash );
+	return get_beatmapset_files(beatmapset);
+}
 
-	if (!beatmap) {
-		throw new Error(`Beatmap with hash ${beatmapset.Hash} not found.`);
+export const get_beatmapset_files = (beatmapset: RealmObject<DefaultObject> & DefaultObject) => {
+	const beatmaps = (beatmapset.Beatmaps as Array<realm_beatmap>);
+
+	if (beatmaps.length === 0) {
+		console.error(`Beatmapset ${beatmapset.OnlineID} has no beatmaps.`);
+		return { foldername: '', files: [] };
 	}
 
-	const foldername = `${beatmapset.OnlineID} ${beatmap.Metadata.Artist} - ${beatmap.Metadata.Title}`;
+	const beatmap_meatadata = beatmaps[0].Metadata;
 
-	const beatmap_files: Array<laser_file> = (beatmapset.Files as  Array<realm_file>).map((v: realm_file) => {
-		return {
+	const foldername = `${beatmapset.OnlineID} ${beatmap_meatadata.Artist} - ${beatmap_meatadata.Title}`;
+
+	const beatmap_files: Array<laser_file> = (beatmapset.Files as  Array<realm_file>)
+		.map((v: realm_file) => ({
 			filename: v.Filename,
 			filehash: v.File.Hash,
 			filepath: get_laser_beatmap_file_path(v.File.Hash),
-		}
-	});
+		}));
 
 	return { foldername, files: beatmap_files };
 }
 
-export const export_beatmapset = (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number, export_path: string, out_result = false) => {
+export const export_beatmapset = (beatmapset: RealmObject<DefaultObject> & DefaultObject, export_path: string, out_result = false) => {
 	
-	const beatmapset_files = get_beatmapset_files(beatmapsets, ID);
+	const beatmapset_files = get_beatmapset_files(beatmapset);
+
+	if (beatmapset_files.files.length === 0) {
+        return;
+	}
 
 	for (let file of beatmapset_files.files) {
         const dest_path = path.join(export_path, beatmapset_files.foldername, file.filename);

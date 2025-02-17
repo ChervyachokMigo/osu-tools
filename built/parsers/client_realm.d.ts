@@ -14,13 +14,17 @@ export type laser_file = {
     filehash: string;
     filepath: string;
 };
-export declare const get_beatmapset_files: (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number) => {
+export declare const find_beatmapset_files: (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number) => {
     foldername: string;
     files: laser_file[];
 };
-export declare const export_beatmapset: (beatmapsets: Results<RealmObject<DefaultObject> & DefaultObject>, ID: number, export_path: string, out_result?: boolean) => {
+export declare const get_beatmapset_files: (beatmapset: RealmObject<DefaultObject> & DefaultObject) => {
+    foldername: string;
+    files: laser_file[];
+};
+export declare const export_beatmapset: (beatmapset: RealmObject<DefaultObject> & DefaultObject, export_path: string, out_result?: boolean) => {
     exported_path: string;
     foldername: string;
     files: laser_file[];
-};
+} | undefined;
 //# sourceMappingURL=client_realm.d.ts.map
