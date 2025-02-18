@@ -92,3 +92,5 @@ export { realm_beatmap, realm_beatmap_difficulty, realm_beatmap_metadata, realm_
 export { realm_file, realm_file_props } from './consts/laser/realm_file';
 export { realm_beatmapset } from './consts/laser/ream_beatmapset';
 export { realm_user } from './consts/laser/realm_user';
+
+export { escape_string } from './tools/escape_string';

@@ -9,6 +9,7 @@ const node_path_1 = __importDefault(require("node:path"));
 const node_fs_1 = require("node:fs");
 const scan_songs_1 = require("./scan_songs");
 const property_settings_1 = require("../consts/property_settings");
+const escape_string_1 = require("../tools/escape_string");
 let realm = null;
 let laser_files_path = null;
 const open_realm = (file_path) => {
@@ -91,7 +92,7 @@ const get_beatmapset_files = (beatmapset) => {
         return { foldername: '', files: [] };
     }
     const beatmap_meatadata = beatmaps[0].Metadata;
-    const foldername = `${beatmapset.OnlineID} ${beatmap_meatadata.Artist} - ${beatmap_meatadata.Title}`;
+    const foldername = (0, escape_string_1.escape_string)(`${beatmapset.OnlineID} ${beatmap_meatadata.Artist} - ${beatmap_meatadata.Title}`);
     const beatmap_files = beatmapset.Files
         .map((v) => ({
         filename: v.Filename,

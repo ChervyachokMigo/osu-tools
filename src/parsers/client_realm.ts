@@ -9,6 +9,7 @@ import { DefaultObject, RealmObject } from "realm/dist/public-types/namespace";
 import { realm_file } from "../consts/laser/realm_file";
 import { realm_beatmapset } from "../consts/laser/ream_beatmapset";
 import { realm_beatmap } from "../consts/laser/realm_beatmap";
+import { escape_string } from "../tools/escape_string";
 
 let realm: Realm | null = null;
 let laser_files_path: string | null = null;
@@ -107,7 +108,7 @@ export const get_beatmapset_files = (beatmapset: RealmObject<DefaultObject> & De
 
 	const beatmap_meatadata = beatmaps[0].Metadata;
 
-	const foldername = `${beatmapset.OnlineID} ${beatmap_meatadata.Artist} - ${beatmap_meatadata.Title}`;
+	const foldername = escape_string(`${beatmapset.OnlineID} ${beatmap_meatadata.Artist} - ${beatmap_meatadata.Title}`);
 
 	const beatmap_files: Array<laser_file> = (beatmapset.Files as  Array<realm_file>)
 		.map((v: realm_file) => ({
