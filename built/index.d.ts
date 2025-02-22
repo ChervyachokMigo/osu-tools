@@ -45,4 +45,5 @@ export { realm_file, realm_file_props } from './consts/laser/realm_file';
 export { realm_beatmapset } from './consts/laser/ream_beatmapset';
 export { realm_user } from './consts/laser/realm_user';
 export { escape_string } from './tools/escape_string';
+export { laser_beatmap_status } from './consts/laser/beatmap_status';
 //# sourceMappingURL=index.d.ts.map
