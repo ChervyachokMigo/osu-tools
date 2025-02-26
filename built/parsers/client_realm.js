@@ -65,11 +65,7 @@ exports.get_laser_beatmap_file = get_laser_beatmap_file;
 const get_laser_beatmap_file_path = (hash) => {
     const second = hash.slice(0, 2);
     const first = second.slice(0, 1);
-    const file_path = node_path_1.default.join(laser_files_path, first, second, hash);
-    if (!(0, node_fs_1.existsSync)(file_path)) {
-        throw new Error(`Beatmap file ${file_path} not exists.`);
-    }
-    return file_path;
+    return node_path_1.default.join(laser_files_path, first, second, hash);
 };
 exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
 const find_beatmapset_files = (beatmapsets, ID) => {

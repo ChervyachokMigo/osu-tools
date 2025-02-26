@@ -69,11 +69,7 @@ export const get_laser_beatmap_file = (
 export const get_laser_beatmap_file_path = ( hash: string ) => {
 	const second = hash.slice(0, 2);
 	const first = second.slice(0, 1);
-	const file_path = path.join(laser_files_path as string, first, second, hash );
-	if (!existsSync(file_path)) {
-        throw new Error(`Beatmap file ${file_path} not exists.`);
-    }
-	return file_path;
+	return path.join(laser_files_path as string, first, second, hash );
 }
 
 export type laser_file = {
