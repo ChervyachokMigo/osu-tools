@@ -1,6 +1,5 @@
 import { all_osu_file_properties, beatmap_data, bpms } from '../../built/index.js';
 import { open_realm, close_realm, get_laser_beatmap_file, set_laser_files_path, get_realm_objects } from '../../built/parsers/client_realm.js';
-import {v4, v5, v6, stringify} from 'uuid';
 
 const realm_path = 'D:/osu!laser/client.realm';
 
