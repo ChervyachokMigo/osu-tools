@@ -272,15 +272,15 @@ class osu_db extends osu_file_1.osu_file {
                             next_offset = beatmap.total_time;
                         }
                         const value = {
-                            value: Math.floor(60000 / inherit_points[i].bpm),
+                            value: 60000 / inherit_points[i].bpm,
                             percent: (next_offset - inherit_points[i].offset) / beatmap.total_time
                         };
                         beatmap.BPM.values.push(value);
                     }
                     const values = beatmap.BPM.values.map(v => v.value);
-                    beatmap.BPM.min = Math.min(...values);
-                    beatmap.BPM.max = Math.max(...values);
-                    beatmap.BPM.average = beatmap.BPM.values.reduce((a, b) => a.percent > b.percent ? a : b).value;
+                    beatmap.BPM.min = Math.round(Math.min(...values));
+                    beatmap.BPM.max = Math.round(Math.max(...values));
+                    beatmap.BPM.average = Math.round(beatmap.BPM.values.reduce((a, b) => a.percent > b.percent ? a : b).value);
                 }
             }
         }

@@ -493,8 +493,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         //[HitObjects] block
         else if (is_properties_has_hit_objects_block && beatmap_block_type.is_hit_objects_block) {
             let row_splitted = row.replace('\r', '').split(',');
-            if (properties_has_hit_objects_block ||
-                osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1) {
+            if (properties_has_hit_objects_block || osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1) {
                 beatmap.hit_objects.count = row_splitted.filter(value => value.length >= 5).length;
             }
             if (options.is_hit_objects_only_count === false &&
@@ -703,6 +702,48 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         if (!beatmap.metadata)
             beatmap.metadata = {};
         beatmap.metadata.beatmap_md5 = md5_file_1.default.sync(osu_file_path);
+    }
+    // beatmap.general:
+    //  total_time
+    //  drain_time
+    //  bpm
+    if (options.is_hit_objects_only_count === false &&
+        (properties_has_hit_objects_block ||
+            (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1 &&
+                (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_total_time) !== -1 ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_drain_time) !== -1 ||
+                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_bpm) !== -1)))) {
+        let hit_objects = beatmap.hit_objects.hit_objects;
+        let first_hit_object = hit_objects[0];
+        let last_hit_object = hit_objects[hit_objects.length - 1];
+        beatmap.general.total_time = last_hit_object.time;
+        beatmap.general.drain_time = last_hit_object.time - first_hit_object.time;
+        if (beatmap.timing_points && beatmap.timing_points.length > 0) {
+            const timing_points = beatmap.timing_points.filter(v => v.uninherited === true);
+            if (timing_points) {
+                const bpms = [];
+                for (let i = 0; i < timing_points.length; i++) {
+                    let next_offset = 0;
+                    if (timing_points[i + 1]) {
+                        next_offset = timing_points[i + 1].time_offset;
+                    }
+                    else {
+                        next_offset = beatmap.general.total_time;
+                    }
+                    const value = 60000 / timing_points[i].beat_length;
+                    if (value > 0) {
+                        const percent = (next_offset - timing_points[i].time_offset) / beatmap.general.total_time;
+                        bpms.push({ value, percent });
+                    }
+                }
+                const values = bpms.map(v => v.value);
+                beatmap.general.bpm = {
+                    min: Math.round(Math.min(...values)),
+                    max: Math.round(Math.max(...values)),
+                    avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
+                };
+            }
+        }
     }
     for (let key in beatmap) {
         if (Array.isArray(beatmap[key]) && beatmap[key].length === 0) {

@@ -146,16 +146,20 @@ export declare enum osu_file_beatmap_property {
     events_comments = 54,
     events_scripts = 55,
     timing_points_block = 56,
-    colors_block = 57,
-    hit_objects_block = 58,
-    hit_objects = 59,
-    hit_objects_count = 60
+    timing_points_total_time = 57,
+    timing_points_drain_time = 58,
+    timing_points_bpm = 59,
+    colors_block = 60,
+    hit_objects_block = 61,
+    hit_objects = 62,
+    hit_objects_count = 63
 }
 export declare const all_general_properties: osu_file_beatmap_property[];
 export declare const all_editor_properties: osu_file_beatmap_property[];
 export declare const all_metadata_properties: osu_file_beatmap_property[];
 export declare const all_difficulty_properties: osu_file_beatmap_property[];
 export declare const all_events_properties: osu_file_beatmap_property[];
+export declare const all_timing_points_properties: osu_file_beatmap_property[];
 export declare const all_hit_objects_properties: osu_file_beatmap_property[];
 export declare const all_osu_file_properties: osu_file_beatmap_property[];
 export declare const none_osu_file_properties: osu_file_beatmap_property[];

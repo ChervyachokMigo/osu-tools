@@ -220,6 +220,11 @@ export declare enum beatmap_data_hit_sound {
     Finish = 2,
     Clap = 3
 }
+export type bpms = {
+    min: number;
+    max: number;
+    avg: number;
+};
 /**  [Hit objects]
  *
  * All of these options (besides volume) are used to determine which sound file to play for a given hitsound.
@@ -376,6 +381,24 @@ export type beatmap_data_general = {
     @param  default 0
     */
     is_samples_match_playback_rate?: boolean;
+    /**[General]
+    
+    Song time length
+    @param  default 0
+    */
+    total_time?: number;
+    /**[General]
+    
+    Playable time
+    @param  default 0
+    */
+    drain_time?: number;
+    /**[General]
+    
+    Beats per minute of map (min, max, avg)
+    @param  default 0
+    */
+    bpm?: bpms;
 };
 /**
  * [Editor]

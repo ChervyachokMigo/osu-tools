@@ -23,7 +23,8 @@ export { beatmap_property,          none_beatmap_properties,    all_beatmap_prop
          osu_file_beatmap_property, none_osu_file_properties,   all_osu_file_properties, 
 
          all_general_properties,    all_editor_properties,      all_metadata_properties,
-         all_difficulty_properties, all_events_properties,      all_hit_objects_properties } from "./consts/property_settings";
+         all_difficulty_properties, all_events_properties,      all_timing_points_properties,
+		 all_hit_objects_properties } from "./consts/property_settings";
 
 export { collection_db_results } from "./consts/collection_db_results";
 export { collection } from "./consts/collection";
@@ -45,7 +46,7 @@ export { beatmap_data,
          beatmap_sample_set,             beatmap_countdown,      hit_sample_set, 
          beatmap_overlay_position,       timing_point_effect,    beatmap_color_type, 
          beatmap_data_hit_object_type,   beatmap_data_hit_sound, beatmap_data_hit_sample, 
-         beatmap_data_hit_object,
+         beatmap_data_hit_object,		 bpms,
 		 point, slider_edge_set, slider_type, slider_properties } from './consts/beatmap_data';
 
 export { beatmap_event } from "./consts/beatmap_events/beatmap_event";

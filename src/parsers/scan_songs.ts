@@ -17,7 +17,7 @@ import { Gamemode } from "../consts/variable_types";
 import bitwise from "bitwise";
 
 import { all_difficulty_properties, all_editor_properties, 
-    all_events_properties, all_general_properties, all_hit_objects_properties, all_metadata_properties, 
+    all_events_properties, all_general_properties, all_hit_objects_properties, all_metadata_properties, all_timing_points_properties,
     osu_file_beatmap_property } from "../consts/property_settings";
 
 import { event_string_parse } from "../tools/beatmap_events";
@@ -572,11 +572,9 @@ export function parse_osu_file(osu_file_path: string,
             let row_escaped = row.replace('\r', '')
 
             if (row_escaped.length >= 1) {
-
                 let current_event = event_string_parse( row_escaped , osu_file_beatmap_properties );
-
-                if (current_event) beatmap.events.push( current_event as beatmap_event );
-
+                if (current_event) 
+					beatmap.events.push( current_event as beatmap_event );
             }
         }
 
@@ -636,9 +634,8 @@ export function parse_osu_file(osu_file_path: string,
 
             let row_splitted = row.replace('\r', '').split(',');
 
-            if (properties_has_hit_objects_block ||
-                osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_count) !== -1){
-                
+            if (properties_has_hit_objects_block || osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_count) !== -1){
+
                 beatmap.hit_objects.count = row_splitted.filter( value => value.length >=5 ).length;
 
             }
@@ -888,6 +885,61 @@ export function parse_osu_file(osu_file_path: string,
             beatmap.metadata = {};
             beatmap.metadata.beatmap_md5 = md5File.sync(osu_file_path);
     }
+
+	// beatmap.general:
+	//  total_time
+	//  drain_time
+	//  bpm
+
+	if (options.is_hit_objects_only_count === false && 
+		( properties_has_hit_objects_block ||
+		
+		( osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_count) !== -1 &&
+		
+		(osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.timing_points_total_time) !== -1 ||
+		  osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.timing_points_drain_time) !== -1 ||
+		  osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.timing_points_bpm) !== -1 ))) ){
+
+			let hit_objects = beatmap.hit_objects.hit_objects as beatmap_data_hit_object[];
+			let first_hit_object = hit_objects[0];
+			let last_hit_object = hit_objects[hit_objects.length-1];
+
+			beatmap.general.total_time = last_hit_object.time;
+			beatmap.general.drain_time = last_hit_object.time - first_hit_object.time;
+
+			if (beatmap.timing_points && beatmap.timing_points.length > 0) {
+			const timing_points = beatmap.timing_points.filter( v => v.uninherited === true );
+
+			if (timing_points) {
+				const bpms = [];
+				for (let i = 0; i < timing_points.length; i++) {
+					let next_offset = 0;
+					if (timing_points[i + 1]) {
+						next_offset = timing_points[i + 1].time_offset;
+					} else {
+						next_offset = beatmap.general.total_time;
+					}
+					const value = 60000 / timing_points[i].beat_length;
+					if (value > 0) {
+						const percent = (next_offset - timing_points[i].time_offset) / beatmap.general.total_time;
+						bpms.push({ value, percent });
+					}
+
+				}
+
+				const values = bpms.map( v => v.value );
+
+				beatmap.general.bpm = {
+					min: Math.round(Math.min(...values)),
+                    max: Math.round(Math.max(...values)),
+                    avg: Math.round(bpms.reduce( (a, b) => a.percent > b.percent ? a : b ).value)
+				}
+
+			}
+		}
+	}
+
+
 
     for (let key in beatmap) {
         if (Array.isArray(beatmap[key as keyof beatmap_data]) && (beatmap[key as keyof beatmap_data] as any[]).length === 0) {

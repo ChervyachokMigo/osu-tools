@@ -239,12 +239,15 @@ export enum osu_file_beatmap_property {
     events_scripts,
 
     timing_points_block,
+	timing_points_total_time,
+	timing_points_drain_time,
+	timing_points_bpm,
 
     colors_block,
 
     hit_objects_block,
     hit_objects,
-    hit_objects_count
+    hit_objects_count,
 }
 
 export const all_general_properties = [
@@ -311,6 +314,12 @@ export const all_events_properties = [
     osu_file_beatmap_property.events_animations,
     osu_file_beatmap_property.events_comments,
     osu_file_beatmap_property.events_scripts
+];
+
+export const all_timing_points_properties = [
+    osu_file_beatmap_property.timing_points_total_time,
+    osu_file_beatmap_property.timing_points_drain_time,
+	osu_file_beatmap_property.timing_points_bpm,
 ];
 
 export const all_hit_objects_properties = [
