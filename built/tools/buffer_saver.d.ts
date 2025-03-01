@@ -20,7 +20,7 @@ export declare class buffer_saver {
     addWindowTickrate(val: bigint): void;
     addWindowTickrateFromDate(val: WindowsTickRate): void;
     addULEB128(number: number): void;
-    addString(val: string | Buffer): void;
+    addString(val: string): void;
     addBufferString(val: StringBuffer): void;
     addStarRatings_double(arr: Array<StarRating>): void;
     addStarRatings_float(arr: Array<StarRating>): void;

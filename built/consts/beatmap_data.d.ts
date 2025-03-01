@@ -399,6 +399,12 @@ export type beatmap_data_general = {
     @param  default 0
     */
     bpm?: bpms;
+    /**[General]
+    
+    Time for break
+    @param  default 0
+    */
+    break_time?: number;
 };
 /**
  * [Editor]
@@ -521,6 +527,12 @@ export type beatmap_data_difficulty = {
      * Amount of slider ticks per beat
      */
     slider_tick_rate?: number;
+    /**
+     * [Difficulty]
+     *
+     * stream difficulty const
+     */
+    stream_difficulty?: number;
 };
 /**
  * [Timing points]

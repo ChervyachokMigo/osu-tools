@@ -10,6 +10,7 @@ import { realm_file } from "../consts/laser/realm_file";
 import { realm_beatmapset } from "../consts/laser/ream_beatmapset";
 import { realm_beatmap } from "../consts/laser/realm_beatmap";
 import { escape_string } from "../tools/escape_string";
+import { beatmap_data } from "../consts/beatmap_data";
 
 let realm: Realm | null = null;
 let laser_files_path: string | null = null;
@@ -53,6 +54,9 @@ export const get_laser_beatmap_file = (
 	raw = true, 
 	osu_file_beatmap_properties: osu_file_beatmap_property[] = all_osu_file_properties,
 	options: scanner_options = default_scanner_options  ) => {
+	if (!hash) {
+		throw new Error('Beatmap hash is required.');
+	}
 	const second = hash.slice(0, 2);
 	const first = second.slice(0, 1);
 	const file_path = path.join(laser_files_path as string, first, second, hash );
@@ -67,6 +71,9 @@ export const get_laser_beatmap_file = (
 }
 
 export const get_laser_beatmap_file_path = ( hash: string ) => {
+	if (!hash) {
+		throw new Error('Beatmap hash is required.');
+	}
 	const second = hash.slice(0, 2);
 	const first = second.slice(0, 1);
 	return path.join(laser_files_path as string, first, second, hash );

@@ -120,7 +120,7 @@ export class buffer_saver {
 		this.buffer_write(Buffer.from(out));
     }
 
-    addString(val: string | Buffer) {
+    addString(val: string) {
         if (val && val.length > 0) {
 			const res = Buffer.from(val);
 			this.addByte(0x0b);

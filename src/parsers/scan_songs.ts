@@ -25,6 +25,7 @@ import { beatmap_event } from "../consts/beatmap_events/beatmap_event";
 
 import { globSync, glob, Path } from "glob";
 import { display_progress, display_progress_reset } from "../tools/display_progress";
+import { beatmap_event_type } from "../consts/beatmap_events/beatmap_event_type";
 
 export type scanner_options = {
     is_read_only?: boolean,
@@ -635,9 +636,13 @@ export function parse_osu_file(osu_file_path: string,
             let row_splitted = row.replace('\r', '').split(',');
 
             if (properties_has_hit_objects_block || osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.hit_objects_count) !== -1){
-
-                beatmap.hit_objects.count = row_splitted.filter( value => value.length >=5 ).length;
-
+				if (row_splitted.length > 0) {
+					if (!beatmap.hit_objects.count) {
+						beatmap.hit_objects.count = 1;
+					} else {
+						beatmap.hit_objects.count++;
+					}
+				}
             }
 
             if ( options.is_hit_objects_only_count === false && 
@@ -924,22 +929,39 @@ export function parse_osu_file(osu_file_path: string,
 						const percent = (next_offset - timing_points[i].time_offset) / beatmap.general.total_time;
 						bpms.push({ value, percent });
 					}
-
 				}
 
-				const values = bpms.map( v => v.value );
+				const break_points = beatmap.events.filter( v=> v.type === beatmap_event_type.beatmap_break );
+				beatmap.general.break_time = 0;
+				if (break_points.length > 0) {
+					for(let v of break_points){
+						beatmap.general.break_time += (v.time_offset_end as number) - (v.time_offset as number);
+					}
+				}
 
-				beatmap.general.bpm = {
-					min: Math.round(Math.min(...values)),
-                    max: Math.round(Math.max(...values)),
-                    avg: Math.round(bpms.reduce( (a, b) => a.percent > b.percent ? a : b ).value)
+
+				if (bpms.length > 0) {
+					const values = bpms.map( v => v.value );
+
+					beatmap.general.bpm = {
+						min: Math.round(Math.min(...values)),
+						max: Math.round(Math.max(...values)),
+						avg: Math.round(bpms.reduce( (a, b) => a.percent > b.percent ? a : b ).value)
+					}
+					const drain_time_with_break_points = (beatmap.general.drain_time as number) - beatmap.general.break_time;
+					if (drain_time_with_break_points <= 0 ) {
+						beatmap.difficulty.stream_difficulty = 0;
+					} else {
+						beatmap.difficulty.stream_difficulty = 
+							( (beatmap.hit_objects.count as number) / drain_time_with_break_points ) * (beatmap.general.bpm.avg as number);
+					}
 				}
 
 			}
 		}
 	}
 
-
+	
 
     for (let key in beatmap) {
         if (Array.isArray(beatmap[key as keyof beatmap_data]) && (beatmap[key as keyof beatmap_data] as any[]).length === 0) {

@@ -15,6 +15,7 @@ const property_settings_1 = require("../consts/property_settings");
 const beatmap_events_1 = require("../tools/beatmap_events");
 const glob_1 = require("glob");
 const display_progress_1 = require("../tools/display_progress");
+const beatmap_event_type_1 = require("../consts/beatmap_events/beatmap_event_type");
 exports.default_scanner_options = {
     is_read_only: false,
     is_hit_objects_only_count: true,
@@ -494,7 +495,14 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         else if (is_properties_has_hit_objects_block && beatmap_block_type.is_hit_objects_block) {
             let row_splitted = row.replace('\r', '').split(',');
             if (properties_has_hit_objects_block || osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1) {
-                beatmap.hit_objects.count = row_splitted.filter(value => value.length >= 5).length;
+                if (row_splitted.length > 0) {
+                    if (!beatmap.hit_objects.count) {
+                        beatmap.hit_objects.count = 1;
+                    }
+                    else {
+                        beatmap.hit_objects.count++;
+                    }
+                }
             }
             if (options.is_hit_objects_only_count === false &&
                 (properties_has_hit_objects_block ||
@@ -736,12 +744,29 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                         bpms.push({ value, percent });
                     }
                 }
-                const values = bpms.map(v => v.value);
-                beatmap.general.bpm = {
-                    min: Math.round(Math.min(...values)),
-                    max: Math.round(Math.max(...values)),
-                    avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
-                };
+                const break_points = beatmap.events.filter(v => v.type === beatmap_event_type_1.beatmap_event_type.beatmap_break);
+                beatmap.general.break_time = 0;
+                if (break_points.length > 0) {
+                    for (let v of break_points) {
+                        beatmap.general.break_time += v.time_offset_end - v.time_offset;
+                    }
+                }
+                if (bpms.length > 0) {
+                    const values = bpms.map(v => v.value);
+                    beatmap.general.bpm = {
+                        min: Math.round(Math.min(...values)),
+                        max: Math.round(Math.max(...values)),
+                        avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
+                    };
+                    const drain_time_with_break_points = beatmap.general.drain_time - beatmap.general.break_time;
+                    if (drain_time_with_break_points <= 0) {
+                        beatmap.difficulty.stream_difficulty = 0;
+                    }
+                    else {
+                        beatmap.difficulty.stream_difficulty =
+                            (beatmap.hit_objects.count / drain_time_with_break_points) * beatmap.general.bpm.avg;
+                    }
+                }
             }
         }
     }

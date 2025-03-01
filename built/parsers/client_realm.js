@@ -47,6 +47,9 @@ const set_laser_files_path = (files_path) => {
 };
 exports.set_laser_files_path = set_laser_files_path;
 const get_laser_beatmap_file = (hash, raw = true, osu_file_beatmap_properties = property_settings_1.all_osu_file_properties, options = scan_songs_1.default_scanner_options) => {
+    if (!hash) {
+        throw new Error('Beatmap hash is required.');
+    }
     const second = hash.slice(0, 2);
     const first = second.slice(0, 1);
     const file_path = node_path_1.default.join(laser_files_path, first, second, hash);
@@ -63,6 +66,9 @@ const get_laser_beatmap_file = (hash, raw = true, osu_file_beatmap_properties = 
 };
 exports.get_laser_beatmap_file = get_laser_beatmap_file;
 const get_laser_beatmap_file_path = (hash) => {
+    if (!hash) {
+        throw new Error('Beatmap hash is required.');
+    }
     const second = hash.slice(0, 2);
     const first = second.slice(0, 1);
     return node_path_1.default.join(laser_files_path, first, second, hash);

@@ -443,7 +443,14 @@ export type beatmap_data_general = {
         Beats per minute of map (min, max, avg)
         @param  default 0 
         */
-	bpm?: bpms
+	bpm?: bpms,
+
+        /**[General]
+        
+        Time for break
+        @param  default 0 
+        */
+	break_time?: number
 
 }
 
@@ -593,6 +600,13 @@ export type beatmap_data_difficulty = {
      * Amount of slider ticks per beat
      */
     slider_tick_rate?: number;
+
+    /**
+     * [Difficulty]    
+     * 
+     * stream difficulty const
+     */
+	stream_difficulty?: number;
 
 }
 
