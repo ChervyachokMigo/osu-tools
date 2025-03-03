@@ -12,10 +12,6 @@ export class osu_file extends raw_file {
 
 		this.file_type = osu_file_type.none;
 
-        if (!this.set_type()) {
-            throw new Error('wrong file type. It not osu file');
-        }
-
         if (typeof property_settings === 'undefined'){
             this.property_settings = [];
         } else {
@@ -24,10 +20,12 @@ export class osu_file extends raw_file {
 
     }
 
+    // depricated
     get_type(): osu_file_type {
         return this.file_type;
     }
 
+	// depricated
     set_type(): boolean {
         if (path.extname(this.file_basename) === '.db') {
 

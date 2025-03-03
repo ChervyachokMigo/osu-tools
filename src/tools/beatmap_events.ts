@@ -6,10 +6,12 @@ import { beatmap_event_origin } from "../consts/beatmap_events/beatmap_event_ori
 import { color } from "../consts/color";
 import { beatmap_event_loop_type } from "../consts/beatmap_events/beatmap_event_loop_type";
 
-import { osu_file_beatmap_property } from "../consts/property_settings";
+import { break_time_properties, osu_file_beatmap_property } from "../consts/property_settings";
 
 export function event_string_parse(row_escaped: string, osu_file_beatmap_properties: osu_file_beatmap_property[]): beatmap_event | undefined {
     const properties_has_events_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.events_block);
+	const properties_has_timing_points_block = osu_file_beatmap_properties.includes(osu_file_beatmap_property.timing_points_block);
+	const is_properties_has_break_time = break_time_properties.some(property => osu_file_beatmap_properties.includes(property));
 
     //Background event
     if (properties_has_events_block ||
@@ -48,7 +50,7 @@ export function event_string_parse(row_escaped: string, osu_file_beatmap_propert
     }
 
     //Break event
-    if (properties_has_events_block ||
+    if (properties_has_events_block || is_properties_has_break_time ||
         osu_file_beatmap_properties.indexOf(osu_file_beatmap_property.events_break_points) !== -1) {
             
         if( row_escaped.startsWith('2') ){

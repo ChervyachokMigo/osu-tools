@@ -6,6 +6,7 @@ const osu_file_type_1 = require("../consts/osu_file_type");
 class collection_db extends osu_file_1.osu_file {
     constructor(file_path) {
         super(file_path, []);
+        this.file_type = osu_file_type_1.osu_file_type.collection_db;
     }
     collection_db_parse() {
         console.log('start parsing collection db..');
@@ -41,22 +42,16 @@ exports.collection_db = collection_db;
  * @also for detailed collection result use union with osu db - function `get_collections_detailed`
  */
 function collection_db_load(collection_db_path) {
-    var file_parse_result = { collections: [] };
+    let result = { collections: [] };
     try {
-        let collection_db_file = new collection_db(collection_db_path);
-        switch (collection_db_file.get_type()) {
-            case osu_file_type_1.osu_file_type.collection_db:
-                file_parse_result = collection_db_file.collection_db_parse();
-                break;
-            default:
-                throw new Error('file type not osu file');
-        }
+        const collection_db_file = new collection_db(collection_db_path);
+        result = collection_db_file.collection_db_parse();
         collection_db_file.close();
-        return file_parse_result;
+        return result;
     }
     catch (e) {
         console.log(e);
-        return file_parse_result;
+        return result;
     }
 }
 exports.collection_db_load = collection_db_load;

@@ -127,6 +127,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
     const properties_has_difficulty_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.difficulty_block);
     const properties_has_events_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.events_block);
     const properties_has_hit_objects_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.hit_objects_block);
+    const properties_has_timing_points_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.timing_points_block);
     const is_properties_has_general_block = properties_has_general_block ||
         property_settings_1.all_general_properties.some(property => osu_file_beatmap_properties.includes(property));
     const is_properties_has_editor_block = properties_has_editor_block ||
@@ -139,6 +140,8 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
         property_settings_1.all_events_properties.some(property => osu_file_beatmap_properties.includes(property));
     const is_properties_has_hit_objects_block = properties_has_hit_objects_block ||
         property_settings_1.all_hit_objects_properties.some(property => osu_file_beatmap_properties.includes(property));
+    const is_properties_has_timing_points_block = properties_has_timing_points_block ||
+        property_settings_1.all_timing_points_properties.some(property => osu_file_beatmap_properties.includes(property));
     const beatmap = {
         general: {},
         editor: {},
@@ -153,6 +156,10 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
     const rows = filedata.split('\n')
         .filter((value) => value.length > 0 && !value.startsWith('//'));
     var beatmap_block_type = Object.assign({}, beatmap_block_1.beatmap_block_type_defaults);
+    let hit_objects_count = 0;
+    const hit_objects = [];
+    const timing_points = [];
+    const beatmap_events = [];
     for (const row of rows) {
         if (row.startsWith('[')) {
             beatmap_block_type = (0, beatmap_block_1.getBlockType)(row);
@@ -440,17 +447,17 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
             }
         }
         //[Events] block
-        else if (is_properties_has_events_block && beatmap_block_type.is_event_block) {
+        else if ((is_properties_has_events_block || is_properties_has_timing_points_block) && beatmap_block_type.is_event_block) {
             let row_escaped = row.replace('\r', '');
             if (row_escaped.length >= 1) {
-                let current_event = (0, beatmap_events_1.event_string_parse)(row_escaped, osu_file_beatmap_properties);
-                if (current_event)
-                    beatmap.events.push(current_event);
+                const current_event = (0, beatmap_events_1.event_string_parse)(row_escaped, osu_file_beatmap_properties);
+                if (current_event) {
+                    beatmap_events.push(current_event);
+                }
             }
         }
         //[TimingPoints] block
-        else if (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_block) !== -1 &&
-            beatmap_block_type.is_timing_points_block) {
+        else if (is_properties_has_timing_points_block && beatmap_block_type.is_timing_points_block) {
             let row_splitted = row.replace('\r', '').split(',');
             if (row_splitted.length >= 2) {
                 let timing_point = {
@@ -466,7 +473,7 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                         is_first_barline: row_splitted[7] ? Boolean(bitwise_1.default.integer.getBit(Number(row_splitted[7]), 3)) : false,
                     }
                 };
-                beatmap.timing_points.push(timing_point);
+                timing_points.push(timing_point);
             }
         }
         //[Colours] block
@@ -492,22 +499,11 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
             }
         }
         //[HitObjects] block
-        else if (is_properties_has_hit_objects_block && beatmap_block_type.is_hit_objects_block) {
+        else if ((is_properties_has_hit_objects_block || is_properties_has_timing_points_block) && beatmap_block_type.is_hit_objects_block) {
             let row_splitted = row.replace('\r', '').split(',');
-            if (properties_has_hit_objects_block || osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1) {
-                if (row_splitted.length > 0) {
-                    if (!beatmap.hit_objects.count) {
-                        beatmap.hit_objects.count = 1;
-                    }
-                    else {
-                        beatmap.hit_objects.count++;
-                    }
-                }
-            }
-            if (options.is_hit_objects_only_count === false &&
-                (properties_has_hit_objects_block ||
-                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects) !== -1)) {
+            if (options.is_hit_objects_only_count === false) {
                 if (row_splitted.length >= 5) {
+                    // define hit object type
                     let type = 0;
                     if (bitwise_1.default.integer.getBit(Number(row_splitted[3]), 0) == 1) {
                         type = beatmap_data_1.beatmap_data_hit_object_type.hitcircle;
@@ -521,8 +517,9 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                     if (bitwise_1.default.integer.getBit(Number(row_splitted[3]), 7) == 1) {
                         type = beatmap_data_1.beatmap_data_hit_object_type.mania_hold;
                     }
-                    let hit_sample = {};
-                    let hit_sample_row = row_splitted.pop();
+                    //define hit object sample params
+                    const hit_sample = {};
+                    const hit_sample_row = row_splitted.pop();
                     if (hit_sample_row) {
                         if (hit_sample_row.length >= 5) {
                             let hit_sample_splitted = hit_sample_row.split(':');
@@ -535,12 +532,12 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                         else {
                             row_splitted.push(hit_sample_row);
                         }
-                        //console.log(hit_sample_row, hit_sample)
                     }
-                    let is_new_combo = Boolean(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 2));
-                    let object_params = row_splitted.slice(5);
+                    const is_new_combo = Boolean(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 2));
+                    const object_params = row_splitted.slice(5);
                     let slider_properties = undefined;
                     if (object_params && object_params.length > 0) {
+                        // define sliders params
                         if (options.is_parse_sliders && type == beatmap_data_1.beatmap_data_hit_object_type.slider) {
                             let curve_data = object_params[0].split('|');
                             let edge_sounds = undefined;
@@ -573,31 +570,29 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                             };
                         }
                     }
-                    let hit_object = {
+                    const hit_object = {
                         x: Number(row_splitted[0]),
                         y: Number(row_splitted[1]),
                         time: Number(row_splitted[2]),
                         type: type,
-                        is_new_combo: is_new_combo,
+                        is_new_combo,
                         hit_sound: Number(row_splitted[4]),
                         object_params,
                         hit_sample,
                         slider_properties
                     };
                     if (is_new_combo) {
-                        let skip_colors_bits = [
+                        const skip_colors_bits = [
                             Number(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 4)),
                             Number(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 5)),
                             Number(bitwise_1.default.integer.getBit(Number(row_splitted[3]), 6))
                         ];
                         hit_object.new_combo_colors_skip = parseInt(`${skip_colors_bits[0]}${skip_colors_bits[1]}${skip_colors_bits[2]}`, 2);
                     }
-                    if (typeof beatmap.hit_objects.hit_objects === 'undefined') {
-                        beatmap.hit_objects.hit_objects = [];
-                    }
-                    beatmap.hit_objects.hit_objects.push(hit_object);
+                    hit_objects.push(hit_object);
                 }
             }
+            hit_objects_count++;
         }
         //end for loop
     }
@@ -711,60 +706,88 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
             beatmap.metadata = {};
         beatmap.metadata.beatmap_md5 = md5_file_1.default.sync(osu_file_path);
     }
-    // beatmap.general:
-    //  total_time
-    //  drain_time
-    //  bpm
-    if (options.is_hit_objects_only_count === false &&
-        (properties_has_hit_objects_block ||
-            (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.hit_objects_count) !== -1 &&
-                (osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_total_time) !== -1 ||
-                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_drain_time) !== -1 ||
-                    osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.timing_points_bpm) !== -1)))) {
-        let hit_objects = beatmap.hit_objects.hit_objects;
-        let first_hit_object = hit_objects[0];
-        let last_hit_object = hit_objects[hit_objects.length - 1];
-        beatmap.general.total_time = last_hit_object.time;
-        beatmap.general.drain_time = last_hit_object.time - first_hit_object.time;
-        if (beatmap.timing_points && beatmap.timing_points.length > 0) {
-            const timing_points = beatmap.timing_points.filter(v => v.uninherited === true);
-            if (timing_points) {
-                const bpms = [];
-                for (let i = 0; i < timing_points.length; i++) {
-                    let next_offset = 0;
-                    if (timing_points[i + 1]) {
-                        next_offset = timing_points[i + 1].time_offset;
+    // define hit objects count
+    if (properties_has_hit_objects_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.hit_objects_count)) {
+        beatmap.hit_objects.count = hit_objects_count;
+    }
+    if (properties_has_hit_objects_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.hit_objects)) {
+        beatmap.hit_objects.hit_objects = hit_objects;
+    }
+    if (properties_has_hit_objects_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.hit_objects)) {
+        beatmap.hit_objects.hit_objects = hit_objects;
+    }
+    if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.timing_points)) {
+        beatmap.timing_points = timing_points;
+    }
+    if (properties_has_events_block) {
+        beatmap.events = beatmap_events;
+    }
+    if (options.is_hit_objects_only_count === false && is_properties_has_timing_points_block) {
+        if (hit_objects.length > 0 && hit_objects_count > 0) {
+            const first_hit_object = hit_objects[0];
+            const last_hit_object = hit_objects[hit_objects.length - 1];
+            // define total time
+            const total_time = last_hit_object.time;
+            if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.total_time)) {
+                beatmap.general.total_time = total_time;
+            }
+            // define drain time
+            const drain_time = last_hit_object.time - first_hit_object.time;
+            if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.drain_time)) {
+                beatmap.general.drain_time = drain_time;
+            }
+            // define bpm, break time, stream difficulty            
+            if (timing_points.length > 0) {
+                const uninherited_timing_points = timing_points.filter(v => v.uninherited === true);
+                if (uninherited_timing_points) {
+                    //calculate bpm
+                    const bpms = [];
+                    for (let i = 0; i < uninherited_timing_points.length; i++) {
+                        let next_offset = 0;
+                        const next_timing_point = uninherited_timing_points[i + 1];
+                        if (next_timing_point) {
+                            next_offset = next_timing_point.time_offset;
+                        }
+                        else {
+                            next_offset = total_time;
+                        }
+                        const value = 60000 / uninherited_timing_points[i].beat_length;
+                        if (value > 0) {
+                            const percent = (next_offset - uninherited_timing_points[i].time_offset) / total_time;
+                            bpms.push({ value, percent });
+                        }
                     }
-                    else {
-                        next_offset = beatmap.general.total_time;
+                    // define break time
+                    const break_points = beatmap_events.filter(v => v.type === beatmap_event_type_1.beatmap_event_type.beatmap_break);
+                    let break_time = 0;
+                    if (break_points.length > 0) {
+                        for (let v of break_points) {
+                            break_time += v.time_offset_end - v.time_offset;
+                        }
                     }
-                    const value = 60000 / timing_points[i].beat_length;
-                    if (value > 0) {
-                        const percent = (next_offset - timing_points[i].time_offset) / beatmap.general.total_time;
-                        bpms.push({ value, percent });
+                    if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.break_time)) {
+                        beatmap.general.break_time = break_time;
                     }
-                }
-                const break_points = beatmap.events.filter(v => v.type === beatmap_event_type_1.beatmap_event_type.beatmap_break);
-                beatmap.general.break_time = 0;
-                if (break_points.length > 0) {
-                    for (let v of break_points) {
-                        beatmap.general.break_time += v.time_offset_end - v.time_offset;
+                    let bpm = { min: 0, max: 0, avg: 0 };
+                    let stream_difficulty = 0;
+                    // define bpm and stream difficulty
+                    if (bpms.length > 0) {
+                        const values = bpms.map(v => v.value);
+                        bpm = {
+                            min: Math.round(Math.min(...values)),
+                            max: Math.round(Math.max(...values)),
+                            avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
+                        };
+                        const notes_time = drain_time - break_time;
+                        if (notes_time > 0) {
+                            stream_difficulty = (hit_objects_count / notes_time) * bpm.avg;
+                        }
                     }
-                }
-                if (bpms.length > 0) {
-                    const values = bpms.map(v => v.value);
-                    beatmap.general.bpm = {
-                        min: Math.round(Math.min(...values)),
-                        max: Math.round(Math.max(...values)),
-                        avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
-                    };
-                    const drain_time_with_break_points = beatmap.general.drain_time - beatmap.general.break_time;
-                    if (drain_time_with_break_points <= 0) {
-                        beatmap.difficulty.stream_difficulty = 0;
+                    if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.bpm)) {
+                        beatmap.general.bpm = bpm;
                     }
-                    else {
-                        beatmap.difficulty.stream_difficulty =
-                            (beatmap.hit_objects.count / drain_time_with_break_points) * beatmap.general.bpm.avg;
+                    if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.stream_difficulty)) {
+                        beatmap.difficulty.stream_difficulty = stream_difficulty;
                     }
                 }
             }

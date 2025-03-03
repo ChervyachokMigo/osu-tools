@@ -13,6 +13,7 @@ export class osu_db extends osu_file {
 
     constructor(file_path: string, property_settings?: beatmap_property[] ){
         super(file_path, property_settings);
+		this.file_type = osu_file_type.osu_db;
     }
 
 	public osu_db_parse( options: osu_db_options ): osu_db_results {
@@ -477,23 +478,18 @@ export class osu_db extends osu_file {
  */
 export function osu_db_load(osu_db_path: string, parse_settings?: Array<beatmap_property>, 
 	options: osu_db_options = {print_progress: true, print_progress_time: false}): osu_db_results {
-    var file_parse_result: osu_db_results = { beatmaps: [] };
-    try{
-        let osu_db_file = new osu_db(osu_db_path, parse_settings);
-        switch (osu_db_file.get_type()){
-            case osu_file_type.osu_db:
-				file_parse_result = osu_db_file.osu_db_parse(options);
-                break;
-                default:
-                    throw new Error('file type not osu file');
-        }
+    let result: osu_db_results = { beatmaps: [] };
 
+    try {
+        const osu_db_file = new osu_db(osu_db_path, parse_settings);
+		result = osu_db_file.osu_db_parse(options);
 		osu_db_file.close();
 
-        return file_parse_result;
+        return result;
+
     } catch (e){
         console.error(e)
-        return file_parse_result;
+        return result;
     }
 }
 

@@ -13,15 +13,16 @@ console.log('beatmaps.length', beatmaps.length)
 let i = 0;
 
 
-while(i < 10 ) {
+while(i < 20 ) {
 	const random_beatmap = beatmaps[Math.round((beatmaps.length - 1) * Math.random())];
 
 	try {
 	const is_raw = false;
 	const beatmap = get_laser_beatmap_file((random_beatmap as any).Hash, is_raw, all_osu_file_properties, {is_hit_objects_only_count: false, }) as beatmap_data;
 
-	if (beatmap.difficulty.stream_difficulty as number > 4) {
+	if (beatmap.difficulty.stream_difficulty as number > 1.99 && beatmap.difficulty.stream_difficulty as number < 2) {
 		console.log(
+			'Beatmap ID:', beatmap.metadata.beatmapset_id, '\n',
 			'Beatmap Artist:', beatmap.metadata.artist, '\n',
 			'Beatmap Title:', beatmap.metadata.title, '\n',
 			'Version:', beatmap.metadata.version, '\n',

@@ -440,17 +440,18 @@ export type beatmap_data_general = {
 
         /**[General]
         
+        Time for break
+        @param  default 0 
+        */
+	break_time?: number
+	
+        /**[General]
+        
         Beats per minute of map (min, max, avg)
         @param  default 0 
         */
 	bpm?: bpms,
 
-        /**[General]
-        
-        Time for break
-        @param  default 0 
-        */
-	break_time?: number
 
 }
 

@@ -226,6 +226,7 @@ export enum osu_file_beatmap_property {
     difficulty_slider_multiplier,
     difficulty_slider_tick_rate,
 
+
     events_block,
 
     events_backgrounds,
@@ -239,15 +240,19 @@ export enum osu_file_beatmap_property {
     events_scripts,
 
     timing_points_block,
-	timing_points_total_time,
-	timing_points_drain_time,
-	timing_points_bpm,
+	timing_points,
 
     colors_block,
 
     hit_objects_block,
     hit_objects,
     hit_objects_count,
+
+	total_time,
+	drain_time,
+	break_time,
+	bpm,
+	stream_difficulty,
 }
 
 export const all_general_properties = [
@@ -313,18 +318,21 @@ export const all_events_properties = [
     osu_file_beatmap_property.events_samples,
     osu_file_beatmap_property.events_animations,
     osu_file_beatmap_property.events_comments,
-    osu_file_beatmap_property.events_scripts
+    osu_file_beatmap_property.events_scripts,
 ];
 
 export const all_timing_points_properties = [
-    osu_file_beatmap_property.timing_points_total_time,
-    osu_file_beatmap_property.timing_points_drain_time,
-	osu_file_beatmap_property.timing_points_bpm,
+	osu_file_beatmap_property.timing_points,
+	osu_file_beatmap_property.break_time,
+    osu_file_beatmap_property.total_time,
+    osu_file_beatmap_property.drain_time,
+	osu_file_beatmap_property.bpm,
+	osu_file_beatmap_property.stream_difficulty
 ];
 
 export const all_hit_objects_properties = [
     osu_file_beatmap_property.hit_objects,
-    osu_file_beatmap_property.hit_objects_count
+    osu_file_beatmap_property.hit_objects_count,
 ];
 
 export const all_osu_file_properties = [
@@ -336,6 +344,12 @@ export const all_osu_file_properties = [
     osu_file_beatmap_property.timing_points_block,
     osu_file_beatmap_property.colors_block,
     osu_file_beatmap_property.hit_objects_block,
+];
+
+export const break_time_properties = [
+	osu_file_beatmap_property.timing_points_block,
+	osu_file_beatmap_property.break_time,
+	osu_file_beatmap_property.stream_difficulty
 ];
 
 export const none_osu_file_properties: osu_file_beatmap_property[] = [];

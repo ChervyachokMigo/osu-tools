@@ -1,6 +1,6 @@
 {
 	"name": "osu-tools",
-	"version": "0.1.72",
+	"version": "0.1.73",
 	"description": "osu parser for db/osr files and some stuff ",
 	"main": "built/index.js",
 	"scripts": {
@@ -19,7 +19,7 @@
 		"test_osu_db_import_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_import_sr.ts",
 		"test_grade": "ts-node tests/test_grade.ts",
 		"test_laser_export_beatmapset_by_id": "ts-node tests/laser/export_beatmapset_by_id.ts",
-		"test_laser_get_beatmap_file": "ts-node tests/laser/get_laser_beatmap_file.ts",
+		"test_laser_get_beatmap_file": "ts-node tests/laser/get_laser_random_beatmap_file.ts",
 		"test_laser_beatmapset_files": "ts-node tests/laser/get_laser_beatmapset_files.ts"
 	},
 	"keywords": [],

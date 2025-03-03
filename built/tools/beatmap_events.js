@@ -8,6 +8,8 @@ const beatmap_event_loop_type_1 = require("../consts/beatmap_events/beatmap_even
 const property_settings_1 = require("../consts/property_settings");
 function event_string_parse(row_escaped, osu_file_beatmap_properties) {
     const properties_has_events_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.events_block);
+    const properties_has_timing_points_block = osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.timing_points_block);
+    const is_properties_has_break_time = property_settings_1.break_time_properties.some(property => osu_file_beatmap_properties.includes(property));
     //Background event
     if (properties_has_events_block ||
         osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.events_backgrounds) !== -1) {
@@ -35,7 +37,7 @@ function event_string_parse(row_escaped, osu_file_beatmap_properties) {
         }
     }
     //Break event
-    if (properties_has_events_block ||
+    if (properties_has_events_block || is_properties_has_break_time ||
         osu_file_beatmap_properties.indexOf(property_settings_1.osu_file_beatmap_property.events_break_points) !== -1) {
         if (row_escaped.startsWith('2')) {
             let row_splitted = row_escaped.split(',');

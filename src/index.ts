@@ -24,7 +24,7 @@ export { beatmap_property,          none_beatmap_properties,    all_beatmap_prop
 
          all_general_properties,    all_editor_properties,      all_metadata_properties,
          all_difficulty_properties, all_events_properties,      all_timing_points_properties,
-		 all_hit_objects_properties } from "./consts/property_settings";
+		 all_hit_objects_properties, break_time_properties } from "./consts/property_settings";
 
 export { collection_db_results } from "./consts/collection_db_results";
 export { collection } from "./consts/collection";

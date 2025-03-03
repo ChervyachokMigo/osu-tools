@@ -31,9 +31,6 @@ class osu_file extends raw_file_1.raw_file {
     constructor(file_path, property_settings) {
         super(file_path);
         this.file_type = osu_file_type_1.osu_file_type.none;
-        if (!this.set_type()) {
-            throw new Error('wrong file type. It not osu file');
-        }
         if (typeof property_settings === 'undefined') {
             this.property_settings = [];
         }
@@ -41,9 +38,11 @@ class osu_file extends raw_file_1.raw_file {
             this.property_settings = property_settings;
         }
     }
+    // depricated
     get_type() {
         return this.file_type;
     }
+    // depricated
     set_type() {
         if (path.extname(this.file_basename) === '.db') {
             if (this.file_basename.startsWith(osu_file_type_1.osu_file_type.osu_db)) {

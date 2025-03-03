@@ -9,6 +9,7 @@ const display_progress_1 = require("../tools/display_progress");
 class osu_db extends osu_file_1.osu_file {
     constructor(file_path, property_settings) {
         super(file_path, property_settings);
+        this.file_type = osu_file_type_1.osu_file_type.osu_db;
     }
     osu_db_parse(options) {
         let osu_db = { beatmaps: [] };
@@ -460,22 +461,16 @@ exports.osu_db = osu_db;
  * @also use `all_beatmap_properties` for set all beatmap settings
  */
 function osu_db_load(osu_db_path, parse_settings, options = { print_progress: true, print_progress_time: false }) {
-    var file_parse_result = { beatmaps: [] };
+    let result = { beatmaps: [] };
     try {
-        let osu_db_file = new osu_db(osu_db_path, parse_settings);
-        switch (osu_db_file.get_type()) {
-            case osu_file_type_1.osu_file_type.osu_db:
-                file_parse_result = osu_db_file.osu_db_parse(options);
-                break;
-            default:
-                throw new Error('file type not osu file');
-        }
+        const osu_db_file = new osu_db(osu_db_path, parse_settings);
+        result = osu_db_file.osu_db_parse(options);
         osu_db_file.close();
-        return file_parse_result;
+        return result;
     }
     catch (e) {
         console.error(e);
-        return file_parse_result;
+        return result;
     }
 }
 exports.osu_db_load = osu_db_load;

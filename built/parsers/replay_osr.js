@@ -7,6 +7,7 @@ const score_parse_1 = require("../tools/score_parse");
 class replay_osr extends osu_file_1.osu_file {
     constructor(file_path, property_settings) {
         super(file_path, property_settings);
+        this.file_type = osu_file_type_1.osu_file_type.replay_osr;
     }
     replay_osr_parse() {
         console.log('start parsing replay..');
@@ -23,22 +24,16 @@ exports.replay_osr = replay_osr;
  * var replay = replay_load('E:\\osu!\\Replays\\replay-osu_3560727_4340069944.osr', all_score_properties);
  */
 function replay_load(replay_osr_path, replay_properties) {
-    var file_parse_result = {};
+    let result = {};
     try {
-        let replay_osr_file = new replay_osr(replay_osr_path, replay_properties);
-        switch (replay_osr_file.get_type()) {
-            case osu_file_type_1.osu_file_type.replay_osr:
-                file_parse_result = replay_osr_file.replay_osr_parse();
-                break;
-            default:
-                throw new Error('file type not osu replay file');
-        }
+        const replay_osr_file = new replay_osr(replay_osr_path, replay_properties);
+        result = replay_osr_file.replay_osr_parse();
         replay_osr_file.close();
-        return file_parse_result;
+        return result;
     }
     catch (e) {
         console.log(e);
-        return file_parse_result;
+        return result;
     }
 }
 exports.replay_load = replay_load;

@@ -14,6 +14,7 @@ export class scores_db extends osu_file {
 
     constructor(file_path: string, property_settings?: Array<score_property>){
         super(file_path, property_settings);
+		this.file_type = osu_file_type.scores_db;
     }
 
     public scores_db_parse(): scores_db_results {
@@ -60,22 +61,17 @@ export class scores_db extends osu_file {
  * @param scores_db_path - absolute path to scores.db
  */
 export function scores_db_load(scores_db_path: string, score_properties: score_property[]): scores_db_results {
-    var file_parse_result: scores_db_results = { beatmaps_scores: [] };
-    try{
-        let scores_db_file = new scores_db(scores_db_path, score_properties);
-        switch (scores_db_file.get_type()){
-            case osu_file_type.scores_db:
-                file_parse_result = scores_db_file.scores_db_parse();
-                break;
-                default:
-                    throw new Error('file type not osu file');
-        }
+    let result: scores_db_results = { beatmaps_scores: [] };
 
+    try {
+        const scores_db_file = new scores_db(scores_db_path, score_properties);
+        result = scores_db_file.scores_db_parse();
 		scores_db_file.close();
 
-        return file_parse_result;
+        return result;
+
     } catch (e){
         console.log(e)
-        return file_parse_result;
+        return result;
     }
 }
