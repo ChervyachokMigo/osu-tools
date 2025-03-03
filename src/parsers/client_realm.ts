@@ -7,10 +7,8 @@ import { default_scanner_options, parse_osu_file, scanner_options } from "./scan
 import { all_osu_file_properties, osu_file_beatmap_property } from "../consts/property_settings";
 import { DefaultObject, RealmObject } from "realm/dist/public-types/namespace";
 import { realm_file } from "../consts/laser/realm_file";
-import { realm_beatmapset } from "../consts/laser/ream_beatmapset";
 import { realm_beatmap } from "../consts/laser/realm_beatmap";
 import { escape_string } from "../tools/escape_string";
-import { beatmap_data } from "../consts/beatmap_data";
 
 let realm: Realm | null = null;
 let laser_files_path: string | null = null;
@@ -79,17 +77,7 @@ export const get_laser_beatmap_file_path = ( hash: string ) => {
 	return path.join(laser_files_path as string, first, second, hash );
 }
 
-const cache = {
-	laser_beatmaps: [],
-};
-
-export const get_laser_beatmap_by_md5 = (md5: string, is_cached = false) => {
-	if (is_cached) {
-		if (cache.laser_beatmaps.length === 0) {
-			cache.laser_beatmaps = Array.from((realm as Realm).objects('Beatmap'));
-		}
-		return cache.laser_beatmaps.find( (v:any) => v?.MD5Hash === md5 );
-	}
+export const get_laser_beatmap_by_md5 = (md5: string) => {
 	return ((realm as Realm).objects('Beatmap')).find( v => v?.MD5Hash === md5 );
 }
 
