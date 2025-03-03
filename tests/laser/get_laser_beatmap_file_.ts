@@ -15,13 +15,13 @@ const props:osu_file_beatmap_property[] = [
 
 const is_raw = false;
 
-for (let i =0 ; i < 15; i ++) {
+for (let i = 0 ; i < 1; i ++) {
 	const random_beatmap = beatmaps[Math.round((beatmaps.length - 1) * Math.random())];
 
-	const beatmap = get_laser_beatmap_file((random_beatmap as any).Hash, is_raw, props, {is_hit_objects_only_count: false, }) as beatmap_data;
+	//const beatmap = get_laser_beatmap_file((random_beatmap as any).Hash, is_raw, props, {is_hit_objects_only_count: false, }) as beatmap_data;
 
-	// console.log(random_beatmap);
-	console.log(beatmap);
+	 console.log(random_beatmap);
+	//console.log(beatmap);
 }
 
 realm.close();

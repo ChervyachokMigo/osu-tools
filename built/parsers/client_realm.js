@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.export_beatmapset = exports.get_beatmapset_files = exports.find_beatmapset_files = exports.get_laser_beatmap_file_path = exports.get_laser_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
+exports.export_beatmapset = exports.get_beatmapset_files = exports.find_beatmapset_files = exports.get_laser_beatmap_by_md5 = exports.get_laser_beatmap_file_path = exports.get_laser_beatmap_file = exports.set_laser_files_path = exports.close_realm = exports.get_realm_objects = exports.open_realm = void 0;
 const realm_1 = __importDefault(require("realm"));
 const node_path_1 = __importDefault(require("node:path"));
 const node_fs_1 = require("node:fs");
@@ -74,6 +74,10 @@ const get_laser_beatmap_file_path = (hash) => {
     return node_path_1.default.join(laser_files_path, first, second, hash);
 };
 exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
+const get_laser_beatmap_by_md5 = (md5) => {
+    return (realm.objects('Beatmaps')).filter(v => v.MD5Hash === md5);
+};
+exports.get_laser_beatmap_by_md5 = get_laser_beatmap_by_md5;
 const find_beatmapset_files = (beatmapsets, ID) => {
     if (ID < 1) {
         console.error('Beatmapset ID must be greater than 0.');
