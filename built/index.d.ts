@@ -6,7 +6,7 @@ export { UTC1970Years, buffer_parse } from './tools/buffer_parse';
 export { get_collections_detailed, get_scores_detailed, get_score_detailed } from './tools/union';
 export { osu_file_type } from "./consts/osu_file_type";
 export { osu_file } from './parsers/osu_file';
-export { beatmap_property, none_beatmap_properties, all_beatmap_properties, score_property, none_score_properties, all_score_properties, osu_file_beatmap_property, none_osu_file_properties, all_osu_file_properties, all_general_properties, all_editor_properties, all_metadata_properties, all_difficulty_properties, all_events_properties, all_timing_points_properties, all_hit_objects_properties } from "./consts/property_settings";
+export { beatmap_property, none_beatmap_properties, all_beatmap_properties, score_property, none_score_properties, all_score_properties, osu_file_beatmap_property, none_osu_file_properties, all_osu_file_properties, all_general_properties, all_editor_properties, all_metadata_properties, all_difficulty_properties, all_events_properties, all_timing_points_properties, all_hit_objects_properties, break_time_properties } from "./consts/property_settings";
 export { collection_db_results } from "./consts/collection_db_results";
 export { collection } from "./consts/collection";
 export { collection_db, collection_db_load } from './parsers/collection_db';
