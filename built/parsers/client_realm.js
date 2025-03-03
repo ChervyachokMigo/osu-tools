@@ -74,8 +74,17 @@ const get_laser_beatmap_file_path = (hash) => {
     return node_path_1.default.join(laser_files_path, first, second, hash);
 };
 exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
-const get_laser_beatmap_by_md5 = (md5) => {
-    return (realm.objects('Beatmap')).filter(v => v.MD5Hash === md5);
+const cache = {
+    laser_beatmaps: [],
+};
+const get_laser_beatmap_by_md5 = (md5, is_cached = false) => {
+    if (is_cached) {
+        if (cache.laser_beatmaps.length === 0) {
+            cache.laser_beatmaps = Array.from(realm.objects('Beatmap'));
+        }
+        return cache.laser_beatmaps.find((v) => (v === null || v === void 0 ? void 0 : v.MD5Hash) === md5);
+    }
+    return (realm.objects('Beatmap')).find(v => (v === null || v === void 0 ? void 0 : v.MD5Hash) === md5);
 };
 exports.get_laser_beatmap_by_md5 = get_laser_beatmap_by_md5;
 const find_beatmapset_files = (beatmapsets, ID) => {

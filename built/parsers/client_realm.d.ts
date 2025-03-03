@@ -10,7 +10,7 @@ export declare const close_realm: () => void;
 export declare const set_laser_files_path: (files_path: string) => void;
 export declare const get_laser_beatmap_file: (hash: string, raw?: boolean, osu_file_beatmap_properties?: osu_file_beatmap_property[], options?: scanner_options) => string | beatmap_data;
 export declare const get_laser_beatmap_file_path: (hash: string) => string;
-export declare const get_laser_beatmap_by_md5: (md5: string) => (Realm.Object<DefaultObject, never> & DefaultObject)[];
+export declare const get_laser_beatmap_by_md5: (md5: string, is_cached?: boolean) => (Realm.Object<DefaultObject, never> & DefaultObject) | undefined;
 export type laser_file = {
     filename: string;
     filehash: string;
