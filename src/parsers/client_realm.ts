@@ -80,7 +80,7 @@ export const get_laser_beatmap_file_path = ( hash: string ) => {
 }
 
 export const get_laser_beatmap_by_md5 = (md5: string) => {
-	return ((realm as Realm).objects('Beatmaps')).filter( v => v.MD5Hash === md5 );
+	return ((realm as Realm).objects('Beatmap')).filter( v => v.MD5Hash === md5 );
 }
 
 export type laser_file = {

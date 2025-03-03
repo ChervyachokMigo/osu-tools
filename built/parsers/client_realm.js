@@ -75,7 +75,7 @@ const get_laser_beatmap_file_path = (hash) => {
 };
 exports.get_laser_beatmap_file_path = get_laser_beatmap_file_path;
 const get_laser_beatmap_by_md5 = (md5) => {
-    return (realm.objects('Beatmaps')).filter(v => v.MD5Hash === md5);
+    return (realm.objects('Beatmap')).filter(v => v.MD5Hash === md5);
 };
 exports.get_laser_beatmap_by_md5 = get_laser_beatmap_by_md5;
 const find_beatmapset_files = (beatmapsets, ID) => {
