@@ -24,7 +24,8 @@ export { beatmap_event_loop_type } from "./consts/beatmap_events/beatmap_event_l
 export { beatmap_event_origin } from "./consts/beatmap_events/beatmap_event_origin";
 export { beatmap_event_type } from "./consts/beatmap_events/beatmap_event_type";
 export { event_string_parse } from './tools/beatmap_events';
-export { scanner_options, songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file, default_scanner_options } from './parsers/scan_songs';
+export { scanner_options, songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, default_scanner_options } from './parsers/scan_songs';
+export { parse_osu_file } from './parsers/parse_osu_file';
 export { score } from "./consts/score";
 export { score_parse } from './tools/score_parse';
 export { scores_beatmap, score_beatmap } from "./consts/scores_beatmap";

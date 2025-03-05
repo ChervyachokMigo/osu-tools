@@ -3,12 +3,13 @@ import path from "node:path";
 
 import { RealmObjectType } from '../consts/laser/RealmObjectType';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
-import { default_scanner_options, parse_osu_file, scanner_options } from "./scan_songs";
+import { default_scanner_options, scanner_options } from "./scan_songs";
 import { all_osu_file_properties, osu_file_beatmap_property } from "../consts/property_settings";
 import { DefaultObject, RealmObject } from "realm/dist/public-types/namespace";
 import { realm_file } from "../consts/laser/realm_file";
 import { realm_beatmap } from "../consts/laser/realm_beatmap";
 import { escape_string } from "../tools/escape_string";
+import { parse_osu_file } from "./parse_osu_file";
 
 let realm: Realm | null = null;
 let laser_files_path: string | null = null;

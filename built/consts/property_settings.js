@@ -233,11 +233,15 @@ var osu_file_beatmap_property;
     osu_file_beatmap_property[osu_file_beatmap_property["hit_objects_block"] = 59] = "hit_objects_block";
     osu_file_beatmap_property[osu_file_beatmap_property["hit_objects"] = 60] = "hit_objects";
     osu_file_beatmap_property[osu_file_beatmap_property["hit_objects_count"] = 61] = "hit_objects_count";
-    osu_file_beatmap_property[osu_file_beatmap_property["total_time"] = 62] = "total_time";
-    osu_file_beatmap_property[osu_file_beatmap_property["drain_time"] = 63] = "drain_time";
-    osu_file_beatmap_property[osu_file_beatmap_property["break_time"] = 64] = "break_time";
-    osu_file_beatmap_property[osu_file_beatmap_property["bpm"] = 65] = "bpm";
-    osu_file_beatmap_property[osu_file_beatmap_property["stream_difficulty"] = 66] = "stream_difficulty";
+    osu_file_beatmap_property[osu_file_beatmap_property["circles_count"] = 62] = "circles_count";
+    osu_file_beatmap_property[osu_file_beatmap_property["sliders_count"] = 63] = "sliders_count";
+    osu_file_beatmap_property[osu_file_beatmap_property["total_time"] = 64] = "total_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["drain_time"] = 65] = "drain_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["break_time"] = 66] = "break_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["circles_time"] = 67] = "circles_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["sliders_time"] = 68] = "sliders_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["bpm"] = 69] = "bpm";
+    osu_file_beatmap_property[osu_file_beatmap_property["stream_difficulty"] = 70] = "stream_difficulty";
 })(osu_file_beatmap_property = exports.osu_file_beatmap_property || (exports.osu_file_beatmap_property = {}));
 exports.all_general_properties = [
     osu_file_beatmap_property.general_beatmap_filename,
@@ -306,11 +310,15 @@ exports.all_timing_points_properties = [
     osu_file_beatmap_property.total_time,
     osu_file_beatmap_property.drain_time,
     osu_file_beatmap_property.bpm,
-    osu_file_beatmap_property.stream_difficulty
+    osu_file_beatmap_property.stream_difficulty,
+    osu_file_beatmap_property.circles_time,
+    osu_file_beatmap_property.sliders_time,
 ];
 exports.all_hit_objects_properties = [
     osu_file_beatmap_property.hit_objects,
     osu_file_beatmap_property.hit_objects_count,
+    osu_file_beatmap_property.circles_count,
+    osu_file_beatmap_property.sliders_count,
 ];
 exports.all_osu_file_properties = [
     osu_file_beatmap_property.general_block,

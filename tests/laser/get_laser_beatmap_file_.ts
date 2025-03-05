@@ -10,7 +10,16 @@ set_laser_files_path('D:\\osu!laser');
 const beatmaps = get_realm_objects(realm, 'Beatmap');
 
 const props:osu_file_beatmap_property[] = [
-	osu_file_beatmap_property.total_time
+	osu_file_beatmap_property.break_time,
+    osu_file_beatmap_property.total_time,
+    osu_file_beatmap_property.drain_time,
+	osu_file_beatmap_property.bpm,
+	osu_file_beatmap_property.stream_difficulty,
+	osu_file_beatmap_property.circles_time,
+    osu_file_beatmap_property.sliders_time,
+    osu_file_beatmap_property.hit_objects_count,
+	osu_file_beatmap_property.circles_count,
+	osu_file_beatmap_property.sliders_count,
 ];
 
 const is_raw = false;
@@ -18,10 +27,10 @@ const is_raw = false;
 for (let i = 0 ; i < 1; i ++) {
 	const random_beatmap = beatmaps[Math.round((beatmaps.length - 1) * Math.random())];
 
-	//const beatmap = get_laser_beatmap_file((random_beatmap as any).Hash, is_raw, props, {is_hit_objects_only_count: false, }) as beatmap_data;
+	const beatmap = get_laser_beatmap_file((random_beatmap as any).Hash, is_raw, props, {is_hit_objects_only_count: false, }) as beatmap_data;
 
-	 console.log(random_beatmap);
-	//console.log(beatmap);
+	//console.log(random_beatmap);
+	console.log(beatmap);
 }
 
 realm.close();

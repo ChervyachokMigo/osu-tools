@@ -10,6 +10,7 @@ const node_fs_1 = require("node:fs");
 const scan_songs_1 = require("./scan_songs");
 const property_settings_1 = require("../consts/property_settings");
 const escape_string_1 = require("../tools/escape_string");
+const parse_osu_file_1 = require("./parse_osu_file");
 let realm = null;
 let laser_files_path = null;
 const open_realm = (file_path) => {
@@ -61,7 +62,7 @@ const get_laser_beatmap_file = (hash, raw = true, osu_file_beatmap_properties = 
         ;
     }
     else {
-        return (0, scan_songs_1.parse_osu_file)(file_path, osu_file_beatmap_properties, options);
+        return (0, parse_osu_file_1.parse_osu_file)(file_path, osu_file_beatmap_properties, options);
     }
 };
 exports.get_laser_beatmap_file = get_laser_beatmap_file;

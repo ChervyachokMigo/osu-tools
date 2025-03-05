@@ -61,8 +61,10 @@ export { event_string_parse } from './tools/beatmap_events';
 
 
 export { scanner_options, 
-    songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder, parse_osu_file,
+    songs_get_all_beatmaps, get_beatmaps_from_beatmap_folder,
 	default_scanner_options } from './parsers/scan_songs';
+
+export { parse_osu_file } from './parsers/parse_osu_file';
 
 export { score } from "./consts/score";
 export { score_parse } from './tools/score_parse';

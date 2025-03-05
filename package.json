@@ -1,45 +1,46 @@
 {
-	"name": "osu-tools",
-	"version": "0.1.74",
-	"description": "osu parser for db/osr files and some stuff ",
-	"main": "built/index.js",
-	"scripts": {
-		"clean": "rd built /S /Q",
-		"build": "npx tsc",
-		"run": "node --max-old-space-size=8000 built/index.js && pause",
-		"clean_build_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
-		"run (debug)": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
-		"test_osu_db": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts",
-		"test_osu_db_2": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_2.ts",
-		"test_scan_songs": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_scan_songs.ts",
-		"test_random": "npx tsc && ts-node tests/test_random.ts",
-		"test_osu_db_save": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_save.ts",
-		"test_osu_db_concat": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_concat.ts",
-		"test_osu_db_export_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_export_sr.ts",
-		"test_osu_db_import_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_import_sr.ts",
-		"test_grade": "ts-node tests/test_grade.ts",
-		"test_laser_export_beatmapset_by_id": "ts-node tests/laser/export_beatmapset_by_id.ts",
-		"test_laser_get_beatmap_file": "ts-node tests/laser/get_laser_random_beatmap_file.ts",
-		"test_laser_beatmapset_files": "ts-node tests/laser/get_laser_beatmapset_files.ts"
-	},
-	"keywords": [],
-	"author": "ChervyachokMigo",
-	"license": "ISC",
-	"devDependencies": {
-		"@types/node": "^18.11.13",
-		"ts-node": "^10.9.1",
-		"typescript": "^4.9.5"
-	},
-	"dependencies": {
-		"bitwise": "^2.1.0",
-		"glob": "^10.3.10",
-		"lzma": "^2.3.2",
-		"md5-file": "^5.0.0",
-		"mmap-io": "github:ChervyachokMigo/mmap-io",
-		"realm": "^12.14.1"
-	},
-	"bundleDependencies": [
-		"bitwise",
-		"md5-file"
-	]
+    "name": "osu-tools",
+    "version": "0.1.78",
+    "description": "osu parser for db/osr files and some stuff ",
+    "main": "built/index.js",
+    "scripts": {
+        "clean": "rd built /S /Q",
+        "build": "npx tsc",
+        "run": "node --max-old-space-size=8000 built/index.js && pause",
+        "clean_build_run": "rd built /S /Q && npx tsc && node --max-old-space-size=8000 built/index.js && pause",
+        "run (debug)": "set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node index.ts",
+        "test_osu_db": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db.ts",
+        "test_osu_db_2": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_2.ts",
+        "test_scan_songs": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_scan_songs.ts",
+        "test_random": "npx tsc && ts-node tests/test_random.ts",
+        "test_osu_db_save": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_save.ts",
+        "test_osu_db_concat": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_concat.ts",
+        "test_osu_db_export_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_export_sr.ts",
+        "test_osu_db_import_sr": "npx tsc && set NODE_OPTIONS=\"--max-old-space-size=8192\" && ts-node tests/test_osu_db_import_sr.ts",
+        "test_grade": "ts-node tests/test_grade.ts",
+        "test_laser_export_beatmapset_by_id": "ts-node tests/laser/export_beatmapset_by_id.ts",
+        "test_laser_get_beatmap_file": "ts-node tests/laser/get_laser_random_beatmap_file.ts",
+        "test_laser_beatmapset_files": "ts-node tests/laser/get_laser_beatmapset_files.ts"
+    },
+    "keywords": [],
+    "author": "ChervyachokMigo",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^18.11.13",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.5"
+    },
+    "dependencies": {
+        "bitwise": "^2.1.0",
+        "fs-extra": "^11.3.0",
+        "glob": "^10.3.10",
+        "lzma": "^2.3.2",
+        "md5-file": "^5.0.0",
+        "mmap-io": "github:ChervyachokMigo/mmap-io",
+        "realm": "^12.14.1"
+    },
+    "bundleDependencies": [
+        "bitwise",
+        "md5-file"
+    ]
 }

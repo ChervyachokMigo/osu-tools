@@ -443,14 +443,27 @@ export type beatmap_data_general = {
         Time for break
         @param  default 0 
         */
-	break_time?: number
+	break_time?: number;
+
+        /**[General]
+        
+        Time of circles
+        @param  default 0 
+        */
+	circles_time?: number;
+		/**[General]
+        
+		Time of sliders
+		@param  default 0 
+        */
+	sliders_time?: number;
 	
         /**[General]
         
         Beats per minute of map (min, max, avg)
         @param  default 0 
         */
-	bpm?: bpms,
+	bpm?: bpms;
 
 
 }
@@ -731,6 +744,10 @@ export type beatmap_hit_objects = {
      * Hit object syntax: x,y,time,type,hitSound,objectParams,hitSample
      */
     hit_objects?: beatmap_data_hit_object[];
+
+	circles_count?: number;
+	
+	sliders_count?: number;
 }
 
 /**
