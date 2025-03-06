@@ -457,6 +457,8 @@ export type beatmap_data_general = {
 		@param  default 0 
         */
 	sliders_time?: number;
+
+	objects_time?: number;
 	
         /**[General]
         

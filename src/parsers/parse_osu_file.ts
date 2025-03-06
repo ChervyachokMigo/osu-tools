@@ -883,7 +883,20 @@ export function parse_osu_file(osu_file_path: string,
 						}
 						
 						if (circles_count > 0 && circles_time > 0) {
-							stream_difficulty = ( circles_count / circles_time ) * bpm.avg;
+							const objects_time = (drain_time - break_time);
+
+							if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(osu_file_beatmap_property.objects_time)) {
+								beatmap.general.objects_time = objects_time;
+							}
+
+							if (objects_time > 0) {
+								if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(osu_file_beatmap_property.objects_time)) {
+									beatmap.general.objects_time = objects_time;
+								}
+								
+								stream_difficulty = circles_time / objects_time;
+								
+							}
 						}
 					}
 

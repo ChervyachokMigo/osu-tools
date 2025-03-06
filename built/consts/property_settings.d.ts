@@ -158,8 +158,9 @@ export declare enum osu_file_beatmap_property {
     break_time = 66,
     circles_time = 67,
     sliders_time = 68,
-    bpm = 69,
-    stream_difficulty = 70
+    objects_time = 69,
+    bpm = 70,
+    stream_difficulty = 71
 }
 export declare const all_general_properties: osu_file_beatmap_property[];
 export declare const all_editor_properties: osu_file_beatmap_property[];

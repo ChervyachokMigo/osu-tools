@@ -240,8 +240,9 @@ var osu_file_beatmap_property;
     osu_file_beatmap_property[osu_file_beatmap_property["break_time"] = 66] = "break_time";
     osu_file_beatmap_property[osu_file_beatmap_property["circles_time"] = 67] = "circles_time";
     osu_file_beatmap_property[osu_file_beatmap_property["sliders_time"] = 68] = "sliders_time";
-    osu_file_beatmap_property[osu_file_beatmap_property["bpm"] = 69] = "bpm";
-    osu_file_beatmap_property[osu_file_beatmap_property["stream_difficulty"] = 70] = "stream_difficulty";
+    osu_file_beatmap_property[osu_file_beatmap_property["objects_time"] = 69] = "objects_time";
+    osu_file_beatmap_property[osu_file_beatmap_property["bpm"] = 70] = "bpm";
+    osu_file_beatmap_property[osu_file_beatmap_property["stream_difficulty"] = 71] = "stream_difficulty";
 })(osu_file_beatmap_property = exports.osu_file_beatmap_property || (exports.osu_file_beatmap_property = {}));
 exports.all_general_properties = [
     osu_file_beatmap_property.general_beatmap_filename,
@@ -313,6 +314,7 @@ exports.all_timing_points_properties = [
     osu_file_beatmap_property.stream_difficulty,
     osu_file_beatmap_property.circles_time,
     osu_file_beatmap_property.sliders_time,
+    osu_file_beatmap_property.objects_time,
 ];
 exports.all_hit_objects_properties = [
     osu_file_beatmap_property.hit_objects,

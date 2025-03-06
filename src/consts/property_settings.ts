@@ -255,8 +255,10 @@ export enum osu_file_beatmap_property {
 	break_time,
 	circles_time,
 	sliders_time,
+	objects_time,
 	bpm,
 	stream_difficulty,
+
 
 }
 
@@ -335,6 +337,7 @@ export const all_timing_points_properties = [
 	osu_file_beatmap_property.stream_difficulty,
 	osu_file_beatmap_property.circles_time,
     osu_file_beatmap_property.sliders_time,
+	osu_file_beatmap_property.objects_time,
 ];
 
 export const all_hit_objects_properties = [
