@@ -713,11 +713,10 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                             avg: Math.round(bpms.reduce((a, b) => a.percent > b.percent ? a : b).value)
                         };
                         if (circles_count > 0 && circles_time > 0) {
-                            let objects_time = (drain_time - break_time);
+                            let objects_time = drain_time - break_time;
                             if (objects_time < 0) {
                                 objects_time = 0;
                             }
-                            console.log('stream_difficulty', circles_time, objects_time, drain_time, break_time);
                             if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.objects_time)) {
                                 beatmap.general.objects_time = objects_time;
                             }

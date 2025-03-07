@@ -1,1 +1,1 @@
-node version.js
+node version.js && npm i
