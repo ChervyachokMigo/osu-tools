@@ -717,12 +717,12 @@ function parse_osu_file(osu_file_path, osu_file_beatmap_properties, options) {
                             if (objects_time < 0) {
                                 objects_time = 0;
                             }
+                            console.log('stream_difficulty', circles_time, objects_time, drain_time, break_time);
                             if (properties_has_timing_points_block || osu_file_beatmap_properties.includes(property_settings_1.osu_file_beatmap_property.objects_time)) {
                                 beatmap.general.objects_time = objects_time;
                             }
                             if (objects_time > 0) {
                                 stream_difficulty = circles_time / objects_time;
-                                console.log('stream_difficulty', circles_time, objects_time, drain_time, break_time);
                             }
                         }
                     }
